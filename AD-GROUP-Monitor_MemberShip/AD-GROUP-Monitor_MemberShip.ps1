@@ -52,32 +52,32 @@
 	Specify the Email Address of the Sender. Example: Reporting@fx.lab
 
 .EXAMPLE
-	.\TOOL-Monitor-AD_Group.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -EmailTo "To@Company.com" -EmailServer "mail.company.com"
+	.\AD-GROUP-Monitor_MemberShip.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -EmailTo "To@Company.com" -EmailServer "mail.company.com"
 
 	This will run the script against the group FXGROUP and send an email to To@Company.com using the address From@Company.com and the server mail.company.com.
 
 .EXAMPLE
-	.\TOOL-Monitor-AD_Group.ps1 -Group "FXGroup","FXGroup2","FXGroup3" -EmailFrom "From@Company.com" -Emailto "To@Company.com" -EmailServer "mail.company.com"
+	.\AD-GROUP-Monitor_MemberShip.ps1 -Group "FXGroup","FXGroup2","FXGroup3" -EmailFrom "From@Company.com" -Emailto "To@Company.com" -EmailServer "mail.company.com"
 
 	This will run the script against the groups FXGROUP,FXGROUP2 and FXGROUP3  and send an email to To@Company.com using the address From@Company.com and the Server mail.company.com.
 
 .EXAMPLE
-	.\TOOL-Monitor-AD_Group.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -Emailto "To@Company.com" -EmailServer "mail.company.com" -Verbose
+	.\AD-GROUP-Monitor_MemberShip.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -Emailto "To@Company.com" -EmailServer "mail.company.com" -Verbose
 
 	This will run the script against the group FXGROUP and send an email to To@Company.com using the address From@Company.com and the server mail.company.com. Additionally the switch Verbose is activated to show the activities of the script.
 
 .EXAMPLE
-	.\TOOL-Monitor-AD_Group.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -Emailto "Auditor@Company.com","Auditor2@Company.com" -EmailServer "mail.company.com" -Verbose
+	.\AD-GROUP-Monitor_MemberShip.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -Emailto "Auditor@Company.com","Auditor2@Company.com" -EmailServer "mail.company.com" -Verbose
 
 	This will run the script against the group FXGROUP and send an email to Auditor@Company.com and Auditor2@Company.com using the address From@Company.com and the server mail.company.com. Additionally the switch Verbose is activated to show the activities of the script.
 
 .EXAMPLE
-	.\TOOL-Monitor-AD_Group.ps1 -SearchRoot 'FX.LAB/TEST/Groups' -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
+	.\AD-GROUP-Monitor_MemberShip.ps1 -SearchRoot 'FX.LAB/TEST/Groups' -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
 
 	This will run the script against all the groups present in the CanonicalName 'FX.LAB/TEST/Groups' and send an email to catfx@fx.lab using the address Reporting@fx.lab and the server 192.168.1.10. Additionally the switch Verbose is activated to show the activities of the script.
 
 .EXAMPLE
-	.\TOOL-Monitor-AD_Group.ps1 -file .\groupslist.txt -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
+	.\AD-GROUP-Monitor_MemberShip.ps1 -file .\groupslist.txt -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
 
 	This will run the script against all the groups present in the file groupslists.txt and send an email to catfx@fx.lab using the address Reporting@fx.lab and the server 192.168.1.10. Additionally the switch Verbose is activated to show the activities of the script.
 
@@ -87,7 +87,7 @@
 .OUTPUTS
 	Email Report
 .NOTES
-	NAME:	TOOL-Monitor-AD_Group.ps1
+	NAME:	AD-GROUP-Monitor_MemberShip.ps1
 	AUTHOR:	Francois-Xavier CAT 
 	DATE:	2012/02/01
 	EMAIL:	info@lazywinadmin.com
@@ -131,21 +131,24 @@
 		ADD Alias to the Group ParameterName
 	1.6 2013.11.21
 		ADD Support for Organizational Unit (SearchRoot parameter)
-        ADD Support for file input (File Parameter)
-        ADD ParamaterSetNames and parameters GroupType/GroupScope/SearchScope
+        	ADD Support for file input (File Parameter)
+        	ADD ParamaterSetNames and parameters GroupType/GroupScope/SearchScope
 		REMOVE [mailaddress] type on $Emailfrom and $EmailTo to make the script available to PowerShell 2.0
-        ADD Regular expression validation on $Emailfrom and $EmailTo
+        	ADD Regular expression validation on $Emailfrom and $EmailTo
 	
-		2013.11.23
+	1.7 2013.11.23
 		ADD ValidateScript on File Parameter
-        ADD Additional information about the Group in the Report
-        CHANGE the format of the $changes output, it will now include the DateTime Property
-        UPDATE Help
-        ADD DisplayName Property in the report
+        	ADD Additional information about the Group in the Report
+        	CHANGE the format of the $changes output, it will now include the DateTime Property
+        	UPDATE Help
+        	ADD DisplayName Property in the report
 		
-		2013.11.27
+	1.8 2013.11.27
 		Minor syntax changes
 		UPDATE Help
+	
+	1.8.1 2013.12.29
+		Rename to AD-GROUP-Monitor_MemberShip
 #>
 
 #requires -version 2.0
