@@ -86,11 +86,13 @@
 
 .OUTPUTS
 	Email Report
+
 .NOTES
 	NAME:	AD-GROUP-Monitor_MemberShip.ps1
 	AUTHOR:	Francois-Xavier CAT 
-	DATE:	2012/02/01
 	EMAIL:	info@lazywinadmin.com
+	WWW:	www.lazywinadmin
+	Twitter:@lazywinadm
 
 	REQUIREMENTS:
 		-Read Permission in Active Directory on the monitored groups
@@ -149,6 +151,9 @@
 	
 	1.8.1 2013.12.29
 		Rename to AD-GROUP-Monitor_MemberShip
+
+	1.8.2 2014.02.17
+		Update Notes
 #>
 
 #requires -version 2.0
