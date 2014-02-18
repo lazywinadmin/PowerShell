@@ -89,7 +89,7 @@
 
 .NOTES
 	NAME:	AD-GROUP-Monitor_MemberShip.ps1
-	AUTHOR:	Francois-Xavier CAT 
+	AUTHOR:	Francois-Xavier Cat 
 	EMAIL:	info@lazywinadmin.com
 	WWW:	www.lazywinadmin
 	Twitter:@lazywinadm
