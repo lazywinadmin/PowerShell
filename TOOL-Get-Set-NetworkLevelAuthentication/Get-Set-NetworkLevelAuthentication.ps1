@@ -1,3 +1,6 @@
+# Blog Article: http://lazywinadmin.com/2014/04/powershell-getset-network-level.html
+# GitHub : https://github.com/lazywinadmin/PowerShell/blob/master/TOOL-Get-Set-NetworkLevelAuthentication/Get-Set-NetworkLevelAuthentication.ps1
+
 function Get-NetworkLevelAuthentication
 {
 <#
@@ -47,6 +50,7 @@ function Get-NetworkLevelAuthentication
 		WWW		: http://lazywinadmin.com
 		Twitter	: @lazywinadm
 #>
+	#Requires -Version 3.0
 	[CmdletBinding()]
 	PARAM (
 		[Parameter(ValueFromPipeline)]
@@ -153,12 +157,6 @@ function Get-NetworkLevelAuthentication
 }
 
 
-
-
-
-
-
-
 function Set-NetworkLevelAuthentication
 {
 <#
@@ -190,6 +188,7 @@ function Set-NetworkLevelAuthentication
 		WWW		: http://lazywinadmin.com
 		Twitter	: @lazywinadm
 #>
+	#Requires -Version 3.0
 	[CmdletBinding()]
 	PARAM (
 		[Parameter(ValueFromPipeline,ValueFromPipelineByPropertyName)]
