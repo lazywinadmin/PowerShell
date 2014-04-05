@@ -282,8 +282,7 @@ function Set-NetworkLevelAuthentication
 		} # FOREACH
 	}#PROCESS
 	END
-	{
-		
+	{	
 		if ($CimSession)
 		{
 			Write-Verbose -Message "END - Close CIM Session(s)"
