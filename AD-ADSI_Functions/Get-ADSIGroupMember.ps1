@@ -22,7 +22,8 @@
 	
 	Process
 	{
-		foreach ($Item in ($DirectorySearcher.FindAll()))
+		#List of Group(s) specify by the user
+		foreach ($Item in $GroupName)
 		{
 			
 			$LDAPFilter = "(&(objectCategory=Group)(name=$GroupName))"
@@ -32,32 +33,38 @@
 			$DirectorySearcher.Filter = $LDAPFilter
 			$DirectorySearcher.SearchScope = "Subtree"
 			
-			$Group = $Item.GetDirectoryEntry()
-			$Members = $Group.member
-			
-			If ($Members -ne $Null)
+			#List of groups found by the query
+			foreach ($Group in ($DirectorySearcher.FindAll())
 			{
-				foreach ($User in $Members)
+				
+				
+				$Group = $Item.GetDirectoryEntry()
+				$Members = $Group.member
+				
+				If ($Members -ne $Null)
 				{
-					$UserObject = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$($User)")
-					If ($UserObject.objectCategory.Value.Contains("Group"))
+					foreach ($User in $Members)
 					{
-					}
-					Else
-					{
-						$ThisUser = New-Object -TypeName PSObject -Property @{
-							cn = $UserObject.cn
-							distinguishedName = $UserObject.distinguishedName
-							name = $UserObject.name
-							nTSecurityDescriptor = $UserObject.nTSecurityDescriptor
-							objectCategory = $UserObject.objectCategory
-							objectClass = $UserObject.objectClass
-							objectGUID = $UserObject.objectGUID
-							objectSID = $UserObject.objectSID
-							showInAdvancedViewOnly = $UserObject.showInAdvancedViewOnly
+						$UserObject = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$($User)")
+						If ($UserObject.objectCategory.Value.Contains("Group"))
+						{
 						}
+						Else
+						{
+							$ThisUser = New-Object -TypeName PSObject -Property @{
+								cn = $UserObject.cn
+								distinguishedName = $UserObject.distinguishedName
+								name = $UserObject.name
+								nTSecurityDescriptor = $UserObject.nTSecurityDescriptor
+								objectCategory = $UserObject.objectCategory
+								objectClass = $UserObject.objectClass
+								objectGUID = $UserObject.objectGUID
+								objectSID = $UserObject.objectSID
+								showInAdvancedViewOnly = $UserObject.showInAdvancedViewOnly
+							}
+						}
+						$UserAccounts += $ThisUser
 					}
-					$UserAccounts += $ThisUser
 				}
 			}
 		}
