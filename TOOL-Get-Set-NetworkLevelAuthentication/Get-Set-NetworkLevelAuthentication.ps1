@@ -4,51 +4,60 @@
 function Get-NetworkLevelAuthentication
 {
 <#
-	.SYNOPSIS
-		This function will get the NLA setting on a local machine or remote machine
+.SYNOPSIS
+	This function will get the NLA setting on a local machine or remote machine
 
-	.DESCRIPTION
-		This function will get the NLA setting on a local machine or remote machine
+.DESCRIPTION
+	This function will get the NLA setting on a local machine or remote machine
 
-	.PARAMETER  ComputerName
-		Specify one or more computer to query
+.PARAMETER  ComputerName
+	Specify one or more computer to query
 
-	.PARAMETER  Credential
-		Specify the alternative credential to use. By default it will use the current one.
-	
-	.EXAMPLE
-		Get-NetworkLevelAuthentication
-		
-		This will get the NLA setting on the localhost
-	
-		ComputerName     : XAVIERDESKTOP
-		NLAEnabled       : True
-		TerminalName     : RDP-Tcp
-		TerminalProtocol : Microsoft RDP 8.0
-		Transport        : tcp	
+.PARAMETER  Credential
+	Specify the alternative credential to use. By default it will use the current one.
 
-    .EXAMPLE
-		Get-NetworkLevelAuthentication -ComputerName DC01
-		
-		This will get the NLA setting on the server DC01
+.EXAMPLE
+	Get-NetworkLevelAuthentication
 	
-		ComputerName     : DC01
-		NLAEnabled       : True
-		TerminalName     : RDP-Tcp
-		TerminalProtocol : Microsoft RDP 8.0
-		Transport        : tcp
+	This will get the NLA setting on the localhost
+
+	ComputerName     : XAVIERDESKTOP
+	NLAEnabled       : True
+	TerminalName     : RDP-Tcp
+	TerminalProtocol : Microsoft RDP 8.0
+	Transport        : tcp	
+
+.EXAMPLE
+	Get-NetworkLevelAuthentication -ComputerName DC01
 	
-	.EXAMPLE
-		Get-NetworkLevelAuthentication -ComputerName DC01, SERVER01 -verbose
+	This will get the NLA setting on the server DC01
+
+	ComputerName     : DC01
+	NLAEnabled       : True
+	TerminalName     : RDP-Tcp
+	TerminalProtocol : Microsoft RDP 8.0
+	Transport        : tcp
+
+.EXAMPLE
+	Get-NetworkLevelAuthentication -ComputerName DC01, SERVER01 -verbose
 	
-	.EXAMPLE
-		Get-Content .\Computers.txt | Get-NetworkLevelAuthentication -verbose
-		
-	.NOTES
-		DATE	: 2014/04/01
-		AUTHOR	: Francois-Xavier Cat
-		WWW		: http://lazywinadmin.com
-		Twitter	: @lazywinadm
+	This will get the NLA setting on the servers DC01 and the SERVER01
+
+.EXAMPLE
+	Get-Content .\Computers.txt | Get-NetworkLevelAuthentication -verbose
+	
+	This will get the NLA setting for all the computers listed in the file Computers.txt
+	
+.EXAMPLE
+	Get-NetworkLevelAuthentication -ComputerName (Get-Content -Path .\Computers.txt)
+	
+	This will get the NLA setting for all the computers listed in the file Computers.txt
+	
+.NOTES
+	DATE	: 2014/04/01
+	AUTHOR	: Francois-Xavier Cat
+	WWW		: http://lazywinadmin.com
+	Twitter	: @lazywinadm
 #>
 	#Requires -Version 3.0
 	[CmdletBinding()]
