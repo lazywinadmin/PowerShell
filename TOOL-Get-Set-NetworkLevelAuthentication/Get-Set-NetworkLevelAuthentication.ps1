@@ -1,5 +1,4 @@
-# Blog Article: http://lazywinadmin.com/2014/04/powershell-getset-network-level.html
-# GitHub : https://github.com/lazywinadmin/PowerShell/blob/master/TOOL-Get-Set-NetworkLevelAuthentication/Get-Set-NetworkLevelAuthentication.ps1
+#Requires -Version 3
 
 function Get-NetworkLevelAuthentication
 {
@@ -58,6 +57,9 @@ function Get-NetworkLevelAuthentication
 	AUTHOR	: Francois-Xavier Cat
 	WWW		: http://lazywinadmin.com
 	Twitter	: @lazywinadm
+	
+	Article : http://lazywinadmin.com/2014/04/powershell-getset-network-level.html
+	GitHub	: https://github.com/lazywinadmin/PowerShell
 #>
 	#Requires -Version 3.0
 	[CmdletBinding()]
@@ -169,33 +171,36 @@ function Get-NetworkLevelAuthentication
 function Set-NetworkLevelAuthentication
 {
 <#
-	.SYNOPSIS
-		This function will set the NLA setting on a local machine or remote machine
+.SYNOPSIS
+	This function will set the NLA setting on a local machine or remote machine
 
-	.DESCRIPTION
-		This function will set the NLA setting on a local machine or remote machine
+.DESCRIPTION
+	This function will set the NLA setting on a local machine or remote machine
 
-	.PARAMETER  ComputerName
-		Specify one or more computers
-	
-	.PARAMETER EnableNLA
-		Specify if the NetworkLevelAuthentication need to be set to $true or $false
-	
-	.PARAMETER  Credential
-		Specify the alternative credential to use. By default it will use the current one.
+.PARAMETER  ComputerName
+	Specify one or more computers
 
-	.EXAMPLE
-		Set-NetworkLevelAuthentication -EnableNLA $true
+.PARAMETER EnableNLA
+	Specify if the NetworkLevelAuthentication need to be set to $true or $false
 
-		ReturnValue                             PSComputerName                         
-		-----------                             --------------                         
-		                                        XAVIERDESKTOP      
-	
-	.NOTES
-		DATE	: 2014/04/01
-		AUTHOR	: Francois-Xavier Cat
-		WWW		: http://lazywinadmin.com
-		Twitter	: @lazywinadm
+.PARAMETER  Credential
+	Specify the alternative credential to use. By default it will use the current one.
+
+.EXAMPLE
+	Set-NetworkLevelAuthentication -EnableNLA $true
+
+	ReturnValue                             PSComputerName                         
+	-----------                             --------------                         
+	                                        XAVIERDESKTOP      
+
+.NOTES
+	DATE	: 2014/04/01
+	AUTHOR	: Francois-Xavier Cat
+	WWW		: http://lazywinadmin.com
+	Twitter	: @lazywinadm
+
+	Article : http://lazywinadmin.com/2014/04/powershell-getset-network-level.html
+	GitHub	: https://github.com/lazywinadmin/PowerShell
 #>
 	#Requires -Version 3.0
 	[CmdletBinding()]
