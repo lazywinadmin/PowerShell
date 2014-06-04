@@ -1,5 +1,0 @@
-TO ADD:
-
--Add ADSI Support
--Add ActiveDirectory Module support
--Add Event Subscription
