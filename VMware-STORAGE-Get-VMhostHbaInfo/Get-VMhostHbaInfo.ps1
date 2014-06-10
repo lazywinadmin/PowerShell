@@ -8,26 +8,104 @@ Function Get-VMhostHbaInfo
 	The function Get-VMHostHBAInfo is gathering HBA cards information using PowerCli cmdlets and SSH connection to get additional details.
 
 .PARAMETER VMHost
-	The description of the ParameterB parameter.
+	Specify the VMhost to query
 
 .PARAMETER Username
-	The description of the ParameterB parameter.
+	Specify the Username account to use to connect via putty (plink.exe)
 	
 .PARAMETER Password
-	The description of the ParameterB parameter.
+	Specify the Username account's password to use to connect via putty (plink.exe)
 	
 .PARAMETER PlinkPath
-	The description of the ParameterB parameter.
+	Specify the plink.exe full path. Default is "C:\Program Files (x86)\PuTTY\plink.exe"
 
 .EXAMPLE
 	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword
 	
+	HostName           : vmhost01.fx.lab
+	HostProduct        : VMware ESXi 5.1.0 build-1157734
+	HbaDevice          : vmhba2
+	HbaWWN             : 10:00:00:00:c9:a5:44:a8
+	HbaDriver          : lpfc820
+	HbaModel           : LPe11000 4Gb Fibre Channel Host Adapter
+	HbaFirmwareVersion : 2.82X4 (ZS2.82X4)
+	HWModel            : ProLiant DL365 G5
+
+
+	HostName           : vmhost01.fx.lab
+	HostProduct        : VMware ESXi 5.1.0 build-1157734
+	HbaDevice          : vmhba3
+	HbaWWN             : 10:00:00:00:c9:a5:44:a9
+	HbaDriver          : lpfc820
+	HbaModel           : LPe11000 4Gb Fibre Channel Host Adapter
+	HbaFirmwareVersion : 2.82X4 (ZS2.82X4)
+	HWModel            : ProLiant DL365 G5
+
+	
 .EXAMPLE
 	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword -PlinkPath "C:\Program Files (x86)\PuTTY\plink.exe"
+
+	HostName           : vmhost01.fx.lab
+	HostProduct        : VMware ESXi 5.1.0 build-1157734
+	HbaDevice          : vmhba2
+	HbaWWN             : 10:00:00:00:c9:a5:44:a8
+	HbaDriver          : lpfc820
+	HbaModel           : LPe11000 4Gb Fibre Channel Host Adapter
+	HbaFirmwareVersion : 2.82X4 (ZS2.82X4)
+	HWModel            : ProLiant DL365 G5
+
+
+	HostName           : vmhost01.fx.lab
+	HostProduct        : VMware ESXi 5.1.0 build-1157734
+	HbaDevice          : vmhba3
+	HbaWWN             : 10:00:00:00:c9:a5:44:a9
+	HbaDriver          : lpfc820
+	HbaModel           : LPe11000 4Gb Fibre Channel Host Adapter
+	HbaFirmwareVersion : 2.82X4 (ZS2.82X4)
+	HWModel            : ProLiant DL365 G5
+
+.EXAMPLE
+	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword -Verbose
+	
+	VERBOSE: PROCESS - vmhost01.fx.lab - Retrieving General Information ...
+	VERBOSE: 6/10/2014 12:38:51 PM Get-View Started execution
+	VERBOSE: 6/10/2014 12:38:52 PM Get-View Finished execution
+	VERBOSE: PROCESS -  - Status is Powered On
+	VERBOSE: PROCESS - vmhost01.fx.lab - Retrieving HBA information ...
+	VERBOSE: PROCESS - vmhost01.fx.lab - Retrieving HBA Advance information - checking SSH Service...
+	VERBOSE: 6/10/2014 12:38:52 PM Get-View Started execution
+	VERBOSE: 6/10/2014 12:38:52 PM Get-View Finished execution
+	VERBOSE: PROCESS - vmhost01.fx.lab - Output Result
+
+	HostName           : vmhost01.fx.lab
+	HostProduct        : VMware ESXi 5.1.0 build-1157734
+	HbaDevice          : vmhba2
+	HbaWWN             : 10:00:00:00:c9:a5:44:a8
+	HbaDriver          : lpfc820
+	HbaModel           : LPe11000 4Gb Fibre Channel Host Adapter
+	HbaFirmwareVersion : 2.82X4 (ZS2.82X4)
+	HWModel            : ProLiant DL365 G5
+
+	VERBOSE: PROCESS - vmhost01.fx.lab - Retrieving HBA information ...
+	VERBOSE: PROCESS - vmhost01.fx.lab - Retrieving HBA Advance information - checking SSH Service...
+	VERBOSE: 6/10/2014 12:38:53 PM Get-View Started execution
+	VERBOSE: 6/10/2014 12:38:54 PM Get-View Finished execution
+	VERBOSE: PROCESS - vmhost01.fx.lab - Output Result
+	
+	HostName           : vmhost01.fx.lab
+	HostProduct        : VMware ESXi 5.1.0 build-1157734
+	HbaDevice          : vmhba3
+	HbaWWN             : 10:00:00:00:c9:a5:44:a9
+	HbaDriver          : lpfc820
+	HbaModel           : LPe11000 4Gb Fibre Channel Host Adapter
+	HbaFirmwareVersion : 2.82X4 (ZS2.82X4)
+	HWModel            : ProLiant DL365 G5
+
+	VERBOSE: END - End of Get-VMhostHbaInfo
 	
 .EXAMPLE
 	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword | Export-CSV HBAInformation.csv
-
+	
 .INPUTS
 	System.String
 
@@ -35,8 +113,12 @@ Function Get-VMhostHbaInfo
 	PSObject
 
 .NOTES
-	www.lazywinadmin.com
-
+	Twitter: @lazywinadm
+	WWW: lazywinadmin.com
+	
+	VERSION HISTORY
+	1.0 Original version of this script is from vmdude.fr (http://www.vmdude.fr/en/scripts-en/hba-firmware-version/)
+	2.0 Converted to a reusable function
 #>
 	
 	
@@ -63,7 +145,7 @@ Function Get-VMhostHbaInfo
 		TRY
 		{
 			# Verify VMware Snapin is loaded
-			IF (-not (Get-PSSnapin -Name VMware.VimAutomation.Core))
+			IF (-not (Get-PSSnapin -Name VMware.VimAutomation.Core -ErrorAction 'SilentlyContinue'))
 			{
 				Write-Verbose -Message "BEGIN - Loading Vmware Snapin VMware.VimAutomation.Core..."
 				Add-PSSnapin -Name VMware.VimAutomation.Core -ErrorAction Stop -ErrorVariable ErrorBeginAddPssnapin
@@ -118,7 +200,7 @@ Function Get-VMhostHbaInfo
 						
 						
 						Write-Verbose -Message "PROCESS - $($esx.name) - Retrieving HBA Advance information - checking SSH Service..."
-						IF (((Get-View -ViewType HostSystem -Filter @{ "Name" = $($ESX.name) }).config.service.service -ErrorAction Stop -ErrorVariable ErrorProcessGetViewTypeService | where-object { $_.key -eq 'tsm-ssh' }).running)
+						IF (((Get-View -ViewType HostSystem -ErrorAction Stop -ErrorVariable ErrorProcessGetViewTypeService -Filter @{ "Name" = $($ESX.name) }).config.service.service |where-object { $_.key -eq 'tsm-ssh' }).running)
 						{
 							if ($hba.driver -match "lpfc")
 							{
