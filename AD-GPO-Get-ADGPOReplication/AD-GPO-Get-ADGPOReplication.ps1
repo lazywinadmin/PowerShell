@@ -23,7 +23,7 @@
 	#>
 	PARAM (
 		[parameter(Mandatory = $True,ParameterSetName="One")]
-		[String]$GPOName,
+		[String[]]$GPOName,
 		[parameter(Mandatory = $True, ParameterSetName = "All")]
 		[Switch]$All
 	)
@@ -40,16 +40,19 @@
 			{
 				IF ($psBoundParameters['GPOName'])
 				{
-					$GPO = Get-GPO -Name $GPOName -Server $DomainController -ErrorAction Stop
+                    Foreach ($GPOItem in $GPOName)
+                    {
+					    $GPO = Get-GPO -Name $GPOItem -Server $DomainController -ErrorAction Stop
 					
-					[pscustomobject][ordered] @{
-						GroupPolicyName = $GPOName
-						DomainController = $DomainController
-						UserVersion = $GPO.User.DSVersion
-						UserSysVolVersion = $GPO.User.SysvolVersion
-						ComputerVersion = $GPO.Computer.DSVersion
-						ComputerSysVolVersion = $GPO.Computer.SysvolVersion
-					}#PSObject
+					    [pscustomobject][ordered] @{
+						    GroupPolicyName = $GPOItem
+						    DomainController = $DomainController
+						    UserVersion = $GPO.User.DSVersion
+						    UserSysVolVersion = $GPO.User.SysvolVersion
+						    ComputerVersion = $GPO.Computer.DSVersion
+						    ComputerSysVolVersion = $GPO.Computer.SysvolVersion
+					    }#PSObject
+                    }#Foreach ($GPOItem in $GPOName)
 				}#IF ($psBoundParameters['GPOName'])
 				IF ($psBoundParameters['All'])
 				{
