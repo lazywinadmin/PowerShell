@@ -19,44 +19,57 @@
 		lazywinadmin.com
 	
 		VERSION HISTORY
-		1.0 2014.09.22 Initial version
+		1.0 2014.09.22 	Initial version
+						Adding some more Error Handling
+						Fix some typo
 	#>
+	[CmdletBinding()]
 	PARAM (
-		[parameter(Mandatory = $True,ParameterSetName="One")]
+		[parameter(Mandatory = $True, ParameterSetName = "One")]
 		[String[]]$GPOName,
 		[parameter(Mandatory = $True, ParameterSetName = "All")]
 		[Switch]$All
 	)
 	BEGIN
 	{
-		if (-not (Get-Module -Name ActiveDirectory)) { Import-Module -Name ActiveDirectory -ErrorAction Stop}
-		if (-not (Get-Module -Name GroupPolicy)) { Import-Module -Name GroupPolicy -ErrorAction Stop }
+		TRY
+		{
+			if (-not (Get-Module -Name ActiveDirectory)) { Import-Module -Name ActiveDirectory -ErrorAction Stop -ErrorVariable ErrorBeginIpmoAD }
+			if (-not (Get-Module -Name GroupPolicy)) { Import-Module -Name GroupPolicy -ErrorAction Stop -ErrorVariable ErrorBeginIpmoGP }
+		}
+		CATCH
+		{
+			Write-Warning -Message "[BEGIN] Something wrong happened"
+			IF ($ErrorBeginIpmoAD) { Write-Warning -Message "[BEGIN] Error while Importing the module Active Directory" }
+			IF ($ErrorBeginIpmoGP) { Write-Warning -Message "[BEGIN] Error while Importing the module Group Policy" }
+			Write-Warning -Message "[BEGIN] $($Error[0].exception.message)"
+		}
 	}
 	PROCESS
 	{
-		FOREACH ($DomainController in ((Get-ADDomainController -filter *).hostname))
+		FOREACH ($DomainController in ((Get-ADDomainController -ErrorAction Stop -ErrorVariable ErrorProcessGetDC -filter *).hostname))
 		{
 			TRY
 			{
 				IF ($psBoundParameters['GPOName'])
 				{
-                    Foreach ($GPOItem in $GPOName)
-                    {
-					    $GPO = Get-GPO -Name $GPOItem -Server $DomainController -ErrorAction Stop
-					
-					    [pscustomobject][ordered] @{
-						    GroupPolicyName = $GPOItem
-						    DomainController = $DomainController
-						    UserVersion = $GPO.User.DSVersion
-						    UserSysVolVersion = $GPO.User.SysvolVersion
-						    ComputerVersion = $GPO.Computer.DSVersion
-						    ComputerSysVolVersion = $GPO.Computer.SysvolVersion
-					    }#PSObject
-                    }#Foreach ($GPOItem in $GPOName)
+					Foreach ($GPOItem in $GPOName)
+					{
+						$GPO = Get-GPO -Name $GPOItem -Server $DomainController -ErrorAction Stop -ErrorVariable ErrorProcessGetGPO
+						
+						[pscustomobject][ordered] @{
+							GroupPolicyName = $GPOItem
+							DomainController = $DomainController
+							UserVersion = $GPO.User.DSVersion
+							UserSysVolVersion = $GPO.User.SysvolVersion
+							ComputerVersion = $GPO.Computer.DSVersion
+							ComputerSysVolVersion = $GPO.Computer.SysvolVersion
+						}#PSObject
+					}#Foreach ($GPOItem in $GPOName)
 				}#IF ($psBoundParameters['GPOName'])
 				IF ($psBoundParameters['All'])
 				{
-					$GPOList = Get-GPO -All -Server $DomainController -ErrorAction Stop
+					$GPOList = Get-GPO -All -Server $DomainController -ErrorAction Stop -ErrorVariable ErrorProcessGetGPOAll
 					
 					foreach ($GPO in $GPOList)
 					{
@@ -74,7 +87,10 @@
 			CATCH
 			{
 				Write-Warning -Message "[PROCESS] Something wrong happened"
-				Write-Warning -Message $Error[0].exception.message
+				IF ($ErrorProcessGetDC) { Write-Warning -Message "[PROCESS] Error while running retrieving Domain Controllers with Get-ADDomainController" }
+				IF ($ErrorProcessGetGPO) { Write-Warning -Message "[PROCESS] Error while running Get-GPO" }
+				IF ($ErrorProcessGetGPOAll) { Write-Warning -Message "[PROCESS] Error while running Get-GPO -All" }
+				Write-Warning -Message "[PROCESS] $($Error[0].exception.message)"
 			}
 		}#FOREACH
 	}#PROCESS
