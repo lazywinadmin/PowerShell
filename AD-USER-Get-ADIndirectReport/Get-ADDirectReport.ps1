@@ -101,7 +101,7 @@ test_userA1         test_userA1         test_userA1@lazy... test_managerA
 	}
 	END
 	{
-		#Remove-Module -Name ActiveDirectory
+		Remove-Module -Name ActiveDirectory -ErrorAction 'SilentlyContinue' -Verbose:$false | Out-Null
 	}
 }
 
