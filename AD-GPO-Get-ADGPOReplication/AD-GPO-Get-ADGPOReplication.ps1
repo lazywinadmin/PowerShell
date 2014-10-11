@@ -23,6 +23,7 @@
 						Adding some more Error Handling
 						Fix some typo
 	#>
+	#requires -version 3
 	[CmdletBinding()]
 	PARAM (
 		[parameter(Mandatory = $True, ParameterSetName = "One")]
