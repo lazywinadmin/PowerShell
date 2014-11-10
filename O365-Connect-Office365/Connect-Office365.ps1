@@ -108,11 +108,3 @@
 		}
 	}
 }
-
-
-
-
-Connect-Office365 -Verbose
-
-
-notepad.exe $profile
