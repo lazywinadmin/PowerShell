@@ -64,12 +64,12 @@ function Connect-Office365
 
 			# CREDENTIAL
 			Write-Verbose -Message "PROCESS - Ask for Office365 Credential"
-			$Credential = Get-Credential -ErrorAction Stop -ErrorVariable ErrorCredential -Credential "$env:USERNAME@$env:USERDNSDOMAIN"
+			$Credential = Get-Credential -ErrorAction continue -ErrorVariable ErrorCredential -Credential "$env:USERNAME@$env:USERDNSDOMAIN"
 
 			
 			# AZURE ACTIVE DIRECTORY (MSOnline)
 			Write-Verbose -Message "PROCESS - Connect to Azure Active Directory"
-			Connect-MsolService -Credential $Credential -ErrorAction Stop -ErrorVariable ErrorConnectMSOL
+			Connect-MsolService -Credential $Credential
 			
 			# EXCHANGE ONLINE (Implicit Remoting module)
 			Write-Verbose -Message "PROCESS - Create session to Exchange online"
@@ -81,7 +81,7 @@ function Connect-Office365
 			
 			# LYNC ONLINE (LyncOnlineConnector)
 			Write-Verbose -Message "PROCESS - Create session to Lync online"
-			$LyncSession = New-CsOnlineSession –Credential $O365cred -ErrorAction Stop -ErrorVariable ErrorConnectExchange
+			$LyncSession = New-CsOnlineSession –Credential $Credential -ErrorAction Stop -ErrorVariable ErrorConnectExchange
 			Import-PSSession -Session $LyncSession -Prefix LyncCloud
 			
 			# SHAREPOINT ONLINE (Implicit Remoting module)
