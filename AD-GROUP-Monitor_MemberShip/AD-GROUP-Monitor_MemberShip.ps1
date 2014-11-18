@@ -155,7 +155,7 @@
 	1.8.2 	2014.02.17
 		Update Notes
 
-	2.0		2014.05.04
+	2.0	2014.05.04
 		Add Support for ActiveDirectory module (AD module is use by default)
 		Add failover to Quest AD Cmdlet if AD module is available
 		Rename GetQADGroupParams variable to ADGroupParams
