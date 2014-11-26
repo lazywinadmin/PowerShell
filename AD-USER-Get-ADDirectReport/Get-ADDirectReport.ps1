@@ -1,4 +1,4 @@
-﻿function Get-ADDirectReports
+function Get-ADDirectReports
 {
 	<#
 	.SYNOPSIS
@@ -80,7 +80,7 @@ test_userA1         test_userA1         test_userA1@lazy... test_managerA
 					ForEach-Object -Process {
 						$_.directreports | ForEach-Object -Process {
 							# Output the current object with the properties Name, SamAccountName, Mail and Manager
-							Get-ADUser -Identity $PSItem -Properties mail, manager | Select-Object -Property Name, SamAccountName, Mail, @{ Name = "Manager"; Expression = { (Get-Aduser -identity $psitem.manager).samaccountname } }
+							Get-ADUser -Identity $PSItem -Properties * | Select-Object -Property *, @{ Name = "ManagerAccount"; Expression = { (Get-Aduser -identity $psitem.manager).samaccountname } }
 							# Gather DirectReports under the current object and so on...
 							Get-ADDirectReports -Identity $PSItem -Recurse
 						}
@@ -91,7 +91,7 @@ test_userA1         test_userA1         test_userA1@lazy... test_managerA
 					Write-Verbose -Message "[PROCESS] Account: $Account"
 					# Get the DirectReports
 					Get-Aduser -identity $Account -Properties directreports | Select-Object -ExpandProperty directReports |
-					Get-ADUser -Properties mail, manager | Select-Object -Property Name, SamAccountName, Mail, @{ Name = "Manager"; Expression = { (Get-Aduser -identity $psitem.manager).samaccountname } }
+					Get-ADUser -Properties * | Select-Object -Property *, @{ Name = "ManagerAccount"; Expression = { (Get-Aduser -identity $psitem.manager).samaccountname } }
 				}#IF (-not($PSBoundParameters['Recurse']))
 			}#TRY
 			CATCH
@@ -106,11 +106,3 @@ test_userA1         test_userA1         test_userA1@lazy... test_managerA
 		Remove-Module -Name ActiveDirectory -ErrorAction 'SilentlyContinue' -Verbose:$false | Out-Null
 	}
 }
-
-<#
-# Find all direct user reporting to Test_director
-Get-ADDirectReports -Identity Test_director
-
-# Find all Indirect user reporting to Test_director
-Get-ADDirectReports -Identity Test_director -Recurse
-#>

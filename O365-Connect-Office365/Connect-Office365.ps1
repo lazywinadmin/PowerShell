@@ -1,4 +1,4 @@
-﻿function Connect-Office365
+function Connect-Office365
 {
 <#
 .SYNOPSIS
@@ -22,7 +22,9 @@
     @lazywinadm
 #>
 	[CmdletBinding()]
-	PARAM ()
+	PARAM (
+
+	)
 	BEGIN
 	{
 		TRY
@@ -59,27 +61,28 @@
 	{
 		TRY
 		{
-			
+
 			# CREDENTIAL
 			Write-Verbose -Message "PROCESS - Ask for Office365 Credential"
-			$O365cred = Get-Credential -ErrorAction Stop -ErrorVariable ErrorCredential
+			$Credential = Get-Credential -ErrorAction continue -ErrorVariable ErrorCredential -Credential "$env:USERNAME@$env:USERDNSDOMAIN"
+
 			
 			# AZURE ACTIVE DIRECTORY (MSOnline)
 			Write-Verbose -Message "PROCESS - Connect to Azure Active Directory"
-			Connect-MsolService -Credential $O365cred -ErrorAction Stop -ErrorVariable ErrorConnectMSOL
+			Connect-MsolService -Credential $Credential
 			
 			# EXCHANGE ONLINE (Implicit Remoting module)
 			Write-Verbose -Message "PROCESS - Create session to Exchange online"
 			$ExchangeURL = "https://ps.outlook.com/powershell/"
-			$O365PS = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri $ExchangeURL -Credential $O365cred -Authentication Basic -AllowRedirection -ErrorAction Stop -ErrorVariable ErrorConnectExchange
+			$O365PS = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri $ExchangeURL -Credential $Credential -Authentication Basic -AllowRedirection -ErrorAction Stop -ErrorVariable ErrorConnectExchange
 			
 			Write-Verbose -Message "PROCESS - Open session to Exchange online (Prefix: Cloud)"
 			Import-PSSession -Session $O365PS –Prefix ExchCloud
 			
 			# LYNC ONLINE (LyncOnlineConnector)
 			Write-Verbose -Message "PROCESS - Create session to Lync online"
-			$lyncsession = New-CsOnlineSession –Credential $O365cred -ErrorAction Stop -ErrorVariable ErrorConnectExchange
-			Import-PSSession -Session $lyncsession -Prefix LyncCloud
+			$LyncSession = New-CsOnlineSession –Credential $Credential -ErrorAction Stop -ErrorVariable ErrorConnectExchange
+			Import-PSSession -Session $LyncSession -Prefix LyncCloud
 			
 			# SHAREPOINT ONLINE (Implicit Remoting module)
 			#Connect-SPOService -Url https://contoso-admin.sharepoint.com –credential $O365cred
@@ -108,11 +111,3 @@
 		}
 	}
 }
-
-
-
-
-Connect-Office365 -Verbose
-
-
-notepad.exe $profile
