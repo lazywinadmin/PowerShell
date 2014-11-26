@@ -165,7 +165,6 @@
 #>
 
 #requires -version 3.0
-#Requires -Module ActiveDirectory
 
 [CmdletBinding()]
 PARAM (
