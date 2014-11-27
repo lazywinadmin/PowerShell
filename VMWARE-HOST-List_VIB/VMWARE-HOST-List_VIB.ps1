@@ -18,11 +18,11 @@ PARAM (
 	$Credential,
 	[parameter(Mandatory = $true)]
 	$Vcenter,
-	[Parameter(ParameterSetName = "All")]
+	[Parameter(mandatory=$true,ParameterSetName = "All")]
 	[Switch]$AllVib,
-	[Parameter(ParameterSetName = "VIBName")]
+	[Parameter(mandatory=$true,ParameterSetName = "VIBName")]
 	$VibName,
-	[Parameter(ParameterSetName = "VIBVendor")]
+	[Parameter(mandatory=$true,ParameterSetName = "VIBVendor")]
 	$VibVendor
 )
 BEGIN
