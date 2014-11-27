@@ -7,6 +7,10 @@ This Script retrieve the VIB information on all the VMware Host
 	VMWARE-HOST-List_VIB.ps1 -VibName "net-e1000e" -Verbose
 .EXAMPLE
 	VMWARE-HOST-List_VIB.ps1 -VibVendor "Dell" -Verbose
+.NOTES
+	Francois-Xavier Cat
+	www.lazywinadmin.com
+	@lazywinadm
 #>
 [CmdletBinding(DefaultParameterSetName="All")]
 PARAM (
