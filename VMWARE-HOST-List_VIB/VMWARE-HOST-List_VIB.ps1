@@ -2,13 +2,12 @@
 .DESCRIPTION
 This Script retrieve the VIB information on all the VMware Host
 .EXAMPLE
-	VMWARE-HOST-List_VIB.ps1 -credential (Get-Credential) -vcenter vc01.fx.lab -AllVib
+	VMWARE-HOST-List_VIB.ps1 -AllVib
 .EXAMPLE
-	VMWARE-HOST-List_VIB.ps1 -credential (Get-Credential) -vcenter vc01.fx.lab -VibName "net-e1000e" -Verbose
+	VMWARE-HOST-List_VIB.ps1 -VibName "net-e1000e" -Verbose
 .EXAMPLE
-	VMWARE-HOST-List_VIB.ps1 -credential (Get-Credential) -vcenter vc01.fx.lab -VibVendor "Dell" -Verbose
+	VMWARE-HOST-List_VIB.ps1 -VibVendor "Dell" -Verbose
 #>
-#Requires -PSSnapin VMware.VimAutomation.Core
 [CmdletBinding(DefaultParameterSetName="All")]
 PARAM (
 	[parameter(Mandatory = $true)]
@@ -26,8 +25,28 @@ BEGIN
 {
 	TRY
 	{
-		# Connect to Vcenter Server
-		Connect-ViServer $Vcenter -Credential $Credential -ErrorAction Stop
+		# Verify VMware Snapin is loaded
+		IF (-not (Get-PSSnapin -Name VMware.VimAutomation.Core -ErrorAction 'SilentlyContinue'))
+		{
+			Write-Verbose -Message "BEGIN - Loading Vmware Snapin VMware.VimAutomation.Core..."
+			Add-PSSnapin -Name VMware.VimAutomation.Core -ErrorAction Stop -ErrorVariable ErrorBeginAddPssnapin
+		}
+		
+		# Verify VMware Snapin is connected to at least one vcenter
+		IF (-not ($global:DefaultVIServer.count -gt 0))
+		{
+			Write-Verbose -Message "BEGIN - Currently not connected to a vCenter..."
+			$Vcenter = Read-Host -Prompt "You are not connected to a VMware vCenter, Please enter the FQDN or IP of the vCenter"
+			
+			IF ((Read-Host -Prompt "You are currently logged as: $($env:username). Do you want to specify different credential ? (Y/N)") -eq 'Y')
+			{
+				Connect-VIServer -Server $Vcenter -credential (Get-Credential) -ErrorAction Stop -ErrorVariable ErrorBeginConnectViServer
+			}
+			ELSE
+			{
+				Connect-VIServer -Server $Vcenter -ErrorAction Stop -ErrorVariable ErrorBeginConnectViServer
+			}
+		}
 	}
 	CATCH
 	{
