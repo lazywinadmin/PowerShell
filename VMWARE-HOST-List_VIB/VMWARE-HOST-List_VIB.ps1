@@ -1,6 +1,12 @@
 ﻿<#
 .DESCRIPTION
 This Script retrieve the VIB information on all the VMware Host
+.PARAMETER AllVib
+	This is the default parameter to retrieve all the VIBs information
+.PARAMETER VIBName
+	Specifies a specific VIB Name
+.PARAMETER VIBVendor
+	Specifies a specific VIB Vendor
 .EXAMPLE
 	VMWARE-HOST-List_VIB.ps1 -AllVib
 .EXAMPLE
