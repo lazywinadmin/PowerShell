@@ -49,7 +49,8 @@
 			Test-Connection -ComputerName $_ -Count 1 -Quiet
 		})]
 		[string]$SMTPServer,
-		$Port = 587
+		[ValidateRange(1,65535)]
+		[int]$Port = 587
 	)
 	
 	$SMTPServer = $server
