@@ -169,6 +169,7 @@
 		FIX the DN of the group in the Summary
 		FIX SearchBase/SearchRoot Parameter which was not working with AD Module
 		FIX Some other minor issues
+		ADD Check to validate data added to $Group is valid
 
 
 
@@ -311,7 +312,8 @@ BEGIN
 		Write-Warning -Message "[BEGIN] Something went wrong"
 		
 		#Show last error
-		Write-Warning -Message $_.Exception.Message
+		#Write-Warning -Message $_.Exception.Message
+        Write-Warning -Message $Error[0]
 		
 		# Quest AD Cmdlets Errors
 		if ($ErrorBEGINGetQuestAD) { Write-Warning -Message "[BEGIN] Can't Find the Quest Active Directory Snappin" }
@@ -394,10 +396,10 @@ PROCESS
 				}#IF ($PSBoundParameters['GroupType'])
 				
 				
-				# Add the Groups in the $group variable
+				
 				IF ($ADModule)
 				{
-					IF ($ADGroupParams.filter)
+					<#IF ($ADGroupParams.filter)
 					{
 						#$ADGroupParams.Filter = "$($ADGroupParams.Filter) -and Name -eq '*'"
 					}
@@ -408,17 +410,29 @@ PROCESS
 						$ADGroupParams.Filter = "*"
 						#}
 					}
+                    #>
+                    IF (-not($ADGroupParams.filter)){$ADGroupParams.Filter = "*"}
+
 					Write-Verbose -Message "[PROCESS] AD Module - Querying..."
 					# Add the groups to the variable $Group
-					$group += (Get-ADGroup @ADGroupParams).Distinguishedname
+
+                    $GroupSearch = Get-ADGroup @ADGroupParams
+
+                    if ($GroupSearch){
+					    $group += $GroupSearch.Distinguishedname
+                        Write-Verbose -Message "[PROCESS] OU: $item"
+                    }
 				}
 				
 				IF ($QuestADSnappin)
 				{
 					Write-Verbose -Message "[PROCESS] Quest AD Snapin - Querying..."
 					# Add the groups to the variable $Group
-					$group += (Get-QADGroup @ADGroupParams).DN
-					Write-Verbose -Message "[PROCESS] OU: $item"
+                    $GroupSearchQuest = Get-QADGroup @ADGroupParams
+                    if ($GroupSearchQuest){
+					    $group += $GroupSearchQuest.DN
+					    Write-Verbose -Message "[PROCESS] OU: $item"
+                    }
 				}
 				
 			}#FOREACH ($item in $OU)
@@ -438,8 +452,13 @@ PROCESS
 			{
 				Write-Verbose -Message "[PROCESS] Loading File: $item"
 				
-				# Add the groups to the variable $Group
-				$Group += Get-Content -Path $File
+                $FileContent = Get-Content -Path $File
+				
+                if ($FileContent)
+                {
+                    # Add the groups to the variable $Group
+				    $Group += Get-Content -Path $File
+                }
 				
 				
 				
@@ -661,7 +680,8 @@ PROCESS
 			CATCH
 			{
 				Write-Warning -Message "[PROCESS] Something went wrong"
-				Write-Warning -Message $_.Exception.Message
+				#Write-Warning -Message $_.Exception.Message
+                Write-Warning -Message $Error[0]
 				
 				#Quest Snappin Errors
 				if ($ErrorProcessGetQADGroup) { Write-warning -Message "[PROCESS] QUEST AD - Error When querying the group $item in Active Directory" }
@@ -683,7 +703,8 @@ PROCESS
 	CATCH
 	{
 		Write-Warning -Message "[PROCESS] Something wrong happened"
-		Write-Warning -Message $error[0].exception.message
+		#Write-Warning -Message $error[0].exception.message
+        Write-Warning -Message $error[0]
 	}
 	
 }#PROCESS
