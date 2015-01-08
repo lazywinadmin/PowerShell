@@ -51,6 +51,10 @@
 .PARAMETER EmailFrom
 	Specify the Email Address of the Sender. Example: Reporting@fx.lab
 
+.PARAMETER Server
+	Specify the Domain Controller to use.
+	Aliases: DomainController, Service
+
 .EXAMPLE
 	.\AD-GROUP-Monitor_MemberShip.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -EmailTo "To@Company.com" -EmailServer "mail.company.com"
 
@@ -80,6 +84,16 @@
 	.\AD-GROUP-Monitor_MemberShip.ps1 -file .\groupslist.txt -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
 
 	This will run the script against all the groups present in the file groupslists.txt and send an email to catfx@fx.lab using the address Reporting@fx.lab and the server 192.168.1.10. Additionally the switch Verbose is activated to show the activities of the script.
+
+.EXAMPLE
+	.\AD-GROUP-Monitor_MemberShip.ps1 -server DC01.fx.lab -file .\groupslist.txt -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
+
+	This will run the script against the Domain Controller "DC01.fx.lab" on all the groups present in the file groupslists.txt and send an email to catfx@fx.lab using the address Reporting@fx.lab and the server 192.168.1.10. Additionally the switch Verbose is activated to show the activities of the script.
+
+.EXAMPLE
+	.\AD-GROUP-Monitor_MemberShip.ps1 -server DC01.fx.lab:389 -file .\groupslist.txt -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
+
+	This will run the script against the Domain Controller "DC01.fx.lab" (on port 389) on all the groups present in the file groupslists.txt and send an email to catfx@fx.lab using the address Reporting@fx.lab and the server 192.168.1.10. Additionally the switch Verbose is activated to show the activities of the script.
 
 .INPUTS
 	System.String
@@ -170,7 +184,7 @@
 		FIX SearchBase/SearchRoot Parameter which was not working with AD Module
 		FIX Some other minor issues
 		ADD Check to validate data added to $Group is valid
-
+		ADD Server Parameter to be able to specify a domain controller
 
 
 	TODO:
@@ -212,6 +226,10 @@ PARAM (
 	[Parameter(ParameterSetName = "File", Mandatory = $true)]
 	[ValidateScript({ Test-Path -Path $_ })]
 	[String[]]$File,
+	
+	[Parameter()]
+	[Alias('DomainController', 'Service')]
+	$Server,
 	
 	[Parameter(Mandatory = $true, HelpMessage = "You must specify the Sender Email Address")]
 	[ValidatePattern("[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]
@@ -341,9 +359,23 @@ PROCESS
 			{
 				# ADGroup Splatting
 				$ADGroupParams = @{ }
+				
+				
 				# ActiveDirectory Module
-				IF ($ADModule) { $ADGroupParams.SearchBase = $item }
-				IF ($QuestADSnappin) { $ADGroupParams.SearchRoot = $item }
+				IF ($ADModule)
+				{
+					$ADGroupParams.SearchBase = $item
+					
+					# Server Specified
+					IF ($PSBoundParameters['Server']) { $ADGroupParams.Server = $Server}
+				}
+				IF ($QuestADSnappin)
+				{
+					$ADGroupParams.SearchRoot = $item
+					
+					# Server Specified
+					IF ($PSBoundParameters['Server']) { $ADGroupParams.Service = $Server }
+				}
 				
 				
 				# # # # # # # # # # # # # # # # # #
@@ -399,23 +431,11 @@ PROCESS
 				
 				IF ($ADModule)
 				{
-					<#IF ($ADGroupParams.filter)
-					{
-						#$ADGroupParams.Filter = "$($ADGroupParams.Filter) -and Name -eq '*'"
-					}
-					ELSE
-					{
-						#IF(-not $PSBoundParameters["GroupType"]){
-						#$ADGroupParams.Filter = "Name -eq '*'"
-						$ADGroupParams.Filter = "*"
-						#}
-					}
-                    #>
                     IF (-not($ADGroupParams.filter)){$ADGroupParams.Filter = "*"}
-
+					
 					Write-Verbose -Message "[PROCESS] AD Module - Querying..."
+					
 					# Add the groups to the variable $Group
-
                     $GroupSearch = Get-ADGroup @ADGroupParams
 
                     if ($GroupSearch){
@@ -478,24 +498,33 @@ PROCESS
 			{
 				
 				Write-Verbose -Message "[PROCESS] GROUP: $item... "
-			<#"ADMODULE"
-			$ADModule -eq $true
-			"Quest"
-			$QuestADSnappin -eq $true
-			#>
+				
+				# Splatting for the AD Group Request
+				$GroupSplatting = @{ }
+				$GroupSplatting.Identity = $item
 				
 				# Group Information
 				if ($ADModule)
 				{
 					Write-Verbose -Message "[PROCESS] ActiveDirectory module"
-					$GroupName = Get-ADGroup -Identity $item -Properties * -ErrorAction Continue -ErrorVariable ErrorProcessGetADGroup
+					
+					# Add the Server if specified
+					IF ($PSBoundParameters['Server']) { $GroupSplatting.Server = $Server }
+					
+					# Look for Group
+					$GroupName = Get-ADGroup @GroupSplatting -Properties * -ErrorAction Continue -ErrorVariable ErrorProcessGetADGroup
 					$DomainName = ($GroupName.canonicalname -split '/')[0]
 					$RealGroupName = $GroupName.name
 				}
 				if ($QuestADSnappin)
 				{
 					Write-Verbose -Message "[PROCESS] Quest ActiveDirectory Snapin"
-					$GroupName = Get-QADgroup -Identity $item -ErrorAction Continue -ErrorVariable ErrorProcessGetQADGroup
+					
+					# Add the Server if specified
+					IF ($PSBoundParameters['Server']) { $GroupSplatting.Service = $Server }
+					
+					# Look for Group
+					$GroupName = Get-QADgroup @GroupSplatting -ErrorAction Continue -ErrorVariable ErrorProcessGetQADGroup
 					$DomainName = $($GroupName.domain.name)
 					$RealGroupName = $GroupName.name
 				}
@@ -504,18 +533,30 @@ PROCESS
 				IF ($GroupName)
 				{
 					
+					# Splatting for the AD Group Members Request
+					$GroupMemberSplatting = @{ }
+					$GroupMemberSplatting.Identity = $GroupName
+					
+					
 					# Get GroupName Membership
 					if ($ADModule)
 					{
 						Write-Verbose -Message "[PROCESS] GROUP: $item - Querying Membership (AD Module)"
-						$Members = Get-ADGroupMember -Identity $GroupName -Recursive -ErrorAction Stop -ErrorVariable ErrorProcessGetADGroupMember | Select-Object -Property *,@{ Name = 'DN'; Expression = { $_.DistinguishedName } }
-						#$Members = Get-ADGroupMember -Identity $GroupName -Recursive -ErrorAction Stop -ErrorVariable ErrorProcessGetADGroupMember #| Select-Object -Property Name,@{ Name = 'DN'; Expression = { $_.DistinguishedName } }
 						
+						# Add the Server if specified
+						IF ($PSBoundParameters['Server']) { $GroupMemberSplatting.Server = $Server }
+						
+						# Look for Members
+						$Members = Get-ADGroupMember @GroupMemberSplatting -Recursive -ErrorAction Stop -ErrorVariable ErrorProcessGetADGroupMember | Select-Object -Property *,@{ Name = 'DN'; Expression = { $_.DistinguishedName } }
 					}
 					if ($QuestADSnappin)
 					{
 						Write-Verbose -Message "[PROCESS] GROUP: $item - Querying Membership (Quest AD Snapin)"
-						$Members = Get-QADGroupMember -Identity $GroupName -Indirect -ErrorAction Stop -ErrorVariable ErrorProcessGetQADGroupMember #| Select-Object -Property *,@{ Name = 'DistinguishedName'; Expression = { $_.dn } }
+						
+						# Add the Server if specified
+						IF ($PSBoundParameters['Server']) { $GroupMemberSplatting.Service = $Server }
+						
+						$Members = Get-QADGroupMember @GroupMemberSplatting -Indirect -ErrorAction Stop -ErrorVariable ErrorProcessGetQADGroupMember #| Select-Object -Property *,@{ Name = 'DistinguishedName'; Expression = { $_.dn } }
 					}
 					# NO MEMBERS, Add some info in $members to avoid the $null
 					# If the value is $null the compare-object won't work
