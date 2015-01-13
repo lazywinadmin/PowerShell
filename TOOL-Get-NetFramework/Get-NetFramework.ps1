@@ -26,11 +26,36 @@
 				$value = "NDP"
 				Get-wmiobject -list "StdRegProv" -namespace root\default -computername . |
 				Invoke-WmiMethod -name GetDWORDValue -ArgumentList $hklm,$key,$value | select uvalue
+
+            #http://stackoverflow.com/questions/27375012/check-remote-wmi-and-remote-registry
 	#>
+	[CmdletBinding()]
+	PARAM (
+		[String[]]$ComputerName,
+		$Credential = [System.Management.Automation.PSCredential]::Empty
+	)
 	
-	Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse |
-	Get-ItemProperty -name Version -EA 0 |
-	Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } |
-	Select-Object -Property PSChildName, Version
+	$Splatting = @{
+		ComputerName = $ComputerName
+	}
 	
+	if ($PSBoundParameters['Credential']) { $Splatting.credential = $Credential }
+	
+	Invoke-Command @Splatting -ScriptBlock {
+		Write-Verbose -Message "$pscomputername"
+		
+		# Get the Net Framework Installed
+		$netFramework = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse |
+		Get-ItemProperty -name Version -EA 0 |
+		Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } |
+		Select-Object -Property PSChildName, Version
+		
+		# Prepare output
+		$Properties = @{
+			ComputerName = "$($env:Computername)$($env:USERDNSDOMAIN)"
+			PowerShellVersion = $psversiontable.PSVersion.Major
+			NetFramework = $netFramework
+		}
+		New-Object -TypeName PSObject -Property $Properties
+	}
 }
