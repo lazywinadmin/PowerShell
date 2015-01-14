@@ -75,7 +75,7 @@
 					foreach ($GPO in $GPOList)
 					{
 						[pscustomobject][ordered] @{
-							GroupPolicyName = $
+							GroupPolicyName = $GPO.DisplayName
 							DomainController = $DomainController
 							UserVersion = $GPO.User.DSVersion
 							UserSysVolVersion = $GPO.User.SysvolVersion
