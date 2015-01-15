@@ -186,6 +186,9 @@
 		ADD Check to validate data added to $Group is valid
 		ADD Server Parameter to be able to specify a domain controller
 
+	2.0.2	2015.01.14
+		FIX an small issue with the $StateFile which did not contains the domain
+
 
 	TODO:
 		-Add Switch to make the Group summary Optional (info: Description,DN,CanonicalName,SID, Scope, Type)
@@ -572,7 +575,7 @@ PROCESS
 					
 					# GroupName Membership File
 					# If the file doesn't exist, assume we don't have a record to refer to
-					$StateFile = "$DomainName_$RealGroupName-membership.csv"
+					$StateFile = "$($DomainName)_$($RealGroupName)-membership.csv"
 					IF (!(Test-Path -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile)))
 					{
 						Write-Verbose -Message "[PROCESS] $item - The following file did not exist: $StateFile"
@@ -596,6 +599,16 @@ PROCESS
 						}
 					}, DisplayName, SamAccountName, DN | Where-Object { $_.name -notlike "*no user or group*" }
 					Write-Verbose -Message "[PROCESS] $item - Compare Block Done !"
+					
+					<# Troubleshooting
+					Write-Verbose -Message "IMPORTCSV var"
+					$ImportCSV | fl -Property Name, SamAccountName, DN
+					
+					Write-Verbose -Message "MEMBER"
+					$Members | fl -Property Name, SamAccountName, DN
+					Write-Verbose -Message "CHANGE"
+					$Changes
+					#>
 					
 					# CHANGES FOUND !
 					If ($Changes)
