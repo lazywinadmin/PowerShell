@@ -188,6 +188,7 @@
 
 	2.0.2	2015.01.14
 		FIX an small issue with the $StateFile which did not contains the domain
+		Add the property Name into the final output.
 
 
 	TODO:
@@ -245,7 +246,6 @@ PARAM (
 	[Parameter(Mandatory = $true, HelpMessage = "You must specify the Email Server to use (IPAddress or FQDN)")]
 	[String]$EmailServer
 )
-
 BEGIN
 {
 	TRY
@@ -597,7 +597,7 @@ PROCESS
 							IF ($_.SideIndicator -eq "=>") { "Removed" }
 							ELSE { "Added" }
 						}
-					}, DisplayName, SamAccountName, DN | Where-Object { $_.name -notlike "*no user or group*" }
+					}, DisplayName, Name, SamAccountName, DN | Where-Object { $_.name -notlike "*no user or group*" }
 					Write-Verbose -Message "[PROCESS] $item - Compare Block Done !"
 					
 					<# Troubleshooting
@@ -614,12 +614,12 @@ PROCESS
 					If ($Changes)
 					{
 						Write-Verbose -Message "[PROCESS] $item - Some changes found"
-						$changes | Select-Object -Property DateTime, State, SamAccountName, DN
+						$changes | Select-Object -Property DateTime, State, Name, SamAccountName, DN
 						
 						# CHANGE HISTORY
 						#  Get the Past Changes History
 						Write-Verbose -Message "[PROCESS] $item - Get the change history for this group"
-						$ChangesHistoryFiles = Get-ChildItem -Path $ScriptPathChangeHistory\$DomainName_$RealGroupName-ChangeHistory.csv -ErrorAction 'SilentlyContinue'
+						$ChangesHistoryFiles = Get-ChildItem -Path $ScriptPathChangeHistory\$($DomainName)_$($RealGroupName)-ChangeHistory.csv -ErrorAction 'SilentlyContinue'
 						Write-Verbose -Message "[PROCESS] $item - Change history files: $(($ChangesHistoryFiles|Measure-Object).Count)"
 						
 						# Process each history changes
@@ -633,11 +633,12 @@ PROCESS
 								$ImportedFile = Import-Csv -Path $file -ErrorAction Stop -ErrorVariable ErrorProcessImportCSVChangeHistory
 								FOREACH ($obj in $ImportedFile)
 								{
-									$Output = "" | Select-Object -Property DateTime, State, DisplayName, SamAccountName, DN
+									$Output = "" | Select-Object -Property DateTime, State, DisplayName,Name, SamAccountName, DN
 									#$Output.DateTime = $file.CreationTime.GetDateTimeFormats("u") | Out-String
 									$Output.DateTime = $obj.DateTime
 									$Output.State = $obj.State
 									$Output.DisplayName = $obj.DisplayName
+									$Output.Name = $obj.Name
 									$Output.SamAccountName = $obj.SamAccountName
 									$Output.DN = $obj.DN
 									$infoChangeHistory = $infoChangeHistory + $Output
@@ -649,14 +650,14 @@ PROCESS
 						# CHANGE(S) EXPORT TO CSV
 						Write-Verbose -Message "[PROCESS] $item - Save changes to a ChangesHistory file"
 						
-						IF (-not (Test-Path -path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$DomainName_$RealGroupName-ChangeHistory.csv")))
+						IF (-not (Test-Path -path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$($DomainName)_$($RealGroupName)-ChangeHistory.csv")))
 						{
-							$Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$DomainName_$RealGroupName-ChangeHistory.csv") -NoTypeInformation
+							$Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$($DomainName)_$($RealGroupName)-ChangeHistory.csv") -NoTypeInformation
 						}
 						ELSE
 						{
 							#$Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$DomainName_$RealGroupName-ChangeHistory-$DateFormat.csv") -NoTypeInformation
-							$Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$DomainName_$RealGroupName-ChangeHistory.csv") -NoTypeInformation -Append
+							$Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$($DomainName)_$($RealGroupName)-ChangeHistory.csv") -NoTypeInformation -Append
 						}
 						
 						
@@ -680,14 +681,14 @@ PROCESS
 						$body += "<i>The membership of this group changed. See the following Added or Removed members.</i>"
 						
 						# Removing the old DisplayName Property
-						$Changes = $changes | Select-Object -Property DateTime, State, SamAccountName, DN
+						$Changes = $changes | Select-Object -Property DateTime, State,Name, SamAccountName, DN
 						
 						$body += $changes | ConvertTo-Html -head $head | Out-String
 						$body += "<br><br><br>"
 						IF ($ChangesHistoryFiles)
 						{
 							# Removing the old DisplayName Property
-							$infoChangeHistory = $infoChangeHistory | Select-Object -Property DateTime, State, SamAccountName, DN
+							$infoChangeHistory = $infoChangeHistory | Select-Object -Property DateTime, State, Name, SamAccountName, DN
 							
 							$body += "<h3>Change History</h3>"
 							$body += "<i>List of the previous changes on this group observed by the script</i>"
