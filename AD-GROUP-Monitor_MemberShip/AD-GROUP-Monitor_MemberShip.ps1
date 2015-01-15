@@ -51,9 +51,17 @@
 .PARAMETER EmailFrom
 	Specify the Email Address of the Sender. Example: Reporting@fx.lab
 
+.PARAMETER EmailEncoding
+	Specify the Body and Subject Encoding to use in the Email.
+	Default is ASCII.
+
 .PARAMETER Server
 	Specify the Domain Controller to use.
 	Aliases: DomainController, Service
+
+.PARAMETER HTMLLog
+	Specify if you want to save a local copy of the Report.
+	It will be saved under the directory "HTML".
 
 .EXAMPLE
 	.\AD-GROUP-Monitor_MemberShip.ps1 -Group "FXGroup" -EmailFrom "From@Company.com" -EmailTo "To@Company.com" -EmailServer "mail.company.com"
@@ -94,6 +102,11 @@
 	.\AD-GROUP-Monitor_MemberShip.ps1 -server DC01.fx.lab:389 -file .\groupslist.txt -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -Verbose
 
 	This will run the script against the Domain Controller "DC01.fx.lab" (on port 389) on all the groups present in the file groupslists.txt and send an email to catfx@fx.lab using the address Reporting@fx.lab and the server 192.168.1.10. Additionally the switch Verbose is activated to show the activities of the script.
+
+.EXAMPLE
+	.\AD-GROUP-Monitor_MemberShip.ps1 -group "Domain Admins" -Emailfrom Reporting@fx.lab -Emailto "Catfx@fx.lab" -EmailServer 192.168.1.10 -EmailEncoding 'ASCII' -HTMLlog
+
+	This will run the script against the group "Domain Admins" and send an email (using the encoding ASCII) to catfx@fx.lab using the address Reporting@fx.lab and the SMTP server 192.168.1.10. It will also save a local HTML report under the HTML Directory.
 
 .INPUTS
 	System.String
@@ -188,7 +201,10 @@
 
 	2.0.2	2015.01.14
 		FIX an small issue with the $StateFile which did not contains the domain
-		Add the property Name into the final output.
+		ADD the property Name into the final output.
+		ADD Support to export the report to a HTML file (-HTMLLog) It will save
+			the report under the folder HTML
+		ADD Support for alternative Email Encoding: Body and Subject. Default is ASCII.
 
 
 	TODO:
@@ -244,7 +260,14 @@ PARAM (
 	[String[]]$Emailto,
 	
 	[Parameter(Mandatory = $true, HelpMessage = "You must specify the Email Server to use (IPAddress or FQDN)")]
-	[String]$EmailServer
+	[String]$EmailServer,
+	
+	[Parameter()]
+	[ValidateSet("ASCII", "UTF8", "UTF7", "UTF32", "Unicode", "BigEndianUnicode", "Default")]
+	[String]$EmailEncoding="ASCII",
+
+	[Parameter()]
+	[Switch]$HTMLLog
 )
 BEGIN
 {
@@ -710,6 +733,11 @@ PROCESS
 						$MailMessage.Subject = $EmailSubject
 						$MailMessage.Body = $Body
 						
+						#  Encoding
+						$MailMessage.BodyEncoding = [System.Text.Encoding]::$EmailEncoding
+						$MailMessage.SubjectEncoding = [System.Text.Encoding]::$EmailEncoding
+
+						
 						#  Sending the Email
 						$SmtpClient.Send($MailMessage)
 						Write-Verbose -Message "[PROCESS] $item - Email Sent."
@@ -718,6 +746,26 @@ PROCESS
 						# GroupName Membership export to CSV
 						Write-Verbose -Message "[PROCESS] $item - Exporting the current membership to $StateFile"
 						$Members | Export-csv -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile) -NoTypeInformation -Encoding Unicode
+						
+						# Export HTML File
+						IF ($PSBoundParameters['HTMLLog'])
+						{
+							# Create HTML Directory if it does not exist
+							$ScriptPathHTML = $ScriptPath + "\HTML"
+							IF (!(Test-Path -Path $ScriptPathHTML))
+							{
+								Write-Verbose -Message "[PROCESS] Creating the HTML Folder : $ScriptPathHTML"
+								New-Item -Path $ScriptPathHTML -ItemType Directory | Out-Null
+							}
+							
+							# Define HTML File Name
+							$HTMLFileName = "$($DomainName)_$($RealGroupName)-$(Get-Date -Format 'yyyyMMdd_HHmmss').html"
+							
+							# Save HTML File
+							$Body | Out-File -FilePath (Join-Path -Path $ScriptPathHTML -ChildPath $HTMLFileName)
+						}
+						
+						
 					}#IF $Change
 					ELSE { Write-Verbose -Message "[PROCESS] $item - No Change" }
 					
