@@ -69,7 +69,7 @@
 		[string]$SMTPServer,
 	
 		[ValidateRange(1, 65535)]
-		[int]$Port,
+		[int]$Port = 25,
 	
 		[Switch]$EnableSSL
 	)#PARAM
@@ -98,7 +98,7 @@
 			}
 			
 			# Create SMTP Client Object
-			$SMTPClient = New-Object Net.Mail.SmtpClient
+			$SMTPClient = New-Object 
 			$SMTPClient.Host = $SmtpServer
 			$SMTPClient.Port = $Port
 			
