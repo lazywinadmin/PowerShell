@@ -31,46 +31,60 @@
 	
 	#>
 	
-	[CmdletBinding()]
+	[CmdletBinding(DefaultParameterSetName = "Main")]
 	PARAM (
+		[Parameter(ParameterSetName = "Main")]
 		[Parameter(Mandatory = $true)]
 		[Alias('To')]
 		[String]$EmailTo,
 		
+		[Parameter(ParameterSetName = "Main")]
 		[Parameter(Mandatory = $true)]
 		[Alias('From')]
 		[String]$EmailFrom,
 		
+		[Parameter(ParameterSetName = "Main")]
 		[String]$EmailCC,
 		
+		[Parameter(ParameterSetName = "Main")]
 		[String]$EmailBCC,
 		
+		[Parameter(ParameterSetName = "Main")]
 		[String]$Subject = "Email from PowerShell",
 		
+		[Parameter(ParameterSetName = "Main")]
 		[String]$Body = "Hello World",
 		
+		[Parameter(ParameterSetName = "Main")]
 		[Switch]$BodyIsHTML = $false,
 		
+		[Parameter(ParameterSetName = "Main")]
 		[ValidateSet("Default","ASCII","Unicode","UTF7","UTF8","UTF32")]
 		[System.Text.Encoding]$Encoding = "Default",
 		
+		[Parameter(ParameterSetName = "Main")]
 		[String]$Attachment,
 		
+		[Parameter(ParameterSetName = "Main")]
 		[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
 		[String]$Username,
-		
+	
+		[Parameter(ParameterSetName = "Main")]
 		[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
 		[String]$Password,
 		
+		[Parameter(ParameterSetName = "Main")]
 		[Parameter(Mandatory = $true)]
 		[ValidateScript({
 			# Verify the host is reachable
 			Test-Connection -ComputerName $_ -Count 1 -Quiet})]
 		[string]$SMTPServer,
-	
+		
+		[Parameter(ParameterSetName = "Main")]
 		[ValidateRange(1, 65535)]
 		[int]$Port = 25,
-	
+		
+		[Parameter(ParameterSetName = "Main")]
 		[Switch]$EnableSSL
 	)#PARAM
 	
@@ -87,8 +101,8 @@
 			$SMTPMessage.CC = $EmailCC
 			$SMTPMessage.Bcc = $EmailBCC
 			$SMTPMessage.IsBodyHtml = $BodyIsHtml
-			$SMTPMessage.BodyEncoding = $Encoding
-			$SMTPMessage.SubjectEncoding = $Encoding
+			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
+			$SMTPMessage.SubjectEncoding = $([System.Text.Encoding]::$Encoding)
 			
 			# Attachement Parameter
 			IF ($PSBoundParameters['attachment'])
