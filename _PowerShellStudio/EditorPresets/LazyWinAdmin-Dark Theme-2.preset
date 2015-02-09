@@ -1,0 +1,20 @@
+﻿<Styles version="1" FontName="Lucida Console" FontSize="13" BackColor="FF000000" MarginColor="FF000000">
+  <Style name="Text" Bold="False" Italic="False" Underline="False" ForeColor="FFC0C0C0" BackColor="0" />
+  <Style name="Cmdlet" Bold="True" Italic="False" Underline="False" ForeColor="FF0066CC" BackColor="0" />
+  <Style name="Alias" Bold="True" Italic="False" Underline="False" ForeColor="FF0000FF" BackColor="0" />
+  <Style name="Reserved Word" Bold="True" Italic="False" Underline="False" ForeColor="FFFFFF00" BackColor="0" />
+  <Style name="Operator" Bold="True" Italic="False" Underline="False" ForeColor="FFA9A9A9" BackColor="0" />
+  <Style name="Variable" Bold="True" Italic="False" Underline="False" ForeColor="FF9370DB" BackColor="0" />
+  <Style name="Number" Bold="False" Italic="False" Underline="False" ForeColor="FF800080" BackColor="0" />
+  <Style name="String" Bold="False" Italic="True" Underline="False" ForeColor="FF808080" BackColor="0" />
+  <Style name="Comment" Bold="False" Italic="False" Underline="False" ForeColor="FF006400" BackColor="0" />
+  <Style name="Function" Bold="True" Italic="False" Underline="False" ForeColor="FFFF0000" BackColor="0" />
+  <Style name="Parameter" Bold="False" Italic="False" Underline="False" ForeColor="FFFFFFFF" BackColor="0" />
+  <Style name="Command As Parameter" Bold="False" Italic="True" Underline="False" ForeColor="FF00008B" BackColor="0" />
+  <Style name="Code Snippet Field" Bold="False" Italic="False" Underline="False" ForeColor="0" BackColor="FFC8FFFF" />
+  <Style name="Highlighted Reference" Bold="False" Italic="False" Underline="False" ForeColor="0" BackColor="FF808080" />
+  <Style name="Type" Bold="False" Italic="False" Underline="False" ForeColor="FF00FF00" BackColor="0" />
+  <Style name="Parameter Attribute" Bold="True" Italic="False" Underline="False" ForeColor="FF00BFFF" BackColor="0" />
+  <Style name="Unknown Command" Bold="False" Italic="False" Underline="False" ForeColor="FF696969" BackColor="0" />
+  <Style name="External Tool" Bold="True" Italic="False" Underline="False" ForeColor="FF0000FF" BackColor="0" />
+</Styles>
