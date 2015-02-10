@@ -1,0 +1,1 @@
+function Launch-InternetExplorer { & 'C:\Program Files (x86)\Internet Explorer\iexplore.exe' "about:blank" }

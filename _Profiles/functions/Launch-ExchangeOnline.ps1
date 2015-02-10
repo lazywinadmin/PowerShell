@@ -1,0 +1,1 @@
+function Launch-ExchangeOnline { Invoke-Item "https://outlook.office365.com/ecp/" }
