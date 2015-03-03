@@ -1,4 +1,4 @@
-﻿Function Get-AccountLockedOut
+Function Get-AccountLockedOut
 {
 	
 <#
@@ -36,7 +36,10 @@
 	{
 		TRY
 		{
-			Write-Verbose -Message "[BEGIN] Declare function"
+            #Variables
+            $TimeDifference = (Get-Date) - $StartTime
+
+			Write-Verbose -Message "[BEGIN] Looking for PDC..."
 			
 			function Get-PDCServer
 			{
@@ -83,6 +86,7 @@
 			# Add the credential to the splatting if specified
 			IF ($PSBoundParameters['Credential'])
 			{
+                Write-Verbose -Message "[PROCESS] Credential Specified"
 				$Splatting.Credential = $Credential
 				$Splatting.ComputerName = $(Get-PDCServer -Domain $DomainName -Credential $Credential)
 			}
@@ -92,6 +96,7 @@
 			}
 			
 			# Query the PDC
+            Write-Verbose -Message "[PROCESS] Querying PDC for LockedOut Account in the last Days:$($TimeDifference.days) Hours: $($TimeDifference.Hours) Minutes: $($TimeDifference.Minutes) Seconds: $($TimeDifference.seconds)"
 			Invoke-Command @Splatting -ScriptBlock {
 				
 				# Query Security Logs
