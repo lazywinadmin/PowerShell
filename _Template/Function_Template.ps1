@@ -52,6 +52,10 @@
 			{
 				IF (Test-Connection -ComputerName $Computer -Count 1 -Quiet)
 				{
+					IF ($PSBoundParameters['Credential'])
+					{
+						
+					}
 					# Some Action here
 				}#IF Test-Connection
 			}
@@ -59,7 +63,10 @@
 			{
 				
 			}#CATCH
-			
+			FINALLY
+			{
+				
+			}#FINALLY
 		}#FOREACH
 	}#PROCESS
 	END
