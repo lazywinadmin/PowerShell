@@ -2,22 +2,28 @@
 {
 <#
 	.SYNOPSIS
-		A brief description of the Enable-RemoteDesktop function.
+		The function Enable-RemoteDesktop will enable RemoteDesktop on a local or remote machine.
 	
 	.DESCRIPTION
-		A detailed description of the Enable-RemoteDesktop function.
+		The function Enable-RemoteDesktop will enable RemoteDesktop on a local or remote machine.
 	
 	.PARAMETER ComputerName
-		A description of the ComputerName parameter.
+		Specifies the computername
 	
 	.PARAMETER Credential
-		A description of the Credential parameter.
+		Specifies the credential to use
 	
 	.PARAMETER CimSession
-		A description of the CimSession parameter.
+		Specifies an existing CIM Session to use
 	
 	.EXAMPLE
-		PS C:\> Enable-RemoteDesktop -ComputerName $value1 -Credential $value2
+		PS C:\> Enable-RemoteDesktop -ComputerName DC01
+	
+	.EXAMPLE
+		PS C:\> Enable-RemoteDesktop -ComputerName DC01 -Credential (Get-Credential -cred "FX\SuperAdmin")
+	
+	.EXAMPLE
+		PS C:\> Enable-RemoteDesktop -CimSession $Session
 	
 	.NOTES
 		Francois-Xavier Cat
@@ -26,7 +32,10 @@
 #>
 	[CmdletBinding()]
 	PARAM (
-		[Parameter(ParameterSetName = "Main")]
+		[Parameter(
+				   ParameterSetName = "Main",
+				   ValueFromPipeline = $True,
+				   ValueFromPipelineByPropertyName = $True)]
 		[Alias("CN", "__SERVER", "PSComputerName")]
 		[String[]]$ComputerName,
 		
@@ -90,7 +99,8 @@
 						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - CIMSession - Enable Remote Desktop (and Modify Firewall Exception")
 						Get-CimInstance @Splatting | Invoke-CimMethod -MethodName SetAllowTSConnections -Arguments @{
 							AllowTSConnections = 1;
-							ModifyFirewallException = 1}
+							ModifyFirewallException = 1
+						}
 					}
 				}
 			}
