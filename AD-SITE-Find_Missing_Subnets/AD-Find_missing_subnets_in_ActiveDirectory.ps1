@@ -61,6 +61,7 @@
 			UPDATE Logic of the script (now append csv for each DC, and process the CSV files and Build html at the end of the PROCESS block)
 			UPDATE Html report to show forest and domain information
 			ADD KeepLogs Switch Parameter
+			REMOVE the ExportCSV part, it is saved by default.
 #>
 
 #requires -version 2.0
@@ -170,6 +171,11 @@ PROCESS
 				$DCName = $($dc.Name).toUpper()
 				TRY
 				{
+					
+					#######################
+					# COPY NETLOGON Files #
+					#######################
+					
 					# Get the Current Domain Controller in the Loop
 					Write-Verbose -Message "[PROCESS] $ForestName - $domainName - $DCName - Gathering Logs"
 					
@@ -195,42 +201,25 @@ PROCESS
 					ELSE { Write-Warning -Message "$ForestName - $domainName - $DCName - NETLOGON.log is not reachable" }
 					
 					
-					<#
-					# Combine all the TXT file in one
-					$FilesToCombine = Get-Content -Path $ScriptPathOutput\$DomainName-*.txt -ErrorAction SilentlyContinue
-					if ($FilesToCombine)
-					{
-						$FilesToCombine | Out-File -FilePath $ScriptPathOutput\$DomainName-$dateformat-All_Export.txt
-						
-						# Convert the TXT file to a CSV format
-						Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
-						$importString = Import-Csv -Path $scriptpathOutput\$DomainName-$dateformat-All_Export.txt -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
-						
-						#  Get Only the entries for the Missing Subnets
-						$MissingSubnets = $importString | Where-Object { $_.Error -like "*NO_CLIENT_SITE*" }
-						Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Missing Subnet(s) Found: $($MissingSubnets.count)"
-						#  Get the other errors from the log
-						$OtherErrors = Get-Content $scriptpathOutput\$DomainName-$dateformat-All_Export.txt | Where-Object { $_ -notlike "*NO_CLIENT_SITE*" } | Sort-Object -Unique
-						Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Other Error(s) Found: $($OtherErrors.count)"
-						
-					}#IF File to Combine
-					ELSE { Write-Verbose -Message "[PROCESS] Nothing to process" }
-					#>
 					
-					
-					
+					###########################
+					# FILE PROCESS (PART 1/2) #
+					###########################
 					# Combine results
 					$FilesToCombine = Get-Content -Path $ScriptPathOutput\*.txt -ErrorAction SilentlyContinue
 					IF ($FilesToCombine)
 					{
 						
 						# Detect version of the netlogon file
+						# Windows Server 2012
 						IF ($FilesToCombine[0] -match "\[\d{1,5}\]")
 						{
 							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
 							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - NETLOGON format: 2012"
 							$ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
 						}
+						
+						# Windows Server Pre-2012 (2003/2008)
 						IF($FilesToCombine[0] -notmatch "\[\d{1,5}\]")
 						{
 							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
@@ -260,55 +249,20 @@ PROCESS
 		}#FOREACH Domains in Forest
 		
 		
-		
-		
-		
-		# FILE PROCESS (Second Part)
+		###########################
+		# FILE PROCESS (PART 2/2) #
+		###########################
 		$MissingSubnets = Import-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-NOCLIENTSITE.csv
 		$OtherErrors = Import-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-OTHERERRORS.csv
 		
-		<#
-		# Combine all the TXT file in one
-		$FilesToCombine = Get-Content -Path $ScriptPathOutput\*.txt -ErrorAction SilentlyContinue
-		IF ($FilesToCombine)
-		{
-			# Convert the TXT file to a CSV format
-			Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
-			$ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
-			
-			# Append Missing Subnet File
-			$importString | Where-Object { $_.Error -like "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-NOCLIENTSITE.csv -Append
-			# Append Other Error File
-			$importString | Where-Object { $_.Error -like "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-OTHERERRORS.csv -Append
-			
-			
-			<#
-			#$FilesToCombine | Out-File -FilePath $ScriptPathOutput\$DomainName-$dateformat-All_Export.txt
-			# Convert the TXT file to a CSV format
-			Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
-			#$importString = Import-Csv -Path $scriptpathOutput\$DomainName-$dateformat-All_Export.txt -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
-			$ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
-			#  Get Only the entries for the Missing Subnets
-			#$MissingSubnets = $importString | Where-Object { $_.Error -like "*NO_CLIENT_SITE*" }
-			#Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Missing Subnet(s) Found: $($MissingSubnets.count)"
-			#  Get the other errors from the log
-			#$OtherErrors = Get-Content $scriptpathOutput\$DomainName-$dateformat-All_Export.txt | Where-Object { $_ -notlike "*NO_CLIENT_SITE*" } | Sort-Object -Unique
-			#Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Other Error(s) Found: $($OtherErrors.count)"
-			
-			
-			
-		}#IF File to Combine
-		ELSE { Write-Verbose -Message "[PROCESS] Nothing to process" }
-		
-		#>
 		
 		
-		
-		
-		# BUILDING THE HTML REPORT
+		############################
+		# BUILDING THE HTML REPORT #
+		############################
 		Write-Verbose -Message "[PROCESS] $ForestName - Building the HTML Report"
 		
-		#  Missing Subnets
+		# MISSING SUBNETS
 		$EmailBody += "<h1><u>Forest:</u> $($ForestName.ToUpper())</h1>"
 		$EmailBody += "<h2><u>Domain</u>: $($DomainName.ToUpper())</h2>"
 		$EmailBody += "<h3>Missing Subnet(s) for $($DomainName.ToUpper())</h3>"
@@ -319,7 +273,7 @@ PROCESS
 		}
 		ELSE { $EmailBody += "<i>No Missing Subnet(s) detected</i>" }
 		
-		#  Other Errors
+		#  OTHER ERRORS
 		$EmailBody += "<h2>Other Error(s)</h2>"
 		IF ($OtherErrors)
 		{
@@ -345,18 +299,6 @@ PROCESS
 		}
 		ELSE { $EmailBody += "<i>No Other Error detected</i>" }
 		
-		# Export to a CSV File
-		<#
-		Write-Verbose -Message "[PROCESS] $ForestName - $domainName - CSV file (backup) - Exporting..."
-		$importString | Select-Object -Property Date, Name, IPAddress, Domain, Error, Code |
-		Sort-Object -Property IPAddress -Unique |
-		Export-Csv -Path $scriptPathOutput\$DomainName-$DateFormat-AD-SITE-MissingSubnets.csv
-		
-		Write-Verbose -Message "[PROCESS] $ForestName - $domainName - CSV file (backup) - Exported to: $domainName-$DateFormat-AD-SITE-MissingSubnets.csv"
-		#>
-		
-		
-		
 	}#TRY
 	CATCH
 	{
@@ -365,8 +307,15 @@ PROCESS
 	}#CATCH
 	FINALLY
 	{
+		
+		
+		##############
+		# SEND EMAIL #
+		##############
+		
 		# Add PostContent to email
 		$EmailBody += $PostContent
+		
 		
 		# EMAIL
 		Write-Verbose -Message "[PROCESS] Preparing the final Email"
