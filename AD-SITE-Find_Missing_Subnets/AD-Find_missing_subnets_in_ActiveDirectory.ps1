@@ -61,7 +61,9 @@
 			UPDATE Logic of the script (now append csv for each DC, and process the CSV files and Build html at the end of the PROCESS block)
 			UPDATE Html report to show forest and domain information
 			ADD KeepLogs Switch Parameter
-			REMOVE the ExportCSV part, it is saved by default.
+			REMOVE the ExportCSV part, it is saved by default
+			ADD HTMLReportPath Parameter, Just need to specify the folder. default file name will be: $ForestName-DateFormat-Report.html
+			ADD Table CSS
 #>
 
 #requires -version 2.0
@@ -85,8 +87,12 @@ PARAM (
 	[String]$EmailSubject = "Report - Active Directory - SITE - Missing Subnets",
 	
 	[Int]$LogsLines = "-200",
+	
+	[Switch]$KeepLogs,
+	
+	[ValidateScript({ Test-Path -Path $_})]
+	[String]$HTMLReportPath
 
-	[Switch]$KeepLogs
 )
 
 BEGIN
@@ -121,7 +127,33 @@ BEGIN
 		"TABLE{border-width: 1px;border-style: solid;border-color: black;border-collapse: collapse}" +
 		"TH{border-width: 1px;padding: 3px;border-style: solid;border-color: black;background-color:`"#00297A`";font-color:white}" +
 		"TD{border-width: 1px;padding-right: 2px;padding-left: 2px;padding-top: 0px;padding-bottom: 0px;border-style: solid;border-color: black;background-color:white}" +
-		"</style>"
+		"</style>"+
+
+		'<style type="text/css">
+		table.gridtable {
+			font-family: verdana,arial,sans-serif;
+			font-size:11px;
+			color:#333333;
+			border-width: 1px;
+			border-color: #666666;
+			border-collapse: collapse;
+		}
+		table.gridtable th {
+			border-width: 1px;
+			padding: 8px;
+			border-style: solid;
+			border-color: #666666;
+			background-color: #dedede;
+		}
+		table.gridtable td {
+			border-width: 1px;
+			padding: 8px;
+			border-style: solid;
+			border-color: #666666;
+			background-color: #ffffff;
+		}
+		</style>'
+		
 		$Head2 = "<style>" +
 		"BODY{background-color:white;font-family:consolas;font-size:9pt;}" +
 		"TABLE{border-width: 1px;border-style: solid;border-color: black;border-collapse: collapse;}" +
@@ -129,19 +161,39 @@ BEGIN
 		"TD{border-width: 1px;padding-right: 2px;padding-left: 2px;padding-top: 0px;padding-bottom: 0px;border-style: solid;border-color: black;background-color:white}" +
 		"</style>"
 		
-		$PostContent = "<br><br><i><u>Generated from:</u> $($env:COMPUTERNAME.ToUpper()) <u>on</u> $(Get-Date -Format "yyyy/MM/dd HH:mm:ss")</i>"
+		$TableCSS = @"
+<style type="text/css">
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+"@
 		
-		
-		<#
-		# Get the Current Domain Information
-		$domain = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
-		Write-Verbose -Message "Domain: $domain"
-		#>
+		$PostContent = "<font size=`"1`" color=`"black`"><br><br><i><u>Generated from:</u> $($env:COMPUTERNAME.ToUpper()) <u>on</u> $(Get-Date -Format "yyyy/MM/dd HH:mm:ss")</i></font>"
 		
 		# Get the Current Forest Information
 		$Forest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
 		$ForestName = $Forest.Name.ToUpper()
-		Write-Verbose -Message "[BEGIN] Forest: $Forest"
+		Write-Verbose -Message "[BEGIN] Forest: $ForestName"
 		
 		
 	}#TRY
@@ -161,11 +213,11 @@ PROCESS
 			$DomainName = $Domain.Name.ToUpper()
 			
 			# Get the names of all the Domain Contollers in $domain
-			Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Getting all Domain Controllers from ..."
+			Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Getting all Domain Controllers from ..."
 			$DomainControllers = $domain | ForEach-Object -Process { $_.DomainControllers } | Select-Object -Property Name
 			
 			# Gathering the NETLOGON.LOG for each Domain Controller
-			Write-Verbose "[PROCESS] $ForestName - $domainName - Gathering Logs from Domain controllers"
+			Write-Verbose "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Gathering Logs from Domain controllers"
 			FOREACH ($dc in $DomainControllers)
 			{
 				$DCName = $($dc.Name).toUpper()
@@ -177,7 +229,7 @@ PROCESS
 					#######################
 					
 					# Get the Current Domain Controller in the Loop
-					Write-Verbose -Message "[PROCESS] $ForestName - $domainName - $DCName - Gathering Logs"
+					Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - $DCName - Gathering Logs"
 					
 					# NETLOGON.LOG path for the current Domain Controller
 					$path = "\\$DCName\admin`$\debug\netlogon.log"
@@ -188,17 +240,17 @@ PROCESS
 						IF ((Get-Content -Path $path | Measure-Object -Line).lines -gt 0)
 						{
 							#Copy the NETLOGON.log locally for the current DC
-							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - $DCName - NETLOGON.LOG - Copying..."
+							Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - $DCName - NETLOGON.LOG - Copying..."
 							Copy-Item -Path $path -Destination $ScriptPathOutput\$DomainName-$DCName-$DateFormat-netlogon.log
 							
 							#Export the $LogsLines last lines of the NETLOGON.log and send it to a file
 							((Get-Content -Path $ScriptPathOutput\$DomainName-$DCName-$DateFormat-netlogon.log -ErrorAction Continue)[$LogsLines .. -1]) |
 							Out-File -FilePath "$ScriptPathOutput\$DomainName-$DCName.txt" -ErrorAction 'Continue' -ErrorVariable ErrorOutFileNetLogon
-							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - $DCName - NETLOGON.LOG - Copied"
+							Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - $DCName - NETLOGON.LOG - Copied"
 						}#IF
-						ELSE { Write-Verbose -Message "[PROCESS] File Empty" }
+						ELSE { Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - $DCName - NETLOGON File Empty !!" }
 					}
-					ELSE { Write-Warning -Message "$ForestName - $domainName - $DCName - NETLOGON.log is not reachable" }
+					ELSE { Write-Warning -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - $DCName - NETLOGON.log is not reachable" }
 					
 					
 					
@@ -214,21 +266,21 @@ PROCESS
 						# Windows Server 2012
 						IF ($FilesToCombine[0] -match "\[\d{1,5}\]")
 						{
-							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
-							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - NETLOGON format: 2012"
+							Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Importing exported data to a CSV format..."
+							Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - NETLOGON format: 2012"
 							$ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
 						}
 						
 						# Windows Server Pre-2012 (2003/2008)
 						IF($FilesToCombine[0] -notmatch "\[\d{1,5}\]")
 						{
-							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
-							Write-Verbose -Message "[PROCESS] $ForestName - $domainName - NETLOGON format: 2008 and Previous versions"
+							Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Importing exported data to a CSV format..."
+							Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - NETLOGON format: 2008 and Previous versions"
 							$ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Domain, Error, Name, IPAddress,Code
 						}
 						
 						# Convert the TXT file to a CSV format
-						Write-Verbose -Message "[PROCESS] $ForestName - $domainName - Importing exported data to a CSV format..."
+						Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Importing exported data to a CSV format..."
 						$ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
 						
 						# Append Missing Subnet File
@@ -316,6 +368,8 @@ PROCESS
 		# Add PostContent to email
 		$EmailBody += $PostContent
 		
+		$EmailBody = $EmailBody -replace "<table>", '<table class="gridtable">'
+		$FinalEmailBody = ConvertTo-Html -Head $Head -PostContent $EmailBody
 		
 		# EMAIL
 		Write-Verbose -Message "[PROCESS] Preparing the final Email"
@@ -328,9 +382,19 @@ PROCESS
 		FOREACH ($To in $Emailto) { $MailMessage.To.add($($To)) }
 		$MailMessage.IsBodyHtml = $true
 		$MailMessage.Subject = $EmailSubject
-		$MailMessage.Body = ConvertTo-Html -Head $Head -PostContent $EmailBody
+		$MailMessage.Body = $FinalEmailBody
 		$SmtpClient.Send($MailMessage)
 		Write-Verbose -Message "[PROCESS] Email Sent!"
+		
+		
+		###############
+		# SAVE REPORT #
+		###############
+		
+		if ($PSBoundParameters['HTMLReportPath'])
+		{
+			$FinalEmailBody | Out-File -LiteralPath (Join-Path -Path $HTMLReportPath -ChildPath "$ForestName-$dateformat-Report.html")
+		}
 	}
 	
 }#PROCESS
