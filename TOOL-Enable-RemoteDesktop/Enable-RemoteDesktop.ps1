@@ -14,7 +14,7 @@
 		Specifies the credential to use
 	
 	.PARAMETER CimSession
-		Specifies an existing CIM Session to use
+		Specifies one or more existing CIM Session(s) to use
 	
 	.EXAMPLE
 		PS C:\> Enable-RemoteDesktop -ComputerName DC01
@@ -24,6 +24,9 @@
 	
 	.EXAMPLE
 		PS C:\> Enable-RemoteDesktop -CimSession $Session
+	
+	.EXAMPLE
+		PS C:\> Enable-RemoteDesktop -CimSession $Session1,$session2,$session3
 	
 	.NOTES
 		Francois-Xavier Cat
@@ -45,41 +48,99 @@
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
 		
 		[Parameter(ParameterSetName = "CimSession")]
-		[Microsoft.Management.Infrastructure.CimSession]$CimSession
+		[Microsoft.Management.Infrastructure.CimSession[]]$CimSession
 	)
 	BEGIN
 	{
 		# Helper Function
 		function Get-DefaultMessage
 		{
-	<#
-	.SYNOPSIS
-		Helper Function to show default message used in VERBOSE/DEBUG/WARNING
-	.DESCRIPTION
-		Helper Function to show default message used in VERBOSE/DEBUG/WARNING.
-		Typically called inside another function in the BEGIN Block
-	#>
+<#
+.SYNOPSIS
+	Helper Function to show default message used in VERBOSE/DEBUG/WARNING
+.DESCRIPTION
+	Helper Function to show default message used in VERBOSE/DEBUG/WARNING
+	and... HOST in some case.
+	This is helpful to standardize the output messages
+	
+.PARAMETER Message
+	Specifies the message to show
+.NOTES
+	Francois-Xavier Cat
+	www.lazywinadmin.com
+	@lazywinadm
+#>
 			PARAM ($Message)
-			Write-Output "[$(Get-Date -Format 'yyyy/MM/dd-HH:mm:ss:ff')][$((Get-Variable -Scope 1 -Name MyInvocation -ValueOnly).MyCommand.Name)] $Message"
+			$DateFormat = Get-Date -Format 'yyyy/MM/dd-HH:mm:ss:ff'
+			$FunctionName = (Get-Variable -Scope 1 -Name MyInvocation -ValueOnly).MyCommand.Name
+			Write-Output "[$DateFormat][$FunctionName] $Message"
 		}#Get-DefaultMessage
 	}
 	PROCESS
 	{
-		FOREACH ($Computer in $ComputerName)
+		IF ($PSBoundParameters['CimSession'])
 		{
-			TRY
+			FOREACH ($Cim in $CimSession)
 			{
-				Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
-				IF (Test-Connection -Computer $Computer -count 1 -quiet)
+				$CIMComputer = $($Cim.ComputerName).ToUpper()
+				
+				TRY
 				{
-					$Splatting = @{
+					# Parameters for Get-CimInstance
+					$CIMSplatting = @{
 						Class = "Win32_TerminalServiceSetting"
 						NameSpace = "root\cimv2\terminalservices"
+						CimSession = $Cim
+						ErrorAction = 'Stop'
+						ErrorVariable = "ErrorProcessGetCimInstance"
 					}
 					
-					IF (-not $PSBoundParameters['CimSession'])
+					# Parameters for Invoke-CimMethod
+					$CIMInvokeSplatting = @{
+						MethodName = "SetAllowTSConnections"
+						Arguments = @{
+							AllowTSConnections = 1;
+							ModifyFirewallException = 1
+						}
+						ErrorAction = 'Stop'
+						ErrorVariable = "ErrorProcessInvokeCim"
+					}
+					
+					Write-Verbose -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - Enable Remote Desktop (and Modify Firewall Exception")
+					Get-CimInstance @CIMSplatting | Invoke-CimMethod @CIMInvokeSplatting
+				}
+				CATCH
+				{
+					Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - Something wrong happened")
+					IF ($ErrorProcessGetCimInstance) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Get-CimInstance") }
+					IF ($ErrorProcessInvokeCim) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Invoke-CimMethod") }
+					Write-Warning -Message $Error[0].Exception.Message
+				} #CATCH
+				FINALLY
+				{
+					$CIMSplatting.Clear()
+					$CIMInvokeSplatting.Clear()
+				}
+			} #FOREACH ($Cim in $CimSessions)
+		} #IF ($PSBoundParameters['CimSession'])
+		ELSE
+		{
+			FOREACH ($Computer in $ComputerName)
+			{
+				$Computer = $Computer.ToUpper()
+				
+				TRY
+				{
+					Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
+					IF (Test-Connection -Computer $Computer -count 1 -quiet)
 					{
-						$Splatting.ComputerName = $Computer
+						$Splatting = @{
+							Class = "Win32_TerminalServiceSetting"
+							NameSpace = "root\cimv2\terminalservices"
+							ComputerName = $Computer
+							ErrorAction = 'Stop'
+							ErrorVariable = 'ErrorProcessGetWmi'
+						}
 						
 						IF ($PSBoundParameters['Credential'])
 						{
@@ -93,27 +154,18 @@
 						# Disable requirement that user must be authenticated
 						#(Get-WmiObject -Class Win32_TSGeneralSetting @Splatting -Filter TerminalName='RDP-tcp').SetUserAuthenticationRequired(0)  Out-Null
 					}
-					IF ($PSBoundParameters['CimSession'])
-					{
-						$Splatting.CimSession = $CimSession
-						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - CIMSession - Enable Remote Desktop (and Modify Firewall Exception")
-						Get-CimInstance @Splatting | Invoke-CimMethod -MethodName SetAllowTSConnections -Arguments @{
-							AllowTSConnections = 1;
-							ModifyFirewallException = 1
-						}
-					}
 				}
-			}
-			CATCH
-			{
-				Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Something wrong happened")
-				Write-Warning -MEssage $Error[0].Exception.Message
-			}
-			FINALLY
-			{
-				$Splatting.Clear()
-			}
-		}#FOREACH
-		
+				CATCH
+				{
+					Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Something wrong happened")
+					IF ($ErrorProcessGetWmi) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Issue with Get-WmiObject")}
+					Write-Warning -MEssage $Error[0].Exception.Message
+				}
+				FINALLY
+				{
+					$Splatting.Clear()
+				}
+			}#FOREACH
+		} #ELSE (Not CIM)
 	}#PROCESS
 }#Function
