@@ -9,11 +9,23 @@
 		Send-email `
 			-EmailTo "fxcat@contoso.com" `
 			-EmailFrom "powershell@contoso.com" `
-			-Username "Account" `
-			-Password "SecretP@ssword" `
 			-SMTPServer "smtp.sendgrid.net"  `
 			-Subject "Test Email" `
 			-Body "Test Email"
+	
+		This will send an email using the current credential of the current logged user
+	.EXAMPLE
+		$Cred = [System.Net.NetworkCredential](Get-Credential -Credential testuser)
+	
+		Send-email `
+			-EmailTo "fxcat@contoso.com" `
+			-EmailFrom "powershell@contoso.com" `
+			-Credential $cred
+			-SMTPServer "smtp.sendgrid.net"  `
+			-Subject "Test Email" `
+			-Body "Test Email"
+	
+		This will send an email using the credentials specified in the $Cred variable
 	.NOTES
 		Francois-Xavier Cat
 		fxcat@lazywinadmin.com
@@ -24,6 +36,7 @@
 		1.0 2014/12/25 	Initial Version
 		1.1 2015/02/04 	Adding some error handling and clean up the code a bit
 						Add Encoding, CC, BCC, BodyAsHTML
+		1.2 2015/04/02	Credential
 	
 		TODO
 		-Add more Help/Example
@@ -65,6 +78,8 @@
 		[Parameter(ParameterSetName = "Main")]
 		[String]$Attachment,
 		
+		[System.Net.NetworkCredential]$Credential,
+		<#
 		[Parameter(ParameterSetName = "Main")]
 		[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
 		[String]$Username,
@@ -72,6 +87,7 @@
 		[Parameter(ParameterSetName = "Main")]
 		[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
 		[String]$Password,
+		#>
 		
 		[Parameter(ParameterSetName = "Main")]
 		[Parameter(Mandatory = $true)]
@@ -111,8 +127,8 @@
 				$SMTPMessage.Attachments.Add($STMPattachment)
 			}
 			
-			# Create SMTP Client Object
-			$SMTPClient = New-Object 
+			#C reate SMTP Client Object
+			$SMTPClient = New-Object -TypeName Net.Mail.SmtpClient
 			$SMTPClient.Host = $SmtpServer
 			$SMTPClient.Port = $Port
 			
@@ -123,15 +139,23 @@
 			}
 			
 			# Credential Paramenter
-			IF (($PSBoundParameters['Username']) -and ($PSBoundParameters['Password']))
+			#IF (($PSBoundParameters['Username']) -and ($PSBoundParameters['Password']))
+			IF ($PSBoundParameters['Credential'])
 			{
+				<#
 				# Create Credential Object
 				$Credentials = New-Object -TypeName System.Net.NetworkCredential
 				$Credentials.UserName = $username.Split("@")[0]
 				$Credentials.Password = $Password
+				#>
 				
 				# Add the credentials object to the SMTPClient obj
-				$SMTPClient.Credentials = $Credentials
+				$SMTPClient.Credentials = $Credential
+			}
+			IF (-not $PSBoundParameters['Credential'])
+			{
+				# Use the current logged user credential
+				$SMTPClient.UseDefaultCredentials = $true
 			}
 			
 			# Send the Email
