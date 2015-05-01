@@ -27,7 +27,7 @@
         By default it will use the current user.
 	
 	.EXAMPLE
-		PS C:\> Get-O365CalendarItem -EmailAddress info@lazywinadmin.com -Credential $cred | Select-Object -Property Subject, StartTimeZone, Start, End, @{L="Attendees";E={$psitem.attendees.emailaddress | Select-Object -Property name -Unique|Sort}}
+		PS C:\> Get-O365CalendarItem -EmailAddress info@lazywinadmin.com -Credential (Get-Credential) | Select-Object -Property Subject, StartTimeZone, Start, End, @{L="Attendees";E={$psitem.attendees.emailaddress | Select-Object -Property name -Unique|Sort}}
         
         Get the calendar Items Subject, StartTimeZone,Start, End, Attendees for the last 7 days
 	.NOTES
@@ -55,7 +55,3 @@
 		Invoke-RestMethod @Splatting | Select-Object -ExpandProperty Value
 	}
 }
-
-# Subject, StartTimeZone,Start, End, Attendees
-Get-O365CalendarItem -Email info@lazywinadmin.com |
-Select-Object -Property Subject, StartTimeZone, Start, End, @{ L = "Attendees"; E = { $psitem.attendees.emailaddress | Select-Object -Property name -Unique | Sort } }
