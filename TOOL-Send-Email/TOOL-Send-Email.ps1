@@ -1,48 +1,90 @@
 ﻿Function Send-EMail
 {
-	<#
+<#
 	.SYNOPSIS
 		This function allows you to send email
+	
 	.DESCRIPTION
-		This function allows you to send email
+		This function allows you to send email using the NET Class System.Net.Mail
+	
+	.PARAMETER EmailTo
+		Specifies the recipient of the email
+	
+	.PARAMETER EmailFrom
+		Specifies the sender of the email
+	
+	.PARAMETER EmailCC
+		Specifies the Carbon Copy recipient
+	
+	.PARAMETER EmailBCC
+		Specifies the Blind Carbon Copy recipient
+	
+	.PARAMETER Subject
+		Specifies the subject of the email.
+	
+	.PARAMETER Body
+		Specifies the body of the email.
+	
+	.PARAMETER BodyIsHTML
+		Specifies that the text format of the body is HTML. Default is Plain Text.
+	
+	.PARAMETER Encoding
+		Specifies the text encoding of the title and the body.
+	
+	.PARAMETER Attachment
+		Specifies if an attachement must be added to the function
+	
+	.PARAMETER Credential
+		Specifies the credential to use, default will use the current credential.
+	
+	.PARAMETER SMTPServer
+		Specifies if the SMTP Server IP or FQDN to use
+	
+	.PARAMETER Port
+		Specifies if the SMTP Server Port to use. Default is 25.
+	
+	.PARAMETER EnableSSL
+		Specifies if the email must be sent using SSL.
+	
 	.EXAMPLE
 		Send-email `
-			-EmailTo "fxcat@contoso.com" `
-			-EmailFrom "powershell@contoso.com" `
-			-SMTPServer "smtp.sendgrid.net"  `
-			-Subject "Test Email" `
-			-Body "Test Email"
-	
+		-EmailTo "fxcat@contoso.com" `
+		-EmailFrom "powershell@contoso.com" `
+		-SMTPServer "smtp.sendgrid.net"  `
+		-Subject "Test Email" `
+		-Body "Test Email"
+		
 		This will send an email using the current credential of the current logged user
+	
 	.EXAMPLE
 		$Cred = [System.Net.NetworkCredential](Get-Credential -Credential testuser)
-	
+		
 		Send-email `
-			-EmailTo "fxcat@contoso.com" `
-			-EmailFrom "powershell@contoso.com" `
-			-Credential $cred
-			-SMTPServer "smtp.sendgrid.net"  `
-			-Subject "Test Email" `
-			-Body "Test Email"
-	
+		-EmailTo "fxcat@contoso.com" `
+		-EmailFrom "powershell@contoso.com" `
+		-Credential $cred
+		-SMTPServer "smtp.sendgrid.net"  `
+		-Subject "Test Email" `
+		-Body "Test Email"
+		
 		This will send an email using the credentials specified in the $Cred variable
+	
 	.NOTES
 		Francois-Xavier Cat
 		fxcat@lazywinadmin.com
 		www.lazywinadmin.com
 		@lazywinadm
-	
+		
 		VERSION HISTORY
 		1.0 2014/12/25 	Initial Version
 		1.1 2015/02/04 	Adding some error handling and clean up the code a bit
-						Add Encoding, CC, BCC, BodyAsHTML
+		Add Encoding, CC, BCC, BodyAsHTML
 		1.2 2015/04/02	Credential
-	
+		
 		TODO
 		-Add more Help/Example
 		-Add Support for classic Get-Credential
-	
-	#>
+#>
 	
 	[CmdletBinding(DefaultParameterSetName = "Main")]
 	PARAM (
@@ -73,7 +115,7 @@
 		
 		[Parameter(ParameterSetName = "Main")]
 		[ValidateSet("Default","ASCII","Unicode","UTF7","UTF8","UTF32")]
-		[System.Text.Encoding]$Encoding = "Default",
+		[System.String]$Encoding = "Default",
 		
 		[Parameter(ParameterSetName = "Main")]
 		[String]$Attachment,
@@ -114,11 +156,20 @@
 			$SMTPMessage.To = $EmailTo
 			$SMTPMessage.Body = $Body
 			$SMTPMessage.Subject = $Subject
-			$SMTPMessage.CC = $EmailCC
-			$SMTPMessage.Bcc = $EmailBCC
-			$SMTPMessage.IsBodyHtml = $BodyIsHtml
 			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
 			$SMTPMessage.SubjectEncoding = $([System.Text.Encoding]::$Encoding)
+			
+			# CC Parameter
+			IF ($PSBoundParameters['EmailCC'])
+			{
+				$SMTPMessage.CC.Add($EmailCC)
+			}
+			
+			# BCC Parameter
+			IF ($PSBoundParameters['EmailBCC'])
+			{
+				$SMTPMessage.BCC.Add($EmailBCC)
+			}
 			
 			# Attachement Parameter
 			IF ($PSBoundParameters['attachment'])
@@ -127,7 +178,7 @@
 				$SMTPMessage.Attachments.Add($STMPattachment)
 			}
 			
-			#C reate SMTP Client Object
+			#Create SMTP Client Object
 			$SMTPClient = New-Object -TypeName Net.Mail.SmtpClient
 			$SMTPClient.Host = $SmtpServer
 			$SMTPClient.Port = $Port
@@ -171,7 +222,7 @@
 	END
 	{
 		# Remove Variables
-		Remove-Variable -Name SMTPClient
-		Remove-Variable -Name Password
+		Remove-Variable -Name SMTPClient -ErrorAction SilentlyContinue
+		Remove-Variable -Name Password -ErrorAction SilentlyContinue
 	}#END
 } #End Function Send-EMail
