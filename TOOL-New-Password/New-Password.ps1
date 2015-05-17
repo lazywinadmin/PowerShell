@@ -15,7 +15,12 @@
 		If the length requested is greater than 4, it will make sure the password contains an Upper and Lower case letter, a Number and a special character
 	
 	.PARAMETER Length
-		Specifies the length of the password
+		Specifies the length of the password.
+        Default is 12 characters
+
+    .PARAMETER Count
+        Specifies how many password you want to output.
+        Default is 1 password.
 	
 	.EXAMPLE
 		PS C:\> New-Password -Length 30
@@ -35,7 +40,9 @@
 	PARAM
 	(
 		[ValidateNotNull()]
-		[int]$Length = 12
+		[int]$Length = 12,
+        [ValidateRange(1,256)]
+        [Int]$Count = 1
 	)#PARAM
 	
 	BEGIN
@@ -53,31 +60,33 @@
 
 	PROCESS
 	{
-        # Password of 4 characters or longer
-		IF ($Length -gt 4)
-		{
+        1..$count | ForEach-Object {
+            # Password of 4 characters or longer
+		    IF ($Length -gt 4)
+		    {
 			
-			DO
-			{
-				# Generate a Password of the length requested
-				$NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
-			}#Do
-			UNTIL (
-			# Make sure it contains an Upercase and Lowercase letter, a number and another special character
-			($NewPassword -cmatch '[A-Z]') -and
-			($NewPassWord -cmatch '[a-z]') -and
-			($NewPassWord -imatch '[0-9]') -and
-			($NewPassWord -imatch '[^A-Z0-9]')
-			)#Until
-		}#IF
-        # Password Smaller than 4 characters
-		ELSE
-		{
-			$NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
-		}#ELSE
+			    DO
+			    {
+				    # Generate a Password of the length requested
+				    $NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
+			    }#Do
+			    UNTIL (
+			    # Make sure it contains an Upercase and Lowercase letter, a number and another special character
+			    ($NewPassword -cmatch '[A-Z]') -and
+			    ($NewPassWord -cmatch '[a-z]') -and
+			    ($NewPassWord -imatch '[0-9]') -and
+			    ($NewPassWord -imatch '[^A-Z0-9]')
+			    )#Until
+		    }#IF
+            # Password Smaller than 4 characters
+		    ELSE
+		    {
+			    $NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
+		    }#ELSE
 		
-		# Output a new password
-		Write-Output $NewPassword
+		    # Output a new password
+		    Write-Output $NewPassword
+        }
 	} #PROCESS
 	END
 	{
