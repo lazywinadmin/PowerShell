@@ -90,6 +90,7 @@
 	} #PROCESS
 	END
 	{
+        # Cleanup
 		Remove-Variable -Name NewPassWord -ErrorAction 'SilentlyContinue'
 	} #END
 } #Function
