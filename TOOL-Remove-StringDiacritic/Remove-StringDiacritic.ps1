@@ -1,11 +1,11 @@
-﻿function Remove-StringDiacritics
+﻿function Remove-StringDiacritic
 {
 <#
 	.SYNOPSIS
-		This function will remove the diacritics characters from a string
-	
+		This function will remove the diacritics (accents) characters from a string.
+		
 	.DESCRIPTION
-		This function will remove the diacritics characters from a string
+		This function will remove the diacritics (accents) characters from a string.
 	
 	.PARAMETER String
 		Specifies the String on which the diacritics need to be removed
@@ -15,7 +15,7 @@
 		https://msdn.microsoft.com/en-us/library/system.text.normalizationform(v=vs.110).aspx
 	
 	.EXAMPLE
-		PS C:\> Remove-StringDiacritics "L'été de Raphaël"
+		PS C:\> Remove-StringDiacritic "L'été de Raphaël"
 		
 		L'ete de Raphael
 	
