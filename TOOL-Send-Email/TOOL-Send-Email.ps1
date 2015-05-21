@@ -153,7 +153,7 @@
 			# Create Mail Message Object
 			$SMTPMessage = New-Object System.Net.Mail.MailMessage
 			$SMTPMessage.From = $EmailFrom
-			$SMTPMessage.To = $EmailTo
+			$SMTPMessage.To.add($EmailTo)
 			$SMTPMessage.Body = $Body
 			$SMTPMessage.Subject = $Subject
 			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
