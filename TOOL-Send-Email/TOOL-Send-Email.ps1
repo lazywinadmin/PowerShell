@@ -68,6 +68,17 @@
 		-Body "Test Email"
 		
 		This will send an email using the credentials specified in the $Cred variable
+		
+	.EXAMPLE
+		Send-email `
+		-EmailTo "fxcat@contoso.com","SomeoneElse@contoso.com" `
+		-EmailFrom "powershell@contoso.com" `
+		-SMTPServer "smtp.sendgrid.net"  `
+		-Subject "Test Email" `
+		-Body "Test Email"
+		
+		This will send an email using the current credential of the current logged user to two
+		fxcat@contoso.com and SomeoneElse@contoso.com
 	
 	.NOTES
 		Francois-Xavier Cat
@@ -91,7 +102,7 @@
 		[Parameter(ParameterSetName = "Main")]
 		[Parameter(Mandatory = $true)]
 		[Alias('To')]
-		[String]$EmailTo,
+		[String[]]$EmailTo,
 		
 		[Parameter(ParameterSetName = "Main")]
 		[Parameter(Mandatory = $true)]
@@ -153,7 +164,7 @@
 			# Create Mail Message Object
 			$SMTPMessage = New-Object System.Net.Mail.MailMessage
 			$SMTPMessage.From = $EmailFrom
-			$SMTPMessage.To.add($EmailTo)
+			FOREACH($To in $EmailTo){$SMTPMessage.To.add($To)}
 			$SMTPMessage.Body = $Body
 			$SMTPMessage.Subject = $Subject
 			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
