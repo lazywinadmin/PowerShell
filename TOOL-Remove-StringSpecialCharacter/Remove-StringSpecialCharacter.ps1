@@ -16,6 +16,11 @@
         Specifies the special character to keep in the output
 	
 	.EXAMPLE
+        PS C:\> Remove-StringSpecialCharacter -String "^&*@wow*(&(*&@"
+
+        wow
+
+    .EXAMPLE
 		PS C:\> Remove-StringSpecialCharacter -String "wow#@!`~)(\|?/}{-_=+*"
 		
 		wow_
@@ -36,19 +41,24 @@
 		[ValidateNotNullOrEmpty()]
 		[Alias('Text')]
 		[System.String]$String,
+
+        [Alias("Keep")]
 		[ValidateNotNullOrEmpty()]
 		[String[]]$SpecialCharacterToKeep
 	)
-	BEGIN
-	{
-		Foreach ($Character in $SpecialCharacterToKeep)
-		{
-			$Regex += "[^\w\.$character"
-		}
-		$Regex += "]"
-	}
 	PROCESS
-	{
+    {
+        IF($PSBoundParameters["SpecialCharacterToKeep"])
+        {
+		    Foreach ($Character in $SpecialCharacterToKeep)
+		    {
+			    $Regex += "[^\w\.$character"
+		    }
+
+		    $Regex += "]"
+        } #IF($PSBoundParameters["SpecialCharacterToKeep"])
+        ELSE {$Regex = "[^\w\.]"}
+	
 		$String -replace $regex, ""
-	}
+    } #PROCESS
 }
