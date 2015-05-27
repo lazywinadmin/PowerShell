@@ -166,6 +166,7 @@
 			$SMTPMessage.From = $EmailFrom
 			FOREACH($To in $EmailTo){$SMTPMessage.To.add($To)}
 			$SMTPMessage.Body = $Body
+			$SMTPMessage.IsBodyHtml = $BodyIsHTML
 			$SMTPMessage.Subject = $Subject
 			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
 			$SMTPMessage.SubjectEncoding = $([System.Text.Encoding]::$Encoding)
