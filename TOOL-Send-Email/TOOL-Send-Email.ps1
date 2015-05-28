@@ -227,6 +227,7 @@
 			$SMTPMessage.From.Address = $From
 			FOREACH ($ToAddress in $To) { $SMTPMessage.To.add($ToAddress) }
 			$SMTPMessage.Body = $Body
+			$SMTPMessage.IsBodyHtml = $BodyIsHTML
 			$SMTPMessage.Subject = $Subject
 			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
 			$SMTPMessage.SubjectEncoding = $([System.Text.Encoding]::$Encoding)
