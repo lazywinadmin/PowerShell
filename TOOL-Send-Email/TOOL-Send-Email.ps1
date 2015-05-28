@@ -1,4 +1,4 @@
-﻿Function Send-EMail
+﻿function Send-Email
 {
 <#
 	.SYNOPSIS
@@ -7,17 +7,29 @@
 	.DESCRIPTION
 		This function allows you to send email using the NET Class System.Net.Mail
 	
-	.PARAMETER EmailTo
-		Specifies the recipient of the email
+	.PARAMETER To
+		A description of the To parameter.
 	
-	.PARAMETER EmailFrom
-		Specifies the sender of the email
+	.PARAMETER From
+		A description of the From parameter.
 	
-	.PARAMETER EmailCC
-		Specifies the Carbon Copy recipient
+	.PARAMETER FromDisplayName
+		Specifies the DisplayName to show for the FROM parameter
 	
-	.PARAMETER EmailBCC
-		Specifies the Blind Carbon Copy recipient
+	.PARAMETER SenderAddress
+		A description of the SenderAddress parameter.
+	
+	.PARAMETER SenderDisplayName
+		Specifies the DisplayName of the Sender
+	
+	.PARAMETER CC
+		A description of the CC parameter.
+	
+	.PARAMETER BCC
+		A description of the BCC parameter.
+	
+	.PARAMETER ReplyToList
+		Specifies the email address(es) that will be use when the recipient(s) reply to the email.
 	
 	.PARAMETER Subject
 		Specifies the subject of the email.
@@ -27,6 +39,9 @@
 	
 	.PARAMETER BodyIsHTML
 		Specifies that the text format of the body is HTML. Default is Plain Text.
+	
+	.PARAMETER Priority
+		Specifies the priority of the message. Default is Normal.
 	
 	.PARAMETER Encoding
 		Specifies the text encoding of the title and the body.
@@ -45,6 +60,25 @@
 	
 	.PARAMETER EnableSSL
 		Specifies if the email must be sent using SSL.
+	
+	.PARAMETER DeliveryNotificationOptions
+		Specifies the delivey notification options.
+		https://msdn.microsoft.com/en-us/library/system.net.mail.deliverynotificationoptions.aspx
+	
+	.PARAMETER EmailCC
+		Specifies the Carbon Copy recipient
+	
+	.PARAMETER EmailBCC
+		Specifies the Blind Carbon Copy recipient
+	
+	.PARAMETER EmailTo
+		Specifies the recipient of the email
+	
+	.PARAMETER EmailFrom
+		Specifies the sender of the email
+	
+	.PARAMETER Sender
+		Specifies the Sender Email address. Sender is the Address of the actual sender acting on behalf of the author listed in the From parameter.
 	
 	.EXAMPLE
 		Send-email `
@@ -68,7 +102,7 @@
 		-Body "Test Email"
 		
 		This will send an email using the credentials specified in the $Cred variable
-		
+	
 	.EXAMPLE
 		Send-email `
 		-EmailTo "fxcat@contoso.com","SomeoneElse@contoso.com" `
@@ -97,78 +131,119 @@
 		-Add Support for classic Get-Credential
 #>
 	
-	[CmdletBinding(DefaultParameterSetName = "Main")]
-	PARAM (
-		[Parameter(ParameterSetName = "Main")]
-		[Parameter(Mandatory = $true)]
-		[Alias('To')]
-		[String[]]$EmailTo,
+	[CmdletBinding(DefaultParameterSetName = 'Main')]
+	param
+	(
+		[Parameter(ParameterSetName = 'Main',
+				   Mandatory = $true)]
+		[Alias('EmailTo')]
+		[String[]]$To,
 		
-		[Parameter(ParameterSetName = "Main")]
-		[Parameter(Mandatory = $true)]
-		[Alias('From')]
-		[String]$EmailFrom,
+		[Parameter(ParameterSetName = 'Main',
+				   Mandatory = $true)]
+		[Alias('EmailFrom', 'FromAddress')]
+		[String]$From,
 		
-		[Parameter(ParameterSetName = "Main")]
-		[String]$EmailCC,
+		[Parameter(ParameterSetName = 'Main')]
+		[ValidateNotNullOrEmpty()]
+		[string]$FromDisplayName,
 		
-		[Parameter(ParameterSetName = "Main")]
-		[String]$EmailBCC,
+		[Parameter(ParameterSetName = 'Main')]
+		[Alias('EmailCC')]
+		[String]$CC,
 		
-		[Parameter(ParameterSetName = "Main")]
-		[String]$Subject = "Email from PowerShell",
+		[Parameter(ParameterSetName = 'Main')]
+		[Alias('EmailBCC')]
+		[System.String]$BCC,
 		
-		[Parameter(ParameterSetName = "Main")]
-		[String]$Body = "Hello World",
+		[Parameter(ParameterSetName = 'Main')]
+		[ValidateNotNullOrEmpty()]
+		[Alias('ReplyTo')]
+		[System.string[]]$ReplyToList,
 		
-		[Parameter(ParameterSetName = "Main")]
+		[Parameter(ParameterSetName = 'Main')]
+		[System.String]$Subject = "Email from PowerShell",
+		
+		[Parameter(ParameterSetName = 'Main')]
+		[System.String]$Body = "Hello World",
+		
+		[Parameter(ParameterSetName = 'Main')]
 		[Switch]$BodyIsHTML = $false,
 		
-		[Parameter(ParameterSetName = "Main")]
-		[ValidateSet("Default","ASCII","Unicode","UTF7","UTF8","UTF32")]
+		[Parameter(ParameterSetName = 'Main')]
+		[ValidateNotNullOrEmpty()]
+		[System.Net.Mail.MailPriority]$Priority = "Normal",
+		
+		[Parameter(ParameterSetName = 'Main')]
+		[ValidateSet("Default", "ASCII", "Unicode", "UTF7", "UTF8", "UTF32")]
 		[System.String]$Encoding = "Default",
 		
-		[Parameter(ParameterSetName = "Main")]
-		[String]$Attachment,
+		[Parameter(ParameterSetName = 'Main')]
+		[System.String]$Attachment,
 		
+		[Parameter(ParameterSetName = 'Main')]
 		[System.Net.NetworkCredential]$Credential,
-		<#
-		[Parameter(ParameterSetName = "Main")]
-		[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
-		[String]$Username,
-	
-		[Parameter(ParameterSetName = "Main")]
-		[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
-		[String]$Password,
-		#>
 		
-		[Parameter(ParameterSetName = "Main")]
-		[Parameter(Mandatory = $true)]
+		[Parameter(ParameterSetName = 'Main',
+				   Mandatory = $true)]
 		[ValidateScript({
 			# Verify the host is reachable
-			Test-Connection -ComputerName $_ -Count 1 -Quiet})]
+			Test-Connection -ComputerName $_ -Count 1 -Quiet
+		})]
+		[Alias("Server")]
 		[string]$SMTPServer,
 		
-		[Parameter(ParameterSetName = "Main")]
+		[Parameter(ParameterSetName = 'Main')]
 		[ValidateRange(1, 65535)]
+		[Alias("SMTPServerPort")]
 		[int]$Port = 25,
 		
-		[Parameter(ParameterSetName = "Main")]
-		[Switch]$EnableSSL
-	)#PARAM
+		[Parameter(ParameterSetName = 'Main')]
+		[Switch]$EnableSSL,
+		
+		[Parameter(ParameterSetName = 'Main')]
+		[ValidateNotNullOrEmpty()]
+		[Alias('EmailSender', 'Sender')]
+		[string]$SenderAddress,
+		
+		[Parameter(ParameterSetName = 'Main')]
+		[ValidateNotNullOrEmpty()]
+		[System.String]$SenderDisplayName,
+		
+		[Parameter(ParameterSetName = 'Main')]
+		[ValidateNotNullOrEmpty()]
+		[Alias('DeliveryOptions')]
+		[System.Net.Mail.DeliveryNotificationOptions]$DeliveryNotificationOptions
+	)
+	
+	#PARAM
 	
 	PROCESS
 	{
 		TRY
 		{
 			# Create Mail Message Object
-			$SMTPMessage = New-Object System.Net.Mail.MailMessage
-			$SMTPMessage.From = $EmailFrom
-			FOREACH($To in $EmailTo){$SMTPMessage.To.add($To)}
+			$SMTPMessage = New-Object -TypeName System.Net.Mail.MailMessage
+			$SMTPMessage.From.Address = $From
+			FOREACH ($ToAddress in $To) { $SMTPMessage.To.add($ToAddress) }
 			$SMTPMessage.Body = $Body
 			$SMTPMessage.Subject = $Subject
 			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
 			$SMTPMessage.SubjectEncoding = $([System.Text.Encoding]::$Encoding)
+			$SMTPMessage.Priority = $Priority
+			$SMTPMessage.Sender.Address = $SenderAddress
+			
+			# Sender Displayname parameter
+			IF ($PSBoundParameters['SenderDisplayName'])
+			{
+				$SMTPMessage.Sender.DisplayName = $SenderDisplayName
+			}
+			
+			# From Displayname parameter
+			IF ($PSBoundParameters['FromDisplayName'])
+			{
+				$SMTPMessage.From.DisplayName = $FromDisplayName
+			}
 			
 			# CC Parameter
 			IF ($PSBoundParameters['EmailCC'])
@@ -182,11 +257,26 @@
 				$SMTPMessage.BCC.Add($EmailBCC)
 			}
 			
+			# ReplyToList Parameter
+			IF ($PSBoundParameters['ReplyToList'])
+			{
+				foreach ($ReplyTo in $ReplyToList)
+				{
+					$SMTPMessage.ReplyToList.Add($ReplyTo)
+				}
+			}
+			
 			# Attachement Parameter
 			IF ($PSBoundParameters['attachment'])
 			{
 				$SMTPattachment = New-Object -TypeName System.Net.Mail.Attachment($attachment)
 				$SMTPMessage.Attachments.Add($STMPattachment)
+			}
+			
+			# Delivery Options
+			IF ($PSBoundParameters['DeliveryNotificationOptions'])
+			{
+				$SMTPMessage.DeliveryNotificationOptions = $DeliveryNotificationOptions
 			}
 			
 			#Create SMTP Client Object
