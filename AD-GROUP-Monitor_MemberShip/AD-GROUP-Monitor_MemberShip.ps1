@@ -11,11 +11,6 @@
 	You can also specify the 'DN','GUID','SID' or the 'Name' of your group(s).
 	Using 'Domain\Name' will also work.
 
-.PARAMETER Group
-	Specify the group(s) to query in Active Directory.
-	You can also specify the 'DN','GUID','SID' or the 'Name' of your group(s).
-	Using 'Domain\Name' will also work.
-
 .PARAMETER SearchRoot
 	Specify the DN, GUID or canonical name of the domain or container to search. By default, the script searches the entire sub-tree of which SearchRoot is the topmost object (sub-tree search). This default behavior can be altered by using the SearchScope parameter.
 
