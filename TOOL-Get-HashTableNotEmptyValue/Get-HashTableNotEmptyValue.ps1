@@ -18,7 +18,7 @@
 
     $HashTable.GetEnumerator().name |
         ForEach-Object -Process {
-            if($HashTable[$_] -ne "" -or $HashTable[$_] -ne $null)
+            if($HashTable[$_] -ne "")
             {
                 Write-Output $_
             }
