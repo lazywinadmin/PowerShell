@@ -6,7 +6,6 @@
 	
 	.DESCRIPTION
 		Retrieve the list of group present in the tokengroups of a user or computer object.
-
 		TokenGroups attribute
 		https://msdn.microsoft.com/en-us/library/ms680275%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
 	
@@ -21,33 +20,44 @@
 	
 	.PARAMETER SizeLimit
 		Specify the number of item maximum to retrieve
+
+    .EXAMPLE
+        Get-ADSITokenGroup -SamAccountName TestUser
+
+        GroupName            Count SamAccountName
+        ---------            ----- --------------
+        wbiegames\MTL_GroupB     2 TestUser
+        wbiegames\MTL_GroupA     2 TestUser
+        wbiegames\MTL_GroupC     2 TestUser
+        wbiegames\MTL_GroupD     2 TestUser
+        wbiegames\MTL-GroupE     1 TestUser
 	
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
-		@lazywinadm
-
-		Version History
-		1.0 2015/04/02 Initial Version
+		@lazywinadm		
 	#>
 	[CmdletBinding()]
 	param
 	(
 		[Parameter(ValueFromPipeline = $true)]
 		[Alias('UserName', 'Identity')]
-		[String]
-		$SamAccountName,
+		[String]$SamAccountName,
+		
 		[Alias('RunAs')]
 		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
+		
 		[Alias('DomainDN', 'Domain')]
-		[String]
-		$DomainDistinguishedName = $(([adsisearcher]"").Searchroot.path),
+		[String]$DomainDistinguishedName = $(([adsisearcher]"").Searchroot.path),
+		
 		[Alias('ResultLimit', 'Limit')]
-		[int]
-		$SizeLimit = '100'
+		[int]$SizeLimit = '100'
 	)
-	
+	BEGIN
+	{
+		$GroupList = ""
+	}
 	PROCESS
 	{
 		TRY
@@ -74,19 +84,18 @@
 				$Search.SearchRoot = $DomainDistinguishedName
 			}
 			
-			FOREACH ($Account in $Search.FindAll())
-			{
-				
+			$Search.FindAll() | ForEach-Object -Process {
+				$Account = $_
 				$AccountGetDirectory = $Account.GetDirectoryEntry();
 				
 				# Add the properties tokenGroups
 				$AccountGetDirectory.GetInfoEx(@("tokenGroups"), 0)
 				
 				
-				FOREACH ($Token in $($AccountGetDirectory.Get("tokenGroups")))
-				{
+				$($AccountGetDirectory.Get("tokenGroups")) |
+				ForEach-Object -Process {
 					# Create SecurityIdentifier to translate into group name
-					$Principal = New-Object System.Security.Principal.SecurityIdentifier($token, 0)
+					$Principal = New-Object System.Security.Principal.SecurityIdentifier($_, 0)
 					
 					# Prepare Output
 					$Properties = @{
@@ -97,10 +106,15 @@
 					# Output Information
 					New-Object -TypeName PSObject -Property $Properties
 				}
-			}
-			
-		}
-		
+			} | Group-Object -Property groupname |
+			ForEach-Object {
+				New-Object -TypeName PSObject -Property @{
+					SamAccountName = $_.group.samaccountname | Select-Object -Unique
+					GroupName = $_.Name
+					Count = $_.Count
+				}#new-object
+			}#Foreach
+		}#TRY
 		CATCH
 		{
 			Write-Warning -Message "[PROCESS] Something wrong happened!"
