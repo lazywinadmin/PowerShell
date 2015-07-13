@@ -26,11 +26,11 @@
 
         GroupName            Count SamAccountName
         ---------            ----- --------------
-        wbiegames\MTL_GroupB     2 TestUser
-        wbiegames\MTL_GroupA     2 TestUser
-        wbiegames\MTL_GroupC     2 TestUser
-        wbiegames\MTL_GroupD     2 TestUser
-        wbiegames\MTL-GroupE     1 TestUser
+        lazywinadmin\MTL_GroupB     2 TestUser
+        lazywinadmin\MTL_GroupA     2 TestUser
+        lazywinadmin\MTL_GroupC     2 TestUser
+        lazywinadmin\MTL_GroupD     2 TestUser
+        lazywinadmin\MTL-GroupE     1 TestUser
 	
 	.NOTES
 		Francois-Xavier Cat
