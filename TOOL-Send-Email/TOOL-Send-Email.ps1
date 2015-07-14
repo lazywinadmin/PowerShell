@@ -224,7 +224,7 @@
 		{
 			# Create Mail Message Object
 			$SMTPMessage = New-Object -TypeName System.Net.Mail.MailMessage
-			$SMTPMessage.From.Address = $From
+			$SMTPMessage.From = $From
 			FOREACH ($ToAddress in $To) { $SMTPMessage.To.add($ToAddress) }
 			$SMTPMessage.Body = $Body
 			$SMTPMessage.IsBodyHtml = $BodyIsHTML
@@ -232,7 +232,7 @@
 			$SMTPMessage.BodyEncoding = $([System.Text.Encoding]::$Encoding)
 			$SMTPMessage.SubjectEncoding = $([System.Text.Encoding]::$Encoding)
 			$SMTPMessage.Priority = $Priority
-			$SMTPMessage.Sender.Address = $SenderAddress
+			$SMTPMessage.Sender = $SenderAddress
 			
 			# Sender Displayname parameter
 			IF ($PSBoundParameters['SenderDisplayName'])
@@ -247,15 +247,15 @@
 			}
 			
 			# CC Parameter
-			IF ($PSBoundParameters['EmailCC'])
+			IF ($PSBoundParameters['CC'])
 			{
-				$SMTPMessage.CC.Add($EmailCC)
+				$SMTPMessage.CC.Add($CC)
 			}
 			
 			# BCC Parameter
-			IF ($PSBoundParameters['EmailBCC'])
+			IF ($PSBoundParameters['BCC'])
 			{
-				$SMTPMessage.BCC.Add($EmailBCC)
+				$SMTPMessage.BCC.Add($BCC)
 			}
 			
 			# ReplyToList Parameter
@@ -327,4 +327,4 @@
 		Remove-Variable -Name SMTPClient -ErrorAction SilentlyContinue
 		Remove-Variable -Name Password -ErrorAction SilentlyContinue
 	}#END
-} #End Function Send-EMail
+} #End Function Send-Email
