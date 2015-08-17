@@ -22,6 +22,9 @@
 		Expand-ScriptAlias -Path "C:\LazyWinAdmin\testscript.ps1"
 
     .EXAMPLE
+        "C:\LazyWinAdmin\testscript.ps1", "C:\LazyWinAdmin\testscript2.ps1" | Expand-ScriptAlias -Confirm
+
+    .EXAMPLE
         "C:\LazyWinAdmin\testscript.ps1", "C:\LazyWinAdmin\testscript2.ps1" | Expand-ScriptAlias -WhatIf
 
         What if: Performing the operation "Expand Alias: select to Select-Object (startoffset: 15)" on target "C:\LazyWinAdmin\testscript2.ps1".
@@ -49,9 +52,6 @@
 			
 			TRY
 			{
-				
-				
-				
 				# Retrieve file content
 				$ScriptContent = (Get-Content $File -Delimiter $([char]0))
 				
@@ -85,22 +85,21 @@
 				# The sort-object is important, we change the values from the end first to not lose the positions of every aliases.
 				Foreach ($Alias in $Aliases)
 				{
+					# whatif and confirm support
 					if ($psCmdlet.ShouldProcess($file, "Expand Alias: $($Alias.alias) to $($Alias.definition) (startoffset: $($alias.StartOffset))"))
 					{
 						# Remove alias and insert full cmldet name
 						$ScriptContent = $ScriptContent.Remove($Alias.StartOffset, ($Alias.EndOffset - $Alias.StartOffset)).Insert($Alias.StartOffset, $Alias.Definition)
-						
 						# Apply to the file
-						Set-Content -Path $File -Value $ScriptContent
+						Set-Content -Path $File -Value $ScriptContent -Confirm:$false
 					}
-				}
+				}#ForEach Alias in Aliases
 				
-			}
+			}#TRY
 			CATCH
 			{
 				Write-Error -Message $($Error[0].Exception.Message)
 			}
-		}
-	}
-	
-}
+		}#FOREACH File in Path
+	}#PROCESS
+}#Expand-ScriptAlias
