@@ -5,11 +5,11 @@ function Get-DistributionGroupMemberRecursive
 .SYNOPSIS
     This script will list all the members (recursively) of a DistributionGroup
 .EXAMPLE
-    Get-DistributionGroupMemberRecursive -Group mtl-wbgames_metallica_all -Verbose
+    Get-DistributionGroupMemberRecursive -Group TestDG  -Verbose
 .NOTES
     Francois-Xavier Cat
-    2015/02/18
-
+    www.lazywinadmin.com
+    @lazywinadm
 #>
 	[CmdletBinding()]
 	PARAM ($Group)
