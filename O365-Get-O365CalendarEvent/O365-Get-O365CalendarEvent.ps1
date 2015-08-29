@@ -37,6 +37,10 @@
         
         Get the calendar Events Subject, StartTimeZone,Start, End, Attendees for the last 7 days
 	.NOTES
+		Francois-Xavier Cat
+		www.lazywinadmin.com
+		@lazywinadm
+		
 		https://msdn.microsoft.com/office/office365/api/calendar-rest-operations
 #>
 	[CmdletBinding()]
