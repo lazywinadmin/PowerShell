@@ -50,16 +50,14 @@
 	{
 		IF ($PSBoundParameters["SpecialCharacterToKeep"])
 		{
+			$Regex = "[^\p{L}\p{Nd}"
 			Foreach ($Character in $SpecialCharacterToKeep)
 			{
-				#$Regex += "[^\w\.$character"
-				$Regex += "[^\p{L}\p{Nd}\.$character"
+				$Regex += "/$character"
 			}
 			
-			#$Regex += "]"
 			$Regex += "]+"
 		} #IF($PSBoundParameters["SpecialCharacterToKeep"])
-		#ELSE {$Regex = "[^\w\.]"}
 		ELSE { $Regex = "[^\p{L}\p{Nd}]+" }
 		
 		$String -replace $regex, ""
