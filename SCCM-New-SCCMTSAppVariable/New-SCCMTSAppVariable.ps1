@@ -31,19 +31,26 @@
 	
 	BEGIN
 	{
-		$TSEnv = New-Object -COMObject Microsoft.SMS.TSEnvironment
+		# Create an TaskSequence Environment Object
+		$TaskSequenceEnvironment = New-Object -COMObject Microsoft.SMS.TSEnvironment
 	}
 	PROCESS
 	{
 		
-		$ApplicationCount = $ApplicationList.Count
+		# Create a Counter
 		$Counter = 1
 		
+		# Foreach Application we create an incremented variable
 		$ApplicationList | ForEach-Object {
-			$Variable = "$BaseVariableName{0:00}" -f $Counter
-			$TSEnv.value("$Variable") = "$_"
 			
-			$Counter++| Out-Null	
+			# Define the Variable Name
+			$Variable = "$BaseVariableName{0:00}" -f $Counter
+			
+			# Create the Task Sequence Variable
+			$TaskSequenceEnvironment.value("$Variable") = "$_"
+			
+			# Increment the counter
+			[void]$Counter++
 		}
 	}
 }
