@@ -9,6 +9,15 @@
 			Specifies the name of the client on which the Cache size need to be changed
 		.PARAMETER SizeMB
 			Specifies the size of the cache in MB.
+		.PARAMETER ServiceRestart
+			Specifies that you want the SCCM Client service to restart
+		.PARAMETER Credential
+			Specifies the credential to use against the remote machine
+			Only work with the WMI query for now, not the service restart
+		.EXAMPLE
+			Set-SCCMClientCacheSize -ComputerName Client01 -SizeMB 5000
+			
+			This will set the client cache to 5000Mb on the computer Client01
 	#>
 	PARAM(
 		[Parameter(Mandatory)]
