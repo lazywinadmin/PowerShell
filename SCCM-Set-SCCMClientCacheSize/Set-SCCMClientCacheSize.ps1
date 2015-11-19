@@ -29,7 +29,7 @@
 		
 		[Alias('RunAs')]
 		[System.Management.Automation.Credential()]
-		$Credential = [System.Management.Automation.PSCredential]::Empty,
+		$Credential = [System.Management.Automation.PSCredential]::Empty
 	)
 
 	FOREACH ($Computer in $ComputerName)
@@ -63,7 +63,7 @@
 			$Cache.Put()
 			
 			# Restart SCCM Client
-			IF($PSBoundParameters[ServiceRestart])
+			IF($PSBoundParameters['ServiceRestart'])
 			{
 				Get-Service @SplattingService | Restart-Service
 			}
