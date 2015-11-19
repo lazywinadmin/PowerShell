@@ -31,7 +31,7 @@
         Default is Null (get all)
 	
     .EXAMPLE
-        Get-SCCMUserTargetedApplication -UserName TestUser -Credential $cred -Purpose Required
+        Get-SCCMUserCollectionDeployment -UserName TestUser -Credential $cred -Purpose Required
 	
 	.NOTES
         Francois-Xavier cat
