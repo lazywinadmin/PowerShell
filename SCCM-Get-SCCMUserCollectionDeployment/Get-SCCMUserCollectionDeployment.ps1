@@ -89,6 +89,21 @@
 			default { $DeploymentIntent = "NA" }
 		}
 		
+		Function Get-DeploymentIntentName
+		{
+	        	PARAM(
+	        	[Parameter(Mandatory)]
+	        	$DeploymentIntent
+	        	)
+            		PROCESS
+	            	{
+				if ($DeploymentIntent = 0) { Write-Output "Required" }
+				if ($DeploymentIntent = 2) { Write-Output "Available" }
+				if ($DeploymentIntent -ne 0 -and $DeploymentIntent -ne 2) { Write-Output "NA" }
+			}
+		}#Function Get-DeploymentIntentName
+        
+		
 	}
 	PROCESS
 	{
@@ -128,6 +143,7 @@
 						DeploymentID = $Deploy.DeploymentID
 						DeploymentName = $Deploy.DeploymentName
 						DeploymentIntent = $deploy.DeploymentIntent
+						DeploymentIntentName = (Get-DeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
 						TargetName = $Deploy.TargetName
 						TargetSubName = $Deploy.TargetSubname
 						
