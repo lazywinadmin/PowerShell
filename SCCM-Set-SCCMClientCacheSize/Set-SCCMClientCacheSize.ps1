@@ -1,8 +1,68 @@
 ﻿function Set-SCCMClientCacheSize
 {
-	PARAM($ComputerName)
-	$Cache = Get-WmiObject -Namespace ‘ROOT\CCM\SoftMgmtAgent’ -Class CacheConfig -ComputerName $ComputerName
-	$Cache.Size = ‘10240’
-	$Cache.Put()
-	Get-Service -ComputerName $ComputerName -Name 'ccmexec'| Restart-Service -Name CcmExec
+	<#
+		.SYNOPSYS
+			Function to set the cache size on a SCCM Client
+		.DESCRIPTION
+			Function to set the cache size on a SCCM Client
+		.PARAMETER ComputerName
+			Specifies the name of the client on which the Cache size need to be changed
+		.PARAMETER SizeMB
+			Specifies the size of the cache in MB.
+	#>
+	PARAM(
+		[Parameter(Mandatory)]
+		[string[]]$ComputerName,
+		
+		[int]$SizeMB = 10240,
+		
+		[Switch]$ServiceRestart,
+		
+		[Alias('RunAs')]
+		[System.Management.Automation.Credential()]
+		$Credential = [System.Management.Automation.PSCredential]::Empty,
+	)
+
+	FOREACH ($Computer in $ComputerName)
+	{
+		Write-Verbose -message "[PROCESS] ComputerName: $Computer"
+		
+		# Define Parameters
+		$SplattingWMI = @{
+			NameSpace = "ROOT\CCM\SoftMgmtAgent"
+			Class = "CacheConfig"
+		}
+		$SplattingService = @{
+			Name = 'ccmexec'
+		}
+		
+		IF ($PSBoundParameters['ComputerName'])
+		{
+			$SplattingWMI.ComputerName = $Computer
+			$SplattingService.ComputerName = $Computer
+		}
+		IF ($PSBoundParameters['Credential'])
+		{
+			$SplattingWMI.Credential = $Credential
+		}
+		
+		TRY
+		{
+			# Set the Cache Size
+			$Cache = Get-WmiObject @SplattingWMI
+			$Cache.Size = $SizeMB
+			$Cache.Put()
+			
+			# Restart SCCM Client
+			IF($PSBoundParameters[ServiceRestart])
+			{
+				Get-Service @SplattingService | Restart-Service
+			}
+		}
+		CATCH
+		{
+			Write-Warning -message "[PROCESS] Something Wrong happened with $Computer"
+			$Error[0].execption.message
+		}
+	}
 }
