@@ -62,7 +62,7 @@
 			$ParentRelatedObject = Get-SCSMRelationshipObject -ByTarget $ActivityObject | Where-Object{ $_.RelationshipId -eq $ParentRelationshipID }
 			$ParentObject = $ParentRelatedObject.SourceObject
 			
-			If ($ParentObject.ClassName -eq 'System.WorkItem.ServiceRequest' -OR $ParentObject.ClassName -eq 'System.WorkItem.ChangeRequest' -OR $ParentObject.ClassName -eq 'System.WorkItem.ReleaseRecord')
+			If ($ParentObject.ClassName -eq 'System.WorkItem.ServiceRequest' -OR $ParentObject.ClassName -eq 'System.WorkItem.ChangeRequest' -OR $ParentObject.ClassName -eq 'System.WorkItem.ReleaseRecord' -OR $ParentObject.ClassName -eq 'System.WorkItem.Incident')
 			{
 				Write-Output $ParentObject
 				
