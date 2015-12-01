@@ -27,6 +27,13 @@
 		Output: 
 		Computer1__Computer2
 	
+	.EXAMPLE
+		$Computers = "Computer1"
+		ConvertTo-StringList -Array $Computers -Delimiter "__"
+	
+		Output: 
+		Computer1
+		
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
