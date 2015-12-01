@@ -13,6 +13,20 @@
 	.PARAMETER Delimiter
 		Separator between value, default is ","
 	
+	.EXAMPLE
+		$Computers = "Computer1","Computer2"
+		ConvertTo-StringList -Array $Computers
+	
+		Output: 
+		Computer1,Computer2
+	
+	.EXAMPLE
+		$Computers = "Computer1","Computer2"
+		ConvertTo-StringList -Array $Computers -Delimiter "__"
+	
+		Output: 
+		Computer1__Computer2
+	
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
@@ -40,7 +54,7 @@
 		foreach ($item in $Array)
 		{
 			# Adding the current object to the list
-			$StringList += "$_$Delimiter"
+			$StringList += "$item$Delimiter"
 		}
 		Write-Verbose "StringList: $StringList"
 	}
