@@ -1,4 +1,4 @@
-﻿Function Get-WorkItemAffectedUser
+﻿function Get-SCSMWorkItemAffectedUser
 {
 <#
 	.SYNOPSIS
@@ -7,44 +7,72 @@
 	.DESCRIPTION
 		Function to retrieve the Affected User of a Work Item
 	
-	.PARAMETER WorkItem
-		Specifies the object to query
+	.PARAMETER SMObject
+		Specifies the SMObject(s) on which the affected need to be retrieve.
+	
+	.PARAMETER Guid
+		Specifies the GUID of the SMObject on which the affected need to be retrieve.
 	
 	.EXAMPLE
-		PS C:\> Get-WorkItemAffectedUser -WorkItem $SR,IR
+		Get-SCSMWorkItemAffectedUser -SMObject $SR,IR
 	
 	.EXAMPLE
-		PS C:\> $SR,IR | Get-WorkItemAffectedUser
+		$SR,IR | Get-SCSMWorkItemAffectedUser
+	
+	.EXAMPLE
+		Get-SCSMWorkItemAffectedUser -GUID 5bd5e783-c8a1-0217-9e19-f82823ef4f87
 	
 	.NOTES
 		Francois-Xavier Cat
 		@lazywinadm
 		www.lazywinadmin.com
-	
-		1.0 Based on Cireson's consultants Script
 #>
-	[CmdletBinding()]
-	PARAM (
-		[Parameter(ValueFromPipeline)]
-		$WorkItem
+	
+	[CmdletBinding(DefaultParameterSetName = 'GUID')]
+	param
+	(
+		[Parameter(ParameterSetName = 'SMObject',
+				   Mandatory = $true,
+				   ValueFromPipeline = $true)]
+		$SMObject,
+		
+		[Parameter(ParameterSetName = 'GUID',
+				   Mandatory = $true)]
+		$Guid
 	)
+	
 	BEGIN
 	{
 		$wiAffectedUser_obj = $null
-		Import-Module -Name SMLets -ErrorAction Stop	
+		Import-Module -Name SMLets -ErrorAction Stop
+		
+		# AffectedUser RelationshipClass
+		$RelationshipClass_AffectedUser = 'dff9be66-38b0-b6d6-6144-a412a3ebd4ce'
+		$RelationshipClass_AffectedUser_Object = Get-SCSMRelationshipClass -id $RelationshipClass_AffectedUser
 	}
 	PROCESS
 	{
-		foreach ($Item in $WorkItem)
+		IF ($PSBoundParameters['GUID'])
 		{
-			Write-Verbose -Message "[PROCESS] Working on $($Item.Name)"
-			# AffectedUser RelationshipClass
-			$RelationshipClass_AffectedUser = 'dff9be66-38b0-b6d6-6144-a412a3ebd4ce'
-			$RelationshipClass_AffectedUser_Object = Get-SCSMRelationshipClass -id $RelationshipClass_AffectedUser
-			
-			Get-ScsmRelatedObject -SMObject $Item -Relationship $wiAffectedUser_relclass_obj |
-			Select-Object -Property @{ Label = "WorkItemName"; Expression = { $Item.Name } },
-						  @{ Label = "WorkItemName"; Expression = { $Item.get_id() } },*
+			foreach ($Item in $GUID)
+			{
+				$SMObject = Get-SCSMObject -id $item
+				Write-Verbose -Message "[PROCESS] Working on $($Item.Name)"
+				Get-ScsmRelatedObject -SMObject $SMObject -Relationship $RelationshipClass_AffectedUser_Object |
+				Select-Object -Property @{ Label = "WorkItemName"; Expression = { $SMObject.Name } },
+							  @{ Label = "WorkItemGUID"; Expression = { $SMObject.get_id() } }, *
+			}
+		}
+		
+		IF ($PSBoundParameters['SMobject'])
+		{
+			foreach ($Item in $SMObject)
+			{
+				Write-Verbose -Message "[PROCESS] Working on $($Item.Name)"
+				Get-ScsmRelatedObject -SMObject $Item -Relationship $RelationshipClass_AffectedUser_Object |
+				Select-Object -Property @{ Label = "WorkItemName"; Expression = { $Item.Name } },
+							  @{ Label = "WorkItemGUID"; Expression = { $Item.get_id() } }, *
+			}
 		}
 	}
 }
