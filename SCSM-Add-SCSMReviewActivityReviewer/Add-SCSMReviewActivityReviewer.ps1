@@ -1,4 +1,4 @@
-﻿function Add-SCSMWorkItemRAReviewer
+﻿function Add-SCSMReviewActivityReviewer
 {
 <#
 	.SYNOPSIS
@@ -20,7 +20,7 @@
 		Specifies the WorkItem ID of the Review Activity
 	
 	.EXAMPLE
-		PS C:\> Add-SCSMWorkItemRAReviewer -UserName 'francois-xavier' -veto $true -WorkItemID '2aa822b0-b144-3acf-bee3-9a11714c5de0'
+		PS C:\> Add-SCSMReviewActivityReviewer -UserName 'francois-xavier' -veto $true -WorkItemID '2aa822b0-b144-3acf-bee3-9a11714c5de0'
 	
 	.NOTES
 		Francois-Xavier Cat
