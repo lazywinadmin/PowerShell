@@ -38,7 +38,6 @@
 		SMS_Collection: https://msdn.microsoft.com/en-us/library/hh948939.aspx
 		SMS_DeploymentInfo: https://msdn.microsoft.com/en-us/library/hh948268.aspx
 #>
-	
 	[CmdletBinding()]
 	PARAM
 	(
@@ -80,7 +79,7 @@
 			default { $DeploymentIntent = "NA" }
 		}
 
-		Function Get-DeploymentIntentName
+		Function Get-SCCMDeploymentIntentName
 		{
 	        	PARAM(
 	        	[Parameter(Mandatory)]
@@ -92,7 +91,29 @@
 				if ($DeploymentIntent = 2) { Write-Output "Available" }
 				if ($DeploymentIntent -ne 0 -and $DeploymentIntent -ne 2) { Write-Output "NA" }
 			}
-		}#Function Get-DeploymentIntentName
+		} #Function Get-DeploymentIntentName
+		
+		function Get-SCCMDeploymentTypeName
+		{
+			<#
+			https://msdn.microsoft.com/en-us/library/hh948731.aspx
+			#>
+			PARAM ($TypeID)
+			switch ($TypeID)
+			{
+				1 { "Application" }
+				2 { "Program" }
+				3 { "MobileProgram" }
+				4 { "Script" }
+				5 { "SoftwareUpdate" }
+				6 { "Baseline" }
+				7 { "TaskSequence" }
+				8 { "ContentDistribution" }
+				9 { "DistributionPointGroup" }
+				10{ "DistributionPointHealth" }
+				11{ "ConfigurationPolicy" }
+			}
+		}
 		
 	}
 	PROCESS
@@ -116,6 +137,11 @@
 				
 				Foreach ($Deploy in $Deployments)
 				{
+					# Get the Deployment type
+					$TypeName = Get-SCCMDeploymentTypeName -TypeID $Deploy.DeploymentTypeid
+					if (-not $TypeName) { $TypeName = Get-SCCMDeploymentTypeName -TypeID $Deploy.DeploymentType }
+					
+					# Prepare output
 					$Properties = @{
 						UserName = $DeviceName
 						ComputerName = $ComputerName
@@ -124,16 +150,19 @@
 						DeploymentID = $Deploy.DeploymentID
 						DeploymentName = $Deploy.DeploymentName
 						DeploymentIntent = $deploy.DeploymentIntent
-                        DeploymentIntentName = (Get-DeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
+						DeploymentIntentName = (Get-SCCMDeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
+						DeploymentTypeName = $TypeName
 						TargetName = $Deploy.TargetName
 						TargetSubName = $Deploy.TargetSubname
 						
 					}
 					
+					#Output the current object
 					New-Object -TypeName PSObject -prop $Properties
+					
+					# Reset TypeName
+					$TypeName=""
 				}
-				
-				
 			}
 		}
 	}
