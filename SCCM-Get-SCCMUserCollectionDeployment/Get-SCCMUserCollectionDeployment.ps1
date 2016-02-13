@@ -2,80 +2,72 @@
 {
 <#
 	.SYNOPSIS
-		Function to retrieve an User's collection deployments
+		Function to retrieve a User's collection deployment
 	
 	.DESCRIPTION
-		Function to retrieve an User's collection deployments
-		The function will first retrieve all the collections where the user is member of and
+		Function to retrieve a User's collection deployment
+		The function will first retrieve all the collection where the user is member of and
 		find deployments advertised on those.
-		
+	
 		The final output will include user, collection and deployment information.
 	
 	.PARAMETER Username
 		Specifies the SamAccountName of the user.
-		The user must be present in the SCCM database.
+		The user must be present in the SCCM CMDB
 	
 	.PARAMETER SiteCode
 		Specifies the SCCM SiteCode
 	
 	.PARAMETER ComputerName
-		Specifies the SCCM Server to query (Most likely the Management Server)
+		Specifies the SCCM Server to query
 	
 	.PARAMETER Credential
 		Specifies the credential to use to query the SCCM Server.
-		Default will take the current user credentials
+        Default will take the current user credentials
 	
 	.PARAMETER Purpose
 		Specifies a specific deployment intent.
-		Possible value: Available or Required.
-		Default is Null (get all)
+        Possible value: Available or Required.
+        Default is Null (get all)
 	
-	.PARAMETER ApplicationName
-		Specifies the exact name of the application to return
-	
-	.EXAMPLE
-		Get-SCCMUserCollectionDeployment -UserName francois-xavier.cat -SiteCode S01 -ComputerName SERVER01 -ApplicationName "Microsoft Visual C++ Redistributable 2005 x64" 
-	
-	.EXAMPLE
-		Get-SCCMUserCollectionDeployment -UserName TestUser -Credential $cred -Purpose Required
+    .EXAMPLE
+        Get-SCCMUserCollectionDeployment -UserName TestUser -Credential $cred -Purpose Required
 	
 	.NOTES
-		Francois-Xavier cat
-		www.lazywinadmin.com
+        Francois-Xavier cat
+        www.lazywinadmin.com
 		@lazywinadm
-		
+
 		SMS_R_User: https://msdn.microsoft.com/en-us/library/hh949577.aspx
 		SMS_Collection: https://msdn.microsoft.com/en-us/library/hh948939.aspx
 		SMS_DeploymentInfo: https://msdn.microsoft.com/en-us/library/hh948268.aspx
 #>
 	
 	[CmdletBinding()]
-	[OutputType([System.Management.Automation.PSCustomObject])]
-	param
+	PARAM
 	(
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory)]
 		[Alias('SamAccountName')]
-		[String]$UserName,
+		$UserName,
 		
-		[Parameter(Mandatory = $true)]
-		[String]$SiteCode,
+		[Parameter(Mandatory)]
+		$SiteCode,
 		
-		[Parameter(Mandatory = $true)]
-		[String]$ComputerName,
+		[Parameter(Mandatory)]
+		$ComputerName,
 		
-		[System.Management.Automation.Credential()]
 		[Alias('RunAs')]
+		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
 		
 		[ValidateSet('Required', 'Available')]
-		[String]$Purpose,
-		
-		[String]$ApplicationName
+		$Purpose
 	)
 	
 	BEGIN
 	{
-		# Verify if the username contains the domain name and remove it
+		# Verify if the username contains the domain name
+		#  If it does... remove the domain name
 		# Example: "FX\TestUser" will become "TestUser"
 		if ($UserName -like '*\*') { $UserName = ($UserName -split '\\')[1] }
 		
@@ -85,7 +77,6 @@
 			NameSpace = "root\SMS\Site_$SiteCode"
 		}
 		
-		# Credential
 		IF ($PSBoundParameters['Credential'])
 		{
 			$Splatting.Credential = $Credential
@@ -98,20 +89,20 @@
 			default { $DeploymentIntent = "NA" }
 		}
 		
-		Function Get-SCCMDeploymentIntentName
+		Function Get-DeploymentIntentName
 		{
-			PARAM (
-				[Parameter(Mandatory)]
-				$DeploymentIntent
-			)
-			PROCESS
-			{
+	        	PARAM(
+	        	[Parameter(Mandatory)]
+	        	$DeploymentIntent
+	        	)
+            		PROCESS
+	            	{
 				if ($DeploymentIntent = 0) { Write-Output "Required" }
 				if ($DeploymentIntent = 2) { Write-Output "Available" }
 				if ($DeploymentIntent -ne 0 -and $DeploymentIntent -ne 2) { Write-Output "NA" }
 			}
-		} #Function Get-SCCMDeploymentIntentName
-		
+		}#Function Get-DeploymentIntentName
+        
 		
 	}
 	PROCESS
@@ -121,7 +112,7 @@
 		
 		# Find the collections where the user is member of		
 		Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($user.resourceid)'" |
-		ForEach-Object -Process {
+		ForEach-Object {
 			
 			# Retrieve the collection of the user
 			$Collections = Get-WmiObject @splatting -Query "Select * From SMS_Collection WHERE CollectionID='$($_.Collectionid)'"
@@ -130,29 +121,15 @@
 			# Retrieve the deployments (advertisement) of each collections
 			Foreach ($Collection in $collections)
 			{
-				
-				switch ($DeploymentIntent)
+				IF ($DeploymentIntent -eq 'NA')
 				{
-					'NA'{
-						$Query = "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)'"
-						if ($PSBoundParameters['ApplicationName'])
-						{
-							$Query = "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND TargetName='$ApplicationName'"
-						}
-					}
-					
-					default
-					{
-						$Query = "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND DeploymentIntent='$DeploymentIntent'"
-						if ($PSBoundParameters['ApplicationName'])
-						{
-							$Query = "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND DeploymentIntent='$DeploymentIntent' AND TargetName='$ApplicationName'"
-						}
-					}
+					# Find the Deployment on one collection					
+					$Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)'")
 				}
-				
-				$Deployments = Get-WmiObject @splatting -Query $Query
-				
+				ELSE
+				{
+					$Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND DeploymentIntent='$DeploymentIntent'")
+				}
 				
 				Foreach ($Deploy in $Deployments)
 				{
@@ -166,7 +143,7 @@
 						DeploymentID = $Deploy.DeploymentID
 						DeploymentName = $Deploy.DeploymentName
 						DeploymentIntent = $deploy.DeploymentIntent
-						DeploymentIntentName = (Get-SCCMDeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
+						DeploymentIntentName = (Get-DeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
 						TargetName = $Deploy.TargetName
 						TargetSubName = $Deploy.TargetSubname
 						
@@ -174,8 +151,8 @@
 					
 					# Output the current Object
 					New-Object -TypeName PSObject -prop $Properties
-				} #Foreach ($Deploy in $Deployments)
-			} #Foreach ($Collection in $collections)
-		} #ForEach-Object {
-	} #PROCESS
-} #function Get-SCCMUserCollectionDeployment
+				}
+			}
+		}
+	}
+}
