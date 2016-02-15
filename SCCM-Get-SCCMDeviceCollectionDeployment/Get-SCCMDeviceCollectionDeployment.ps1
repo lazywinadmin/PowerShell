@@ -143,7 +143,7 @@
 					
 					# Prepare output
 					$Properties = @{
-						UserName = $DeviceName
+						DeviceName = $DeviceName
 						ComputerName = $ComputerName
 						CollectionName = $Deploy.CollectionName
 						CollectionID = $Deploy.CollectionID
