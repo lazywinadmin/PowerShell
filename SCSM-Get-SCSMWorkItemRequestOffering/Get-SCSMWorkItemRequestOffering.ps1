@@ -1,4 +1,4 @@
-﻿function Get-SCSMWorkItemRelatedRequestOffering
+﻿function Get-SCSMWorkItemRequestOffering
 {
 	<#
 	.SYNOPSIS
@@ -10,15 +10,15 @@
 
 	.EXAMPLE
 		$SR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'"
-		Get-SCSMWorkItemRelatedRequestOffering -SMObject $SR
+		Get-SCSMWorkItemRequestOffering -SMObject $SR
 	
 	.EXAMPLE
-		Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'" | Get-SCSMWorkItemRelatedRequestOffering
+		Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'" | Get-SCSMWorkItemRequestOffering
 	
 	.EXAMPLE
 		$SR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'"
 		$IR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.IncidentRequest$) -Filter "ID -eq 'IR99000'"
-		Get-SCSMWorkItemRelatedRequestOffering -SMObject $SR,IR
+		Get-SCSMWorkItemRequestOffering -SMObject $SR,IR
 	
 	.NOTES
 		Francois-Xavier Cat
