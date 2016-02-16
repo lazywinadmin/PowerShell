@@ -1,6 +1,6 @@
-[GetSCSMWorkItemParent01]: https://github.com/lazywinadmin/PowerShell/blob/master/SCSM-Get-SCSMWorkItemParent/Get-SCSMWorkItemParent01.jpg
-[GetSCSMWorkItemParent02]: https://github.com/lazywinadmin/PowerShell/blob/master/SCSM-Get-SCSMWorkItemParent/Get-SCSMWorkItemParent02.jpg
-[GetSCSMWorkItemParent03]: https://github.com/lazywinadmin/PowerShell/blob/master/SCSM-Get-SCSMWorkItemParent/Get-SCSMWorkItemParent03.jpg
+[GetSCSMWorkItemParent01]: https://github.com/lazywinadmin/PowerShell/blob/master/SCSM-Get-SCSMWorkItemParent/images/Get-SCSMWorkItemParent01.jpg
+[GetSCSMWorkItemParent02]: https://github.com/lazywinadmin/PowerShell/blob/master/SCSM-Get-SCSMWorkItemParent/images/Get-SCSMWorkItemParent02.jpg
+[GetSCSMWorkItemParent03]: https://github.com/lazywinadmin/PowerShell/blob/master/SCSM-Get-SCSMWorkItemParent/images/Get-SCSMWorkItemParent03.jpg
 # Get-SCSMWorkItemParent
 
 ## Loading the function
