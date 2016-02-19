@@ -32,7 +32,8 @@
 	
 	.NOTES
         Francois-Xavier cat
-        WB Games Montreal
+        www.lazywinadmin.com
+        @lazywinadm
 
 		SMS_R_SYSTEM: https://msdn.microsoft.com/en-us/library/cc145392.aspx
 		SMS_Collection: https://msdn.microsoft.com/en-us/library/hh948939.aspx
