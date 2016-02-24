@@ -1,6 +1,8 @@
 [CleanMacaddress01]: https://github.com/lazywinadmin/PowerShell/blob/master/TOOL-Clean-MacAddress/Clean-MacAddress01.png
 # Clean-MacAddress
+This function is used to clean up a Mac Address string.
 
+I'm using this for some report and for SCCM Automation to keep everything clean :-)
 ## Loading the function
 
 ```PowerShell
