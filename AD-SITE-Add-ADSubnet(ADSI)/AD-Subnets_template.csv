@@ -1,0 +1,4 @@
+Name,Location,Site,Description
+192.168.1.0/24,Paris,FX2,PROD Servers VLAN 15
+192.168.2.0/24,London,FX3,PROD Servers VLAN 16
+192.168.3.0/24,Montreal,MTL1,DEV Servers VLAN 101
