@@ -14,10 +14,10 @@
 		Specifies the GUID of the SMObject on which the affected need to be retrieve.
 	
 	.EXAMPLE
-		Get-SCSMWorkItemAffectedUser -SMObject $SR,IR
+		Get-SCSMWorkItemAffectedUser -SMObject $SR,$IR
 	
 	.EXAMPLE
-		$SR,IR | Get-SCSMWorkItemAffectedUser
+		$SR,$IR | Get-SCSMWorkItemAffectedUser
 	
 	.EXAMPLE
 		Get-SCSMWorkItemAffectedUser -GUID 5bd5e783-c8a1-0217-9e19-f82823ef4f87
