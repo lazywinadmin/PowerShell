@@ -66,7 +66,7 @@ function Get-PerforceFileOpened
 			RevisionNumber = $RevisionNumber
 			Comment = $FullComment[0]
 			ChangeListNumber = $ChangeNumber -as [int]
-			User = ($FullComment[1].trim() -split '@')[0]
+			Username = ($FullComment[1].trim() -split '@')[0]
 			Workspace = ($FullComment[1].trim() -split '@')[1]
 			Line = $OriginalLine
 		}
