@@ -45,9 +45,10 @@ function Get-PerforceFileShelve
 	}
 	
 	
-	foreach ($Change in $ChangeListNumber)
+	foreach ($Change in ($ChangeListNumber|Select-Object -Unique))
 	{
-		$ShelvesFiles = p4 describe -S $ChangeListNumber | select-string -Pattern '\.\.\. //'
+		$Shelves = p4 describe -S $ChangeListNumber
+        $ShelvesFiles = $Shelves | select-string -Pattern '\.\.\. //'
 		
 		foreach ($file in $ShelvesFiles)
 		{
@@ -55,10 +56,15 @@ function Get-PerforceFileShelve
 			$LiteralPath = $file -split "#" -replace '\.\.\. ', ''
 			
 			[pscustomobject][ordered]@{
+				ChangeListNumber = $Change
+		                UserName = (($Shelves -split '\s')[3] -split '@')[0]
+		                WorkSpace = (($Shelves -split '\s')[3] -split '@')[1]
+		                ChangeDateTime = ($Shelves -split '\s')[5..6] -as [string] -as [datetime]
+		                ChangeType = ($Shelves -split '\s')[7]
 				LiteralPath = $LiteralPath[0]
 				FileName = ($LiteralPath[0] -split '/')[-1]
 				RevisionNumber = ($LiteralPath[1] -split '\s')[0]
-				ChangeType = ($LiteralPath[1] -split '\s')[1]
+				Type = ($LiteralPath[1] -split '\s')[1]
 				Line = $OriginalLine
 			}
 		}
