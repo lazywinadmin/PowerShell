@@ -19,9 +19,11 @@
 .EXAMPLE
 	Set-NetworkLevelAuthentication -EnableNLA $true
 
-	ReturnValue                             PSComputerName                         
-	-----------                             --------------                         
-	                                        XAVIERDESKTOP      
+.EXAMPLE
+	Set-NetworkLevelAuthentication -EnableNLA $true -computername "SERVER01","SERVER02"
+
+.EXAMPLE
+	Set-NetworkLevelAuthentication -EnableNLA $true -computername (Get-Content ServersList.txt)
 
 .NOTES
 	DATE	: 2014/04/01
