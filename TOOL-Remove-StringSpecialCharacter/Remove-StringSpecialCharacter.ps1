@@ -38,9 +38,10 @@
 	
 	param
 	(
+		[Parameter(ValueFromPipeline)]
 		[ValidateNotNullOrEmpty()]
 		[Alias('Text')]
-		[System.String]$String,
+		[System.String[]]$String,
 		
 		[Alias("Keep")]
 		[ValidateNotNullOrEmpty()]
@@ -60,6 +61,9 @@
 		} #IF($PSBoundParameters["SpecialCharacterToKeep"])
 		ELSE { $Regex = "[^\p{L}\p{Nd}]+" }
 		
-		$String -replace $regex, ""
+		FOREACH ($Str in $string)
+		{
+			$Str -replace $regex, ""
+		}
 	} #PROCESS
 }
