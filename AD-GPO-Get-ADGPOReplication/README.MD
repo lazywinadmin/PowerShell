@@ -1,6 +1,7 @@
-# Function Get-ADGPOReplication
+Get-ADGPOReplication
+===================
 
-(LazyWinAdmin Article)[]
+[Blog article on lazywinadmin.com](http://www.lazywinadmin.com/2014/10/powershell-check-gpo-replication.html)
 
 Get-ADGPOReplication is retrieving the GPO version and Sysvol version accross the domain for one or more Group Policy objects. This can especially helps you troubleshooting replication issues.
 
@@ -8,20 +9,24 @@ This small function is taking advantage of the module ActiveDirectory to retriev
 
 For each GPO, It will then retrieve the version of the User/Computer configurations and the Sysvol Version.
 
-Getting the list of Domain Controllers
-$DomainControllers = ((Get-ADDomainController -filter *).hostname)
 
-Processing each Group Policy Object, against each Domain controllers
-Foreach ($GPOItem in $GPOName)
-{
-    $GPO = Get-GPO -Name $GPOItem -Server $DomainController -ErrorAction Stop
-    
-    [pscustomobject][ordered] @{
-        GroupPolicyName = $GPOItem
-        DomainController = $DomainController
-        UserVersion = $GPO.User.DSVersion
-        UserSysVolVersion = $GPO.User.SysvolVersion
-        ComputerVersion = $GPO.Computer.DSVersion
-        ComputerSysVolVersion = $GPO.Computer.SysvolVersion
-    }#PSObject
-}#Foreach ($GPOItem in $GPOName)
+####Examples
+=================
+Using the function against one GPO:
+```PowerShell
+Get-ADGPOReplication -GPOName "AZE_Test"
+```
+Using the function against multiple GPO:
+```PowerShell
+Get-ADGPOReplication -GPOName "AZE_Test", "AZE_Test2"
+```
+Using the function against All GPO:
+```PowerShell
+Get-ADGPOReplication -All
+```
+Optionally you can send the output to Out-Gridview which will give you a very nice view on all your GPO versions.
+```PowerShell
+Get-ADGPOReplication -GPOName AZE_Test | Out-GridView -Title "AZE_Test $(Get-Date)"
+```
+
+![alt tag](images/Get-ADGPOReplication01.png "DataGrid Example")
