@@ -1,4 +1,4 @@
-﻿function Disable-RemoteDesktop
+function Disable-RemoteDesktop
 {
 <#
 	.SYNOPSIS
@@ -32,8 +32,11 @@
 		Francois-Xavier Cat
 		@lazywinadm
 		www.lazywinadmin.com
+        github.com/lazywinadmin
 #>
-	[CmdletBinding()]
+	#Requires -RunAsAdministrator
+	[CmdletBinding(DefaultParameterSetName = 'CimSession',
+				   SupportsShouldProcess = $true)]
 	PARAM (
 		[Parameter(
 				   ParameterSetName = "Main",
@@ -74,7 +77,7 @@
 			$DateFormat = Get-Date -Format 'yyyy/MM/dd-HH:mm:ss:ff'
 			$FunctionName = (Get-Variable -Scope 1 -Name MyInvocation -ValueOnly).MyCommand.Name
 			Write-Output "[$DateFormat][$FunctionName] $Message"
-		}#Get-DefaultMessage
+		} #Get-DefaultMessage
 	}
 	PROCESS
 	{
@@ -84,42 +87,46 @@
 			{
 				$CIMComputer = $($Cim.ComputerName).ToUpper()
 				
-				TRY
+				IF ($PSCmdlet.ShouldProcess($CIMComputer, "Disable Remote Desktop via Win32_TerminalServiceSetting"))
 				{
-					# Parameters for Get-CimInstance
-					$CIMSplatting = @{
-						Class = "Win32_TerminalServiceSetting"
-						NameSpace = "root\cimv2\terminalservices"
-						CimSession = $Cim
-						ErrorAction = 'Stop'
-						ErrorVariable = "ErrorProcessGetCimInstance"
-					}
 					
-					# Parameters for Invoke-CimMethod
-					$CIMInvokeSplatting = @{
-						MethodName = "SetAllowTSConnections"
-						Arguments = @{
-							AllowTSConnections = 0;
-							ModifyFirewallException = 0
+					TRY
+					{
+						# Parameters for Get-CimInstance
+						$CIMSplatting = @{
+							Class = "Win32_TerminalServiceSetting"
+							NameSpace = "root\cimv2\terminalservices"
+							CimSession = $Cim
+							ErrorAction = 'Stop'
+							ErrorVariable = "ErrorProcessGetCimInstance"
 						}
-						ErrorAction = 'Stop'
-						ErrorVariable = "ErrorProcessInvokeCim"
+						
+						# Parameters for Invoke-CimMethod
+						$CIMInvokeSplatting = @{
+							MethodName = "SetAllowTSConnections"
+							Arguments = @{
+								AllowTSConnections = 0;
+								ModifyFirewallException = 0
+							}
+							ErrorAction = 'Stop'
+							ErrorVariable = "ErrorProcessInvokeCim"
+						}
+						
+						Write-Verbose -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - disable Remote Desktop (and Modify Firewall Exception")
+						Get-CimInstance @CIMSplatting | Invoke-CimMethod @CIMInvokeSplatting
 					}
-					
-					Write-Verbose -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - disable Remote Desktop (and Modify Firewall Exception")
-					Get-CimInstance @CIMSplatting | Invoke-CimMethod @CIMInvokeSplatting
-				}
-				CATCH
-				{
-					Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - Something wrong happened")
-					IF ($ErrorProcessGetCimInstance) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Get-CimInstance") }
-					IF ($ErrorProcessInvokeCim) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Invoke-CimMethod") }
-					Write-Warning -Message $Error[0].Exception.Message
-				} #CATCH
-				FINALLY
-				{
-					$CIMSplatting.Clear()
-					$CIMInvokeSplatting.Clear()
+					CATCH
+					{
+						Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - Something wrong happened")
+						IF ($ErrorProcessGetCimInstance) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Get-CimInstance") }
+						IF ($ErrorProcessInvokeCim) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Invoke-CimMethod") }
+						Write-Warning -Message $Error[0].Exception.Message
+					} #CATCH
+					FINALLY
+					{
+						$CIMSplatting.Clear()
+						$CIMInvokeSplatting.Clear()
+					}
 				}
 			} #FOREACH ($Cim in $CimSessions)
 		} #IF ($PSBoundParameters['CimSession'])
@@ -129,43 +136,48 @@
 			{
 				$Computer = $Computer.ToUpper()
 				
-				TRY
+				IF ($PSCmdlet.ShouldProcess($Computer, "Disable Remote Desktop via Win32_TerminalServiceSetting"))
 				{
-					Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
-					IF (Test-Connection -Computer $Computer -count 1 -quiet)
+					
+					TRY
 					{
-						$Splatting = @{
-							Class = "Win32_TerminalServiceSetting"
-							NameSpace = "root\cimv2\terminalservices"
-							ComputerName = $Computer
-							ErrorAction = 'Stop'
-							ErrorVariable = 'ErrorProcessGetWmi'
-						}
-						
-						IF ($PSBoundParameters['Credential'])
+						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
+						IF (Test-Connection -Computer $Computer -count 1 -quiet)
 						{
-							$Splatting.credential = $Credential
+							$Splatting = @{
+								Class = "Win32_TerminalServiceSetting"
+								NameSpace = "root\cimv2\terminalservices"
+								ComputerName = $Computer
+								Authentication = 'PacketPrivacy'
+								ErrorAction = 'Stop'
+								ErrorVariable = 'ErrorProcessGetWmi'
+							}
+							
+							IF ($PSBoundParameters['Credential'])
+							{
+								$Splatting.credential = $Credential
+							}
+							
+							# disable Remote Desktop
+							Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Get-WmiObject - disable Remote Desktop")
+							(Get-WmiObject @Splatting).SetAllowTsConnections(0, 0) | Out-Null
+							
+							# Disable requirement that user must be authenticated
+							#(Get-WmiObject -Class Win32_TSGeneralSetting @Splatting -Filter TerminalName='RDP-tcp').SetUserAuthenticationRequired(0)  Out-Null
 						}
-						
-						# disable Remote Desktop
-						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Get-WmiObject - disable Remote Desktop")
-						(Get-WmiObject @Splatting).SetAllowTsConnections(0, 0) | Out-Null
-						
-						# Disable requirement that user must be authenticated
-						#(Get-WmiObject -Class Win32_TSGeneralSetting @Splatting -Filter TerminalName='RDP-tcp').SetUserAuthenticationRequired(0)  Out-Null
+					}
+					CATCH
+					{
+						Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Something wrong happened")
+						IF ($ErrorProcessGetWmi) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Issue with Get-WmiObject") }
+						Write-Warning -MEssage $Error[0].Exception.Message
+					}
+					FINALLY
+					{
+						$Splatting.Clear()
 					}
 				}
-				CATCH
-				{
-					Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Something wrong happened")
-					IF ($ErrorProcessGetWmi) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Issue with Get-WmiObject")}
-					Write-Warning -MEssage $Error[0].Exception.Message
-				}
-				FINALLY
-				{
-					$Splatting.Clear()
-				}
-			}#FOREACH
+			} #FOREACH
 		} #ELSE (Not CIM)
-	}#PROCESS
-}#Function
+	} #PROCESS
+} #Function
