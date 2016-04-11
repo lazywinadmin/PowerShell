@@ -10,6 +10,9 @@
 	.PARAMETER Path
 		Specifies the path of the file
 	
+	.EXAMPLE
+		ConvertTo-Base64 -Path "C:\images\PowerShellLogo.png"
+	
 	.NOTES
 		Francois-Xavier Cat
 		@lazywinadm
