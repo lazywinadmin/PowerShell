@@ -9,6 +9,9 @@
 	
 	.PARAMETER String
 		Specifies the String to Convert
+		
+	.EXAMPLE
+		ConvertFrom-Base64 -String $ImageBase64 |Out-File ImageTest.png
 	
 	.NOTES
 		Francois-Xavier Cat
