@@ -10,4 +10,4 @@ Get-O365CalendarEvent `
     -PageResult 2|Select-Object -Property Subject, StartTimeZone, Start, End
 ```
 
-![Alt text](/images/Get-O365CalendarEvent.png?raw=true "Get-O365CalendarEvent Example")
+![Alt text](https://raw.githubusercontent.com/lazywinadmin/PowerShell/master/O365-Get-O365CalendarEvent/images/Get-O365CalendarEvent.png?raw=true "Get-O365CalendarEvent Example")
