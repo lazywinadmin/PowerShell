@@ -20,7 +20,11 @@
 		Default is 'yyyy\/MM\/dd HH:mm:ss:ff' For example: 2016/04/20 23:33:46:78
 	
 	.PARAMETER FunctionScope
-		Specifies the FunctionName to retrieve.
+		Valid values are "Global", "Local", or "Script", or a number relative to the current scope (0 through the number of scopes, where 0 is the current scope and 1 is its parent). "Local" is the default
+		
+		See also: About_scopes https://technet.microsoft.com/en-us/library/hh847849.aspx
+		
+		Example:
 		0 is New-ScriptMessage
 		1 is the function calling New-ScriptMessage
 		2 is for example the script/function calling the function which call New-ScriptMessage
@@ -58,7 +62,7 @@
 		[String]$Message,
 		[String]$Block,
 		[String]$DateFormat = 'yyyy\/MM\/dd HH:mm:ss:ff',
-		[int]$FunctionScope = "1"
+		$FunctionScope = "1"
 	)
 	
 	PROCESS
