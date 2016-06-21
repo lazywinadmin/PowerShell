@@ -54,6 +54,9 @@
 		
 		# Filter/Sorting/Top/Order
 		https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#UseODataqueryparametersPageresults
+
+    .HISTORY
+        Stephane van Gulick - PowerShellDistrict.com: Added Headers Property 'timeZone' to fit the display gap that could happen between an actual event an the current timeZone.
 #>
 	
 	[CmdletBinding()]
@@ -66,20 +69,34 @@
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
 		[ValidateNotNullOrEmpty()]
 		[ValidateRange(1, 50)]
-		$PageResult = '10'
+		$PageResult = '10',
+        [ValidateSet(
+            'Romance Standard Time',
+            'Atlantic Standard Time'
+        )]
+        $Timezone #complete list available here https://technet.microsoft.com/en-us/library/cc749073(v=ws.10).aspx
 	)
 	
 	PROCESS
 	{
+        
+
 		$Splatting = @{
 			Credential = $Credential
 			Uri = "https://outlook.office365.com/api/v1.0/users/$EmailAddress/calendarview?startDateTime=$StartDateTime&endDateTime=$($EndDateTime)&`$top=$PageResult"
-		}
+
+        }
+
+        if ($TimeZone){
+            $headers = New-Object 'System.Collections.Generic.Dictionary[[String],[String]]'
+            $headers.Add('Prefer', "outlook.timezone=`"$TimeZone`"")
+            $Splatting.Add('Headers',$headers)
+        }
 		if (-not $PSBoundParameters['EmailAddress'])
 		{
 			#Query the current User
 			$Splatting.Uri = "https://outlook.office365.com/api/v1.0/me/calendarview?startDateTime=$StartDateTime&endDateTime=$($EndDateTime)&`$top=$PageResult"
 		}
-		Invoke-RestMethod @Splatting | Select-Object -ExpandProperty Value
+		Invoke-RestMethod @Splatting  | Select-Object -ExpandProperty Value
 	}
 }
