@@ -18,14 +18,18 @@
 		Default is c:\temp\djoin.tmp
     
 	.EXAMPLE
-        New-DjoinFile -Hash $hash -DestinationFile C:\temp\test.tmp
+        New-DjoinFile -Blob $Blob -DestinationFile C:\temp\test.tmp
     
 	.NOTES
         Francois-Xavier.Cat
         LazyWinAdmin.com
         @lazywinadm
         github.com/lazywinadmin
-    
+	
+    .LINK
+		https://github.com/lazywinadmin/PowerShell/tree/master/TOOL-New-DjoinFile
+	.LINK
+		http://www.lazywinadmin.com/2016/07/offline-domain-join-copying-djoin.html
 	.LINK
         https://msdn.microsoft.com/en-us/library/system.io.fileinfo(v=vs.110).aspx
     #>
