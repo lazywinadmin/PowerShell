@@ -1,4 +1,4 @@
-[NewDjoinFile01]: https://github.com/lazywinadmin/PowerShell/blob/master/TOOL-New-DjoinFile/images/New-DjoinFile01.png
+[NewDjoinFile01]: https://github.com/lazywinadmin/PowerShell/blob/master/TOOL-New-DjoinFile/media/New-DjoinFile01.png
 New-DjoinFile
 ===================
 ## Related Article(s)
