@@ -121,7 +121,7 @@ function New-SCCMDeviceVariable
 				# Add the Variable
 				$NewMachineVariableInstance.psbase.Properties['Name'].Value = $Name
 				$NewMachineVariableInstance.psbase.Properties['Value'].Value = $Value
-				$NewMachineVariableInstance.psbase.Properties['IsMasked'].Value = $false
+				$NewMachineVariableInstance.psbase.Properties['IsMasked'].Value = $IsMasked
 				
 				# Retrieve the Machine Settings
 				$MachineSettingsClass.get()
@@ -156,7 +156,7 @@ function New-SCCMDeviceVariable
 				# Add the Variable
 				$NewMachineVariablesInstance.psbase.Properties['Name'].Value = $Name
 				$NewMachineVariablesInstance.psbase.Properties['Value'].Value = $Value
-				$NewMachineVariablesInstance.psbase.Properties['IsMasked'].Value = $false
+				$NewMachineVariablesInstance.psbase.Properties['IsMasked'].Value = $IsMasked
 				
 				# Insert the variable we just created into the machine settings
 				Write-Verbose -Message "$ResourceID - Insert machine Variable into machine settings"
