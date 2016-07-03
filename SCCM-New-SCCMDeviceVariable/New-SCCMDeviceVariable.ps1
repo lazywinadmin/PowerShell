@@ -109,7 +109,7 @@ function New-SCCMDeviceVariable
 			$MachineSettingsClass = Get-WmiObject @SCCM_Splatting -Query "SELECT ResourceID FROM SMS_MachineSettings WHERE ResourceID = '$ResourceID'"
 			
 			# If a Machine Settings is found
-			if ($MachineSettings)
+			if ($MachineSettingsClass)
 			{
 				Write-Verbose -Message "$ResourceID - Machine Settings Exists"
 				
@@ -125,10 +125,11 @@ function New-SCCMDeviceVariable
 				
 				# Retrieve the Machine Settings
 				$MachineSettingsClass.get()
-
+                
+                
 				# Insert the variable we just created into the machine settings
 				Write-Verbose -Message "$ResourceID - Insert machine Variable into machine settings"
-				$MachineSettingsClass.MachineVariables = $NewMachineVariableInstance
+				$MachineSettingsClass.MachineVariables += $NewMachineVariableInstance
 				
 				# Save our change back to SCCM
 				Write-Verbose -Message "$ResourceID - Save Change"
@@ -159,7 +160,7 @@ function New-SCCMDeviceVariable
 				
 				# Insert the variable we just created into the machine settings
 				Write-Verbose -Message "$ResourceID - Insert machine Variable into machine settings"
-				$NewMachineSettingsClassInstance.MachineVariables = $NewMachineVariablesInstance
+				$NewMachineSettingsClassInstance.MachineVariables += $NewMachineVariablesInstance
 				
 				# Save our change back to SCCM
 				Write-Verbose -Message "$ResourceID - Save Change"
