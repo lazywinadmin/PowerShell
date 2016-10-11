@@ -1,17 +1,17 @@
-﻿function Remove-StringLatinCharacters
+﻿function Remove-StringLatinCharacter
 {
 <#
 .SYNOPSIS
     Function to remove diacritics from a string
 .EXAMPLE
-    Remove-StringLatinCharacters -String "L'été de Raphaël"
+    Remove-StringLatinCharacter -String "L'été de Raphaël"
 
     L'ete de Raphael
 .EXAMPLE
     Foreach ($file in (Get-ChildItem c:\test\*.txt))
     {
         # Get the content of the current file and remove the diacritics
-        $NewContent = Get-content $file | Remove-StringLatinCharacters
+        $NewContent = Get-content $file | Remove-StringLatinCharacter
     
         # Overwrite the current file with the new content
         $NewContent | Set-Content $file
