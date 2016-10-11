@@ -3,6 +3,8 @@
 <#
 .SYNOPSIS
     Function to remove diacritics from a string
+.PARAMETER String
+	Specifies the String that will be processed
 .EXAMPLE
     Remove-StringLatinCharacter -String "L'été de Raphaël"
 
