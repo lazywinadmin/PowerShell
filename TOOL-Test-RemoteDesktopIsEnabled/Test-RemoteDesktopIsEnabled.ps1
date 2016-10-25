@@ -1,18 +1,32 @@
-﻿function Test-RemoteDesktop
+﻿function Test-RemoteDesktopIsEnabled
 {
-  <#
-  .SYNOPSIS
-    Function to check if RDP is enabled
-  .DESCRIPTION
-    Function to check if RDP is enabled
-  .NOTES
-    Francois-Xavier Cat
-    @lazywinadm
-    www.lazywinadmin.com
-  #>
-  
+<#
+.SYNOPSIS
+  Function to check if RDP is enabled
+
+.DESCRIPTION
+  Function to check if RDP is enabled
+
+.EXAMPLE
+  Test-RemoteDesktopIsEnabled
+
+  Test if Remote Desktop is enabled on the current machine
+
+.EXAMPLE
+  Test-RemoteDesktopIsEnabled -ComputerName SERVER01,SERVER02
+
+  Test if Remote Desktop is enabled on the remote machine SERVER01 and SERVER02
+
+.NOTES
+	Francois-Xavier Cat
+	@lazywinadm
+	www.lazywinadmin.com
+	github.com/lazywinadmin
+#>
+
+
 PARAM(
-  [String[]]$ComputerName
+  [String[]]$ComputerName = $env:COMPUTERNAME
   )
   FOREACH ($Computer in $ComputerName)
   {

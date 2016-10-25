@@ -23,6 +23,7 @@
 
 .NOTES
     Francois-Xavier Cat
+    lazywinadmin.com
     @lazywinadm
     github.com/lazywinadmin
 
@@ -34,13 +35,29 @@
             Initial version Based on Marcin Krzanowic code
         1.0.0.1 | Francois-Xavier Cat
             Added support for ValueFromPipeline
+        1.0.0.2 | Francois-Xavier Cat
+            Add Support for multiple String
+            Add Error Handling
 #>
+    [CmdletBinding()]
 	PARAM (
 		[Parameter(ValueFromPipeline=$true)]
-		[System.String]$String
+		[System.String[]]$String
 		)
 	PROCESS
 	{
-		[Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($String))
+        FOREACH ($StringValue in $String)
+        {
+            Write-Verbose -Message "$StringValue"
+
+            TRY
+            {
+                [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($StringValue))
+            }
+		    CATCH
+            {
+                Write-Error -Message $Error[0].exception.message
+            }
+        }
 	}
 }
