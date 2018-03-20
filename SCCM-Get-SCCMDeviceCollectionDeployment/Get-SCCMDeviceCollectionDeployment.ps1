@@ -28,12 +28,20 @@
         Possible value: Available or Required.
         Default is Null (get all)
     .EXAMPLE
-        Get-SCCMDeviceCollectionDeployment -DeviceName MTLLAP8500 -Credential $cred -Purpose Required
+        Get-SCCMDeviceCollectionDeployment -DeviceName MYCOMPUTER01 -Credential $cred -Purpose Required
 	
 	.NOTES
         Francois-Xavier cat
         www.lazywinadmin.com
-        @lazywinadm
+		@lazywinadm
+		
+		CHANGE HISTORY
+			1.0 | 2015/09/03 | Francois-Xavier Cat
+				Initial Version
+			1.1 | 2017/09/15 | Francois-Xavier Cat
+				Update Comment based help
+				Update Crendential parameter type
+				Update Verbose messages
 
 		SMS_R_SYSTEM: https://msdn.microsoft.com/en-us/library/cc145392.aspx
 		SMS_Collection: https://msdn.microsoft.com/en-us/library/hh948939.aspx
@@ -43,25 +51,29 @@
 	PARAM
 	(
 		[Parameter(Mandatory)]
-		$DeviceName,
+		[System.String]$DeviceName,
 		
         [Parameter(Mandatory)]
-		$SiteCode,
+		[System.String]$SiteCode,
 		
         [Parameter(Mandatory)]
-		$ComputerName,
+		[System.String]$ComputerName,
 		
 		[Alias('RunAs')]
+		[pscredential]
 		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
 		
 		[ValidateSet('Required', 'Available')]
-		$Purpose
+		[System.String]$Purpose
 	)
 	
 	BEGIN
 	{
+		$FunctionName = (Get-Variable -Scope 1 -Name MyInvocation -ValueOnly).MyCommand.Name
 		
+		Write-Verbose -Message "[$FunctionName] Create splatting"
+
 		# Define default properties
 		$Splatting = @{
 			ComputerName = $ComputerName
@@ -70,6 +82,7 @@
 		
 		IF ($PSBoundParameters['Credential'])
 		{
+			Write-Verbose -Message "[$FunctionName] Append splatting"
 			$Splatting.Credential = $Credential
 		}
 		
@@ -80,6 +93,8 @@
 			default { $DeploymentIntent = "NA" }
 		}
 
+		Write-Verbose -Message "[$FunctionName] Define helper functions"
+		Write-Verbose -Message "[$FunctionName] helper function: Get-SCCMDeploymentIntentName"
 		Function Get-SCCMDeploymentIntentName
 		{
 	        	PARAM(
@@ -94,6 +109,7 @@
 			}
 		} #Function Get-DeploymentIntentName
 		
+		Write-Verbose -Message "[$FunctionName] helper function: Get-SCCMDeploymentTypeName"
 		function Get-SCCMDeploymentTypeName
 		{
 			<#
@@ -119,52 +135,66 @@
 	}
 	PROCESS
 	{
-		$Device = Get-WMIObject @Splatting -Query "Select * From SMS_R_SYSTEM WHERE Name='$DeviceName'"
+		TRY
+		{
 		
+			Write-Verbose -Message "[$FunctionName] Retrieving Device '$DeviceName'..."
+			$Device = Get-WMIObject @Splatting -Query "Select * From SMS_R_SYSTEM WHERE Name='$DeviceName'"
 		
-		Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($Device.resourceid)'" | ForEach-Object {
-			$Collections = Get-WmiObject @splatting -Query "Select * From SMS_Collection WHERE CollectionID='$($_.Collectionid)'"
+			Write-Verbose -Message "[$FunctionName] Retrieving collection(s) where the device is member..."
+			Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($Device.resourceid)'" | ForEach-Object {
+
+				Write-Verbose -Message "[$FunctionName] Retrieving collection '$($_.Collectionid)'..."
+				$Collections = Get-WmiObject @splatting -Query "Select * From SMS_Collection WHERE CollectionID='$($_.Collectionid)'"
 			
-			Foreach ($Collection in $collections)
-			{
-				IF ($DeploymentIntent -eq 'NA')
+				Foreach ($Collection in $collections)
 				{
-					$Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)'")
-				}
-				ELSE
-				{
-					$Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND DeploymentIntent='$DeploymentIntent'")
-				}
-				
-				Foreach ($Deploy in $Deployments)
-				{
-					# Get the Deployment type
-					$TypeName = Get-SCCMDeploymentTypeName -TypeID $Deploy.DeploymentTypeid
-					if (-not $TypeName) { $TypeName = Get-SCCMDeploymentTypeName -TypeID $Deploy.DeploymentType }
-					
-					# Prepare output
-					$Properties = @{
-						DeviceName = $DeviceName
-						ComputerName = $ComputerName
-						CollectionName = $Deploy.CollectionName
-						CollectionID = $Deploy.CollectionID
-						DeploymentID = $Deploy.DeploymentID
-						DeploymentName = $Deploy.DeploymentName
-						DeploymentIntent = $deploy.DeploymentIntent
-						DeploymentIntentName = (Get-SCCMDeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
-						DeploymentTypeName = $TypeName
-						TargetName = $Deploy.TargetName
-						TargetSubName = $Deploy.TargetSubname
-						
+					IF ($DeploymentIntent -eq 'NA')
+					{
+						Write-Verbose -Message "[$FunctionName] DeploymentIntent is not specified"
+						$Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)'")
+					}
+					ELSE
+					{
+						Write-Verbose -Message "[$FunctionName] DeploymentIntent '$DeploymentIntent'"
+						$Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND DeploymentIntent='$DeploymentIntent'")
 					}
 					
-					#Output the current object
-					New-Object -TypeName PSObject -prop $Properties
-					
-					# Reset TypeName
-					$TypeName=""
+					Foreach ($Deploy in $Deployments)
+					{
+						Write-Verbose -Message "[$FunctionName] Retrieving DeploymentType..."
+						$TypeName = Get-SCCMDeploymentTypeName -TypeID $Deploy.DeploymentTypeid
+						if (-not $TypeName) { $TypeName = Get-SCCMDeploymentTypeName -TypeID $Deploy.DeploymentType }
+						
+						# Prepare output
+						Write-Verbose -Message "[$FunctionName] Preparing output..."
+						$Properties = @{
+							DeviceName = $DeviceName
+							ComputerName = $ComputerName
+							CollectionName = $Deploy.CollectionName
+							CollectionID = $Deploy.CollectionID
+							DeploymentID = $Deploy.DeploymentID
+							DeploymentName = $Deploy.DeploymentName
+							DeploymentIntent = $deploy.DeploymentIntent
+							DeploymentIntentName = (Get-SCCMDeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
+							DeploymentTypeName = $TypeName
+							TargetName = $Deploy.TargetName
+							TargetSubName = $Deploy.TargetSubname
+							
+						}
+						
+						#Output the current object
+						Write-Verbose -Message "[$FunctionName] Output information"
+						New-Object -TypeName PSObject -prop $Properties
+						
+						# Reset TypeName
+						$TypeName=""
+					}
 				}
 			}
+		}
+		CATCH{
+			$PSCmdlet.ThrowTerminatingError()
 		}
 	}
 }
