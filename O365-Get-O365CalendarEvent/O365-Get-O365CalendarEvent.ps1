@@ -79,7 +79,8 @@
 		
 		[System.datetime]$EndDateTime = ((Get-Date).adddays(7)),
 		
-		[System.Management.Automation.Credential()]
+        [System.Management.Automation.Credential()]
+        [pscredential]
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
 		
 		[ValidateNotNullOrEmpty()]
@@ -173,9 +174,9 @@
 	{
 		TRY
 		{
-			$ScriptName = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).MyCommand
+			$FunctionName = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).MyCommand
 			
-			Write-Verbose -Message "[$ScriptName] Create splatting"
+			Write-Verbose -Message "[$FunctionName] Create splatting"
 			$Splatting = @{
 				Credential = $Credential
 				Uri = "https://outlook.office365.com/api/v1.0/users/$EmailAddress/calendarview?startDateTime=$StartDateTime&endDateTime=$($EndDateTime)&`$top=$PageResult"
@@ -184,18 +185,18 @@
 			
 			if ($TimeZone)
 			{
-				Write-Verbose -Message "[$ScriptName] Add TimeZone"
+				Write-Verbose -Message "[$FunctionName] Add TimeZone"
 				$headers = New-Object -TypeName 'System.Collections.Generic.Dictionary[[String],[String]]'
 				$headers.Add('Prefer', "outlook.timezone=`"$TimeZone`"")
 				$Splatting.Add('Headers', $headers)
 			}
 			if (-not $PSBoundParameters['EmailAddress'])
 			{
-				Write-Verbose -Message "[$ScriptName] EmailAddress not specified, updating URI"
+				Write-Verbose -Message "[$FunctionName] EmailAddress not specified, updating URI"
 				#Query the current User
 				$Splatting.Uri = "https://outlook.office365.com/api/v1.0/me/calendarview?startDateTime=$StartDateTime&endDateTime=$($EndDateTime)&`$top=$PageResult"
 			}
-			Write-Verbose -Message "[$ScriptName] URI: $($Splatting.Uri)"
+			Write-Verbose -Message "[$FunctionName] URI: $($Splatting.Uri)"
 			Invoke-RestMethod @Splatting -ErrorAction Stop | Select-Object -ExpandProperty Value
 		}
 		CATCH
