@@ -1,4 +1,4 @@
-﻿function Remove-StringSpecialCharacter
+function Remove-StringSpecialCharacter
 {
 <#
 .SYNOPSIS
@@ -45,7 +45,7 @@
 		[System.String[]]$String,
 		
 		[Alias("Keep")]
-		[ValidateNotNullOrEmpty()]
+		#[ValidateNotNullOrEmpty()]
 		[String[]]$SpecialCharacterToKeep
 	)
 	PROCESS
@@ -55,7 +55,12 @@
 			$Regex = "[^\p{L}\p{Nd}"
 			Foreach ($Character in $SpecialCharacterToKeep)
 			{
-				$Regex += "/$character"
+				IF ($Character -eq "-"){
+					$Regex +="-"
+				} else {
+					$Regex += [Regex]::Escape($Character)
+				}
+				#$Regex += "/$character"
 			}
 			
 			$Regex += "]+"
