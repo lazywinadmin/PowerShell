@@ -3,16 +3,16 @@ function Get-SCSMObjectPrefix
 <#
 	.SYNOPSIS
 		Function to retrieve the Prefix used for the different WorkItem, Activities or Knowledge Article
-	
+
 	.DESCRIPTION
 		Function to retrieve the Prefix used for the different WorkItem, Activities or Knowledge Article
-	
+
 	.PARAMETER ClassName
 		Specified the ClassName you want to query
-	
+
 	.EXAMPLE
 		Get-SCSMObjectPrefix
-	
+
 		DependentActivity         : DA
 		ManualActivity            : MA
 		ParallelActivity          : PA
@@ -25,19 +25,19 @@ function Get-SCSMObjectPrefix
 		Knowledge                 : KA
 		Problem                   : PR
 		Release                   : RR
-	
+
 	.EXAMPLE
 		Get-SCSMObjectPrefix -ClassName Change
-	
+
 		CR
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin
 		@lazywinadm
 		github.com/lazywinadmin
 #>
-	
+
 	[OutputType([psobject])]
 	param
 	(
@@ -57,11 +57,11 @@ function Get-SCSMObjectPrefix
 	)]
 		[string]$ClassName
 	)
-	
+
 	BEGIN
 	{
 		Import-Module -Name Smlets
-		
+
 		$ActivitySettingsObj = Get-SCSMObject -Class (Get-SCSMClass -Name "System.GlobalSetting.ActivitySettings")
 		$ChangeSettingsObj = Get-SCSMObject -Class (Get-SCSMClass -Name "System.GlobalSetting.ChangeSettings")
 		$KnowledgedSettingsObj = Get-SCSMObject -Class (Get-SCSMClass -Name "System.GlobalSetting.KnowledgeSettings")

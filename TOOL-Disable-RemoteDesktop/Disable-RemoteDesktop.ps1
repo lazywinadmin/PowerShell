@@ -3,31 +3,31 @@ function Disable-RemoteDesktop
 <#
 	.SYNOPSIS
 		The function Disable-RemoteDesktop will disable RemoteDesktop on a local or remote machine.
-	
+
 	.DESCRIPTION
 		The function Disable-RemoteDesktop will disable RemoteDesktop on a local or remote machine.
-	
+
 	.PARAMETER ComputerName
 		Specifies the computername
-	
+
 	.PARAMETER Credential
 		Specifies the credential to use
-	
+
 	.PARAMETER CimSession
 		Specifies one or more existing CIM Session(s) to use
-	
+
 	.EXAMPLE
 		PS C:\> Disable-RemoteDesktop -ComputerName DC01
-	
+
 	.EXAMPLE
 		PS C:\> Disable-RemoteDesktop -ComputerName DC01 -Credential (Get-Credential -cred "FX\SuperAdmin")
-	
+
 	.EXAMPLE
 		PS C:\> Disable-RemoteDesktop -CimSession $Session
-	
+
 	.EXAMPLE
 		PS C:\> Disable-RemoteDesktop -CimSession $Session1,$session2,$session3
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		@lazywinadm
@@ -44,12 +44,12 @@ function Disable-RemoteDesktop
 				   ValueFromPipelineByPropertyName = $True)]
 		[Alias("CN", "__SERVER", "PSComputerName")]
 		[String[]]$ComputerName,
-		
+
 		[Parameter(ParameterSetName = "Main")]
 		[Alias("RunAs")]
 		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
-		
+
 		[Parameter(ParameterSetName = "CimSession")]
 		[Microsoft.Management.Infrastructure.CimSession[]]$CimSession
 	)
@@ -65,7 +65,7 @@ function Disable-RemoteDesktop
 	Helper Function to show default message used in VERBOSE/DEBUG/WARNING
 	and... HOST in some case.
 	This is helpful to standardize the output messages
-	
+
 .PARAMETER Message
 	Specifies the message to show
 .NOTES
@@ -86,10 +86,10 @@ function Disable-RemoteDesktop
 			FOREACH ($Cim in $CimSession)
 			{
 				$CIMComputer = $($Cim.ComputerName).ToUpper()
-				
+
 				IF ($PSCmdlet.ShouldProcess($CIMComputer, "Disable Remote Desktop via Win32_TerminalServiceSetting"))
 				{
-					
+
 					TRY
 					{
 						# Parameters for Get-CimInstance
@@ -100,7 +100,7 @@ function Disable-RemoteDesktop
 							ErrorAction = 'Stop'
 							ErrorVariable = "ErrorProcessGetCimInstance"
 						}
-						
+
 						# Parameters for Invoke-CimMethod
 						$CIMInvokeSplatting = @{
 							MethodName = "SetAllowTSConnections"
@@ -111,7 +111,7 @@ function Disable-RemoteDesktop
 							ErrorAction = 'Stop'
 							ErrorVariable = "ErrorProcessInvokeCim"
 						}
-						
+
 						Write-Verbose -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - disable Remote Desktop (and Modify Firewall Exception")
 						Get-CimInstance @CIMSplatting | Invoke-CimMethod @CIMInvokeSplatting
 					}
@@ -135,10 +135,10 @@ function Disable-RemoteDesktop
 			FOREACH ($Computer in $ComputerName)
 			{
 				$Computer = $Computer.ToUpper()
-				
+
 				IF ($PSCmdlet.ShouldProcess($Computer, "Disable Remote Desktop via Win32_TerminalServiceSetting"))
 				{
-					
+
 					TRY
 					{
 						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
@@ -152,16 +152,16 @@ function Disable-RemoteDesktop
 								ErrorAction = 'Stop'
 								ErrorVariable = 'ErrorProcessGetWmi'
 							}
-							
+
 							IF ($PSBoundParameters['Credential'])
 							{
 								$Splatting.credential = $Credential
 							}
-							
+
 							# disable Remote Desktop
 							Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Get-WmiObject - disable Remote Desktop")
 							(Get-WmiObject @Splatting).SetAllowTsConnections(0, 0) | Out-Null
-							
+
 							# Disable requirement that user must be authenticated
 							#(Get-WmiObject -Class Win32_TSGeneralSetting @Splatting -Filter TerminalName='RDP-tcp').SetUserAuthenticationRequired(0)  Out-Null
 						}

@@ -5,17 +5,17 @@ $Search.Filter = "(&((objectclass=user)(samaccountname=$UserSam)))"
 $Search.FindAll() | ForEach-Object -Process {
                 $Account = $_
 				$AccountGetDirectory = $Account.GetDirectoryEntry();
-				
+
 				# Add the properties tokenGroups
 				$AccountGetDirectory.GetInfoEx(@("tokenGroups"), 0)
-				
-				
+
+
 				$($AccountGetDirectory.Get("tokenGroups"))|
                 ForEach-Object -Process {
 					    # Create SecurityIdentifier to translate into group name
 					    $Principal = New-Object System.Security.Principal.SecurityIdentifier($_, 0)
                         $domainName = [adsi]"LDAP://$($Principal.AccountDomainSid)"
-                        
+
                         <#
                            TypeName: System.Security.Principal.SecurityIdentifier
 

@@ -3,7 +3,7 @@
 <#
 .SYNOPSIS
 	This function will remove the diacritics (accents) characters from a string.
-	
+
 .DESCRIPTION
 	This function will remove the diacritics (accents) characters from a string.
 
@@ -16,7 +16,7 @@
 
 .EXAMPLE
 	PS C:\> Remove-StringDiacritic "L'été de Raphaël"
-	
+
 	L'ete de Raphael
 
 .NOTES
@@ -33,7 +33,7 @@
 		[System.String[]]$String,
 		[System.Text.NormalizationForm]$NormalizationForm = "FormD"
 	)
-	
+
 	FOREACH ($StringValue in $String)
 	{
 		Write-Verbose -Message "$StringValue"
@@ -42,7 +42,7 @@
 			# Normalize the String
 			$Normalized = $StringValue.Normalize($NormalizationForm)
 			$NewString = New-Object -TypeName System.Text.StringBuilder
-			
+
 			# Convert the String to CharArray
 			$normalized.ToCharArray() |
 			ForEach-Object -Process {

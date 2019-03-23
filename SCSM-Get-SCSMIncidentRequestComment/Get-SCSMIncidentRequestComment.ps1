@@ -1,77 +1,77 @@
 ﻿function Get-SCSMIncidentRequestComment
 {
 <#
-	.SYNOPSIS
-		Function to retrieve the comments from a Incident Request WorkItem
-	
-	.DESCRIPTION
-		Function to retrieve the comments from a Incident Request WorkItem
-	
-	.PARAMETER DateTime
-		Specifies from when (DateTime) the search need to look
-	
-	.PARAMETER GUID
-		Specifies the GUID of the Incident Request
-	
-	.EXAMPLE
-		Get-SCSMServiceRequestComment -DateTime $((Get-Date).AddHours(-15))
-	
-	.EXAMPLE
-		Get-SCSMServiceRequestComment -DateTime "2016/01/01"
-	
-	.EXAMPLE
-		Get-SCSMServiceRequestComment -GUID 221dbd07-b480-ee33-fc25-6077406e83ad
-	
-	.NOTES
-		Francois-Xavier Cat
-		www.LazyWinAdmin.com
-		@lazywinadm
+    .SYNOPSIS
+        Function to retrieve the comments from a Incident Request WorkItem
+
+    .DESCRIPTION
+        Function to retrieve the comments from a Incident Request WorkItem
+
+    .PARAMETER DateTime
+        Specifies from when (DateTime) the search need to look
+
+    .PARAMETER GUID
+        Specifies the GUID of the Incident Request
+
+    .EXAMPLE
+        Get-SCSMServiceRequestComment -DateTime $((Get-Date).AddHours(-15))
+
+    .EXAMPLE
+        Get-SCSMServiceRequestComment -DateTime "2016/01/01"
+
+    .EXAMPLE
+        Get-SCSMServiceRequestComment -GUID 221dbd07-b480-ee33-fc25-6077406e83ad
+
+    .NOTES
+        Francois-Xavier Cat
+        www.LazyWinAdmin.com
+        @lazywinadm
 #>
-	
-	PARAM
-	(
-		[Parameter(ParameterSetName = 'General',
-				   Mandatory = $true)]
-		$DateTime = $((Get-Date).AddHours(-24)),
-		
-		[Parameter(ParameterSetName = 'GUID')]
-		$GUID
-	)
-	BEGIN
-	{
-		$AssignedUserClassRelation = Get-SCSMRelationshipClass -Id 15e577a3-6bf9-6713-4eac-ba5a5b7c4722
-	}
-	PROCESS
-	{
-		
-		IF ($PSBoundParameters['GUID'])
-		{
-			$Tickets = Get-SCSMObject -id $GUID
-		}
-		ELSE
-		{
-			if ($DateTime -is [String]) { $DateTime = Get-Date $DateTime }
-			$DateTime = $DateTime.ToString(“yyy-MM-dd HH:mm:ss”)
-			$Tickets = Get-SCSMObject -Class (Get-SCSMClass System.WorkItem.incident$) -Filter "CreatedDate -gt '$DateTime'" #| Where-Object { $_.AssignedTo -eq $NULL }
-		}
-		
-		$Tickets |
-		ForEach-Object {
-			$CurrentTicket = $_
-			$relatedObjects = Get-scsmrelatedobject -SMObject $CurrentTicket
-			$AssignedTo = (Get-SCSMRelatedObject -SMObject $CurrentTicket -Relationship $AssignedUserClassRelation)
-			Foreach ($Comment in ($relatedObjects | Where-Object { $_.classname -eq 'System.WorkItem.TroubleTicket.UserCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AnalystCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AuditCommentLog' }))
-			{
-				# Output the information
-				[pscustomobject][ordered] @{
-					TicketName = $CurrentTicket.Name
-					TicketClassName = $CurrentTicket.Classname
-					TicketDisplayName = $CurrentTicket.DisplayName
-					TicketID = $CurrentTicket.ID
-					TicketGUID = $CurrentTicket.get_id()
-					TicketTierQueue = $CurrentTicket.TierQueue.displayname
-					TicketAssignedTo = $AssignedTo.DisplayName
-					TicketCreatedDate = $CurrentTicket.CreatedDate
+
+    PARAM
+    (
+        [Parameter(ParameterSetName = 'General',
+                   Mandatory = $true)]
+        $DateTime = $((Get-Date).AddHours(-24)),
+
+        [Parameter(ParameterSetName = 'GUID')]
+        $GUID
+    )
+    BEGIN
+    {
+        $AssignedUserClassRelation = Get-SCSMRelationshipClass -Id 15e577a3-6bf9-6713-4eac-ba5a5b7c4722
+    }
+    PROCESS
+    {
+
+        IF ($PSBoundParameters['GUID'])
+        {
+            $Tickets = Get-SCSMObject -id $GUID
+        }
+        ELSE
+        {
+            if ($DateTime -is [String]) { $DateTime = Get-Date $DateTime }
+            $DateTime = $DateTime.ToString(“yyy-MM-dd HH:mm:ss”)
+            $Tickets = Get-SCSMObject -Class (Get-SCSMClass System.WorkItem.incident$) -Filter "CreatedDate -gt '$DateTime'" #| Where-Object { $_.AssignedTo -eq $NULL }
+        }
+
+        $Tickets |
+        ForEach-Object {
+            $CurrentTicket = $_
+            $relatedObjects = Get-scsmrelatedobject -SMObject $CurrentTicket
+            $AssignedTo = (Get-SCSMRelatedObject -SMObject $CurrentTicket -Relationship $AssignedUserClassRelation)
+            Foreach ($Comment in ($relatedObjects | Where-Object { $_.classname -eq 'System.WorkItem.TroubleTicket.UserCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AnalystCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AuditCommentLog' }))
+            {
+                # Output the information
+                [pscustomobject][ordered] @{
+                    TicketName = $CurrentTicket.Name
+                    TicketClassName = $CurrentTicket.Classname
+                    TicketDisplayName = $CurrentTicket.DisplayName
+                    TicketID = $CurrentTicket.ID
+                    TicketGUID = $CurrentTicket.get_id()
+                    TicketTierQueue = $CurrentTicket.TierQueue.displayname
+                    TicketAssignedTo = $AssignedTo.DisplayName
+                    TicketCreatedDate = $CurrentTicket.CreatedDate
 					Comment = $Comment.Comment
 					CommentEnteredBy = $Comment.EnteredBy
 					CommentEnteredDate = $Comment.EnteredDate
@@ -79,6 +79,6 @@
 				}
 			}
 		}
-		
+
 	}
 }

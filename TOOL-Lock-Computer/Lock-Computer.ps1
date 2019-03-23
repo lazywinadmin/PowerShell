@@ -6,7 +6,7 @@ Function Lock-Computer
 		.SYNOPSIS
 		Function to Lock your computer
 	#>
-	
+
 $signature = @"
 [DllImport("user32.dll", SetLastError = true)]
 public static extern bool LockWorkStation();

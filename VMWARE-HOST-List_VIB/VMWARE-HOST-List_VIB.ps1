@@ -41,13 +41,13 @@ BEGIN
 			Write-Verbose -Message "BEGIN - Loading Vmware Snapin VMware.VimAutomation.Core..."
 			Add-PSSnapin -Name VMware.VimAutomation.Core -ErrorAction Stop -ErrorVariable ErrorBeginAddPssnapin
 		}
-		
+
 		# Verify VMware Snapin is connected to at least one vcenter
 		IF (-not ($global:DefaultVIServer.count -gt 0))
 		{
 			Write-Verbose -Message "BEGIN - Currently not connected to a vCenter..."
 			$Vcenter = Read-Host -Prompt "You are not connected to a VMware vCenter, Please enter the FQDN or IP of the vCenter"
-			
+
 			IF ((Read-Host -Prompt "You are currently logged as: $($env:username). Do you want to specify different credential ? (Y/N)") -eq 'Y')
 			{
 				Connect-VIServer -Server $Vcenter -credential (Get-Credential) -ErrorAction Stop -ErrorVariable ErrorBeginConnectViServer
@@ -69,7 +69,7 @@ PROCESS
 	TRY
 	{
 		$VMHosts = Get-VMHost -ErrorAction Stop -ErrorVariable ErrorGetVMhost | Where-Object { $_.ConnectionState -eq "Connected" }
-		
+
 		IF ($PSBoundParameters['AllVib'])
 		{
 			Foreach ($CurrentVMhost in $VMHosts)
@@ -93,7 +93,7 @@ PROCESS
 							'InstallDate' = $VIB.InstallDate
 							'AcceptanceLevel' = $VIB.AcceptanceLevel
 						}#$Prop
-						
+
 						# Output Current Object
 						New-Object PSobject -Property $Prop
 					}#FOREACH
@@ -129,7 +129,7 @@ PROCESS
 							'InstallDate' = $VIB.InstallDate
 							'AcceptanceLevel' = $VIB.AcceptanceLevel
 						}#$Prop
-						
+
 						# Output Current Object
 						New-Object PSobject -Property $Prop
 					}#FOREACH
@@ -165,7 +165,7 @@ PROCESS
 							'InstallDate' = $VIB.InstallDate
 							'AcceptanceLevel' = $VIB.AcceptanceLevel
 						}#$Prop
-						
+
 						# Output Current Object
 						New-Object PSobject -Property $Prop
 					}#FOREACH

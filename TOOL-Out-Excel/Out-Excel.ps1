@@ -7,7 +7,7 @@
 	.PARAMETER Raw
 	.NOTES
     	Original Script: http://pathologicalscripter.wordpress.com/out-excel/
-	
+
 		TODO:
 			Parameter to change color of header
 			Parameter to activate background color on Odd unit
@@ -16,7 +16,7 @@
 #>
 	[CmdletBinding()]
 	PARAM ([string[]]$property, [switch]$raw)
-	
+
 	BEGIN
 	{
 		# start Excel and open a new workbook
@@ -29,7 +29,7 @@
 		$Row = 1
 		$HeaderHash = @{ }
 	}
-	
+
 	PROCESS
 	{
 		if ($_ -eq $null) { return }
@@ -87,7 +87,7 @@
 			}
 		}
 	}
-	
+
 	end
 	{
 		# now just resize the columns and we’re finished

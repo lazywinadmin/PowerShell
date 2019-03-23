@@ -22,14 +22,14 @@ function Resolve-ShortURL
 	@lazywinadm
 	github.com/lazywinadmin
 #>
-	
+
 	[CmdletBinding()]
 	[OutputType([System.String])]
 	PARAM
 	(
 		[String[]]$ShortUrl
 	)
-	
+
 	FOREACH ($URL in $ShortUrl)
 	{
 		TRY

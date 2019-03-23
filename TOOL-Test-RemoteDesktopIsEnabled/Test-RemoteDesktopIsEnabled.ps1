@@ -39,7 +39,7 @@ PARAM(
         }
         # Enable Remote Desktop
         [boolean](Get-WmiObject -Class Win32_TerminalServiceSetting @Splatting).AllowTsConnections
-        
+
         # Disable requirement that user must be authenticated
         #(Get-WmiObject -Class Win32_TSGeneralSetting @Splatting -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0) | Out-Null
       }
@@ -49,5 +49,5 @@ PARAM(
       Write-Warning -MEssage $Error[0].Exception.Message
     }
   }#FOREACH
-  
+
 }#Function

@@ -5,11 +5,11 @@
 	Function to retrieve the list of Type Accelerator available
 .EXAMPLE
 	Get-NetFrameworkTypeAccelerator
-	
+
 	Return the list of Type Accelerator available on your system
 .EXAMPLE
 	Get-Accelerator
-	
+
 	Return the list of Type Accelerator available on your system
 	This is a function alias created by [Alias()]
 .NOTES

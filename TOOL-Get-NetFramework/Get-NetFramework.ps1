@@ -5,7 +5,7 @@
 		This function will retrieve the list of Framework Installed on the computer.
 	.EXAMPLE
 		Get-NetFramework
-	
+
 		PSChildName                                   Version                                      
 		-----------                                   -------                                      
 		v2.0.50727                                    2.0.50727.4927                               
@@ -16,7 +16,7 @@
 		Client                                        4.5.51641                                    
 		Full                                          4.5.51641                                    
 		Client                                        4.0.0.0        
-	
+
 	.NOTES
 		TODO:
 			Credential support
@@ -34,22 +34,22 @@
 		[String[]]$ComputerName,
 		$Credential = [System.Management.Automation.PSCredential]::Empty
 	)
-	
+
 	$Splatting = @{
 		ComputerName = $ComputerName
 	}
-	
+
 	if ($PSBoundParameters['Credential']) { $Splatting.credential = $Credential }
-	
+
 	Invoke-Command @Splatting -ScriptBlock {
 		Write-Verbose -Message "$pscomputername"
-		
+
 		# Get the Net Framework Installed
 		$netFramework = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse |
 		Get-ItemProperty -name Version -EA 0 |
 		Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } |
 		Select-Object -Property PSChildName, Version
-		
+
 		# Prepare output
 		$Properties = @{
 			ComputerName = "$($env:Computername)$($env:USERDNSDOMAIN)"

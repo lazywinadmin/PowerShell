@@ -16,19 +16,19 @@
 	{
 		# Get the output of netstat
 		$data = netstat -n
-		
+
 		# Keep only the line with the data (we remove the first lines)
 		$data = $data[4..$data.count]
-		
+
 		# Each line need to be splitted and get rid of unnecessary spaces
 		foreach ($line in $data)
 		{
 			# Get rid of the first whitespaces, at the beginning of the line
 			$line = $line -replace '^\s+', ''
-			
+
 			# Split each property on whitespaces block
 			$line = $line -split '\s+'
-			
+
 			# Define the properties
 			$properties = @{
 				Protocole = $line[0]
@@ -38,7 +38,7 @@
 				ForeignAddressPort = ($line[2] -split ":")[1]
 				State = $line[3]
 			}
-			
+
 			# Output the current line
 			New-Object -TypeName PSObject -Property $properties
 		}

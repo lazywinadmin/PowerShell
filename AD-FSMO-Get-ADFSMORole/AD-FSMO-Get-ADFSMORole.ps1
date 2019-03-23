@@ -49,7 +49,7 @@
             $ForestRoles = Get-ADForest
             $DomainRoles = Get-ADDomain
         }
-        
+
         # Define Properties
         $Properties = @{
             SchemaMaster = $ForestRoles.SchemaMaster
@@ -58,7 +58,7 @@
             RIDMaster = $DomainRoles.RIDMaster
             PDCEmulator = $DomainRoles.PDCEmulator
         }
-        
+
         New-Object -TypeName PSObject -Property $Properties
     }
     CATCH

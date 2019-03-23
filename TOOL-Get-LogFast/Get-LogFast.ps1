@@ -22,12 +22,12 @@
 		@lazywinadm
 		www.lazywinadmin.com
 		github.com/lazywinadmin
-		
+
 #>
 	[CmdletBinding()]
 	PARAM (
 		$Path = "c:\Biglog.log",
-		
+
 		$Match
 	)
 	BEGIN
@@ -44,22 +44,22 @@
 			# Read the next line
 			#  .ReadLine() method: Reads a line of characters from the current stream and returns the data as a string.
 			$Line = $StreamReader.ReadLine()
-			
+
 			#  Ignore empty line and line starting with a #
 			if ($Line.length -eq 0 -or $Line -match "^#")
 			{
 				continue
 			}
-			
+
 			IF ($PSBoundParameters['Match'])
 			{
 				If ($Line -match $Match)
 				{
 					Write-Verbose -Message "[PROCESS] Match found"
-					
+
 					# Split the line on $Delimiter
 					#$result = ($Line -split $Delimiter)
-					
+
 					Write-Output $Line
 				}
 			}

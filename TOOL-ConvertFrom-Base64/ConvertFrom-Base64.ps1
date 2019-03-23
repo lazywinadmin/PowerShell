@@ -3,16 +3,16 @@
 	<#
 	.SYNOPSIS
 		Converts the specified string, which encodes binary data as base-64 digits, to an equivalent 8-bit unsigned integer array.
-	
+
 	.DESCRIPTION
 		Converts the specified string, which encodes binary data as base-64 digits, to an equivalent 8-bit unsigned integer array.
-	
+
 	.PARAMETER String
 		Specifies the String to Convert
-		
+
 	.EXAMPLE
 		ConvertFrom-Base64 -String $ImageBase64 |Out-File ImageTest.png
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		@lazywinadm

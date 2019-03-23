@@ -39,10 +39,10 @@
 	PARAM (
 		[Parameter(ValueFromPipeline,ValueFromPipelineByPropertyName)]
 		[System.String[]]$ComputerName = $env:ComputerName,
-		
+
 		[Parameter(Mandatory)]
 		[System.Boolean]$EnableNLA,
-		
+
 		[Alias("RunAs")]
 		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty
@@ -65,7 +65,7 @@
 			}
 		}
 	}#BEGIN
-	
+
 	PROCESS
 	{
 		FOREACH ($Computer in $ComputerName)
@@ -80,18 +80,18 @@
 					ErrorAction = 'Stop'
 					ErrorVariable = 'ProcessError'
 				}
-				
+
 				# Add Credential if specified when calling the function
 				IF ($PSBoundParameters['Credential'])
 				{
 					Write-Verbose -message "[PROCESS] $Computer - CIM/WMI - Add Credential Specified"
 					$CIMSessionParams.credential = $Credential
 				}
-				
+
 				# Connectivity Test
 				Write-Verbose -Message "[PROCESS] $Computer - Testing Connection..."
 				Test-Connection -ComputerName $Computer -Count 1 -ErrorAction Stop -ErrorVariable ErrorTestConnection | Out-Null
-				
+
 				# CIM/WMI Connection
 				#  WsMAN
 				IF ((Test-WSMan -ComputerName $Computer -ErrorAction SilentlyContinue).productversion -match 'Stack: 3.0')
@@ -101,7 +101,7 @@
 					$CimProtocol = $CimSession.protocol
 					Write-Verbose -message "[PROCESS] $Computer - [$CimProtocol] CIM SESSION - Opened"
 				}
-				
+
 				# DCOM
 				ELSE
 				{
@@ -112,13 +112,13 @@
 					$CimProtocol = $CimSession.protocol
 					Write-Verbose -message "[PROCESS] $Computer - [$CimProtocol] CIM SESSION - Opened"
 				}
-				
+
 				# Getting the Information on Terminal Settings
 				Write-Verbose -message "[PROCESS] $Computer - [$CimProtocol] CIM SESSION - Get the Terminal Services Information"
 				$NLAinfo = Get-CimInstance -CimSession $CimSession -ClassName Win32_TSGeneralSetting -Namespace root\cimv2\terminalservices -Filter "TerminalName='RDP-tcp'"
 				$NLAinfo | Invoke-CimMethod -MethodName SetUserAuthenticationRequired -Arguments @{ UserAuthenticationRequired = $EnableNLA } -ErrorAction 'Continue' -ErrorVariable ErrorProcessInvokeWmiMethod
 			}
-			
+
 			CATCH
 			{
 				Write-Warning -Message "Error on $Computer"

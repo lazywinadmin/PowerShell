@@ -15,7 +15,7 @@ function Get-NetworkLevelAuthentication
 
 .EXAMPLE
 	Get-NetworkLevelAuthentication
-	
+
 	This will get the NLA setting on the localhost
 
 	ComputerName     : XAVIERDESKTOP
@@ -26,7 +26,7 @@ function Get-NetworkLevelAuthentication
 
 .EXAMPLE
 	Get-NetworkLevelAuthentication -ComputerName DC01
-	
+
 	This will get the NLA setting on the server DC01
 
 	ComputerName     : DC01
@@ -37,25 +37,25 @@ function Get-NetworkLevelAuthentication
 
 .EXAMPLE
 	Get-NetworkLevelAuthentication -ComputerName DC01, SERVER01 -verbose
-	
+
 	This will get the NLA setting on the servers DC01 and the SERVER01
 
 .EXAMPLE
 	Get-Content .\Computers.txt | Get-NetworkLevelAuthentication -verbose
-	
+
 	This will get the NLA setting for all the computers listed in the file Computers.txt
-	
+
 .EXAMPLE
 	Get-NetworkLevelAuthentication -ComputerName (Get-Content -Path .\Computers.txt)
-	
+
 	This will get the NLA setting for all the computers listed in the file Computers.txt
-	
+
 .NOTES
 	DATE	: 2014/04/01
 	AUTHOR	: Francois-Xavier Cat
 	WWW		: http://lazywinadmin.com
 	Twitter	: @lazywinadm
-	
+
 	Article : http://lazywinadmin.com/2014/04/powershell-getset-network-level.html
 	GitHub	: https://github.com/lazywinadmin/PowerShell
 #>
@@ -64,7 +64,7 @@ function Get-NetworkLevelAuthentication
 	PARAM (
 		[Parameter(ValueFromPipeline)]
 		[String[]]$ComputerName = $env:ComputerName,
-		
+
 		[Alias("RunAs")]
 		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty
@@ -87,7 +87,7 @@ function Get-NetworkLevelAuthentication
 			}
 		}
 	}#BEGIN
-	
+
 	PROCESS
 	{
 		FOREACH ($Computer in $ComputerName)
@@ -100,17 +100,17 @@ function Get-NetworkLevelAuthentication
 					ErrorAction = 'Stop'
 					ErrorVariable = 'ProcessError'
 				}
-				
+
 				# Add Credential if specified when calling the function
 				IF ($PSBoundParameters['Credential'])
 				{
 					$CIMSessionParams.credential = $Credential
 				}
-				
+
 				# Connectivity Test
 				Write-Verbose -Message "PROCESS - $Computer - Testing Connection..."
 				Test-Connection -ComputerName $Computer -count 1 -ErrorAction Stop -ErrorVariable ErrorTestConnection | Out-Null
-				
+
 				# CIM/WMI Connection
 				#  WsMAN
 				IF ((Test-WSMan -ComputerName $Computer -ErrorAction SilentlyContinue).productversion -match 'Stack: 3.0')
@@ -120,7 +120,7 @@ function Get-NetworkLevelAuthentication
 					$CimProtocol = $CimSession.protocol
 					Write-Verbose -message "PROCESS - $Computer - [$CimProtocol] CIM SESSION - Opened"
 				}
-				
+
 				# DCOM
 				ELSE
 				{
@@ -131,7 +131,7 @@ function Get-NetworkLevelAuthentication
 					$CimProtocol = $CimSession.protocol
 					Write-Verbose -message "PROCESS - $Computer - [$CimProtocol] CIM SESSION - Opened"
 				}
-				
+
 				# Getting the Information on Terminal Settings
 				Write-Verbose -message "PROCESS - $Computer - [$CimProtocol] CIM SESSION - Get the Terminal Services Information"
 				$NLAinfo = Get-CimInstance -CimSession $CimSession -ClassName Win32_TSGeneralSetting -Namespace root\cimv2\terminalservices -Filter "TerminalName='RDP-tcp'"
@@ -143,7 +143,7 @@ function Get-NetworkLevelAuthentication
 					'Transport' = $NLAinfo.transport
 				}
 			}
-			
+
 			CATCH
 			{
 				Write-Warning -Message "PROCESS - Error on $Computer"
@@ -155,7 +155,7 @@ function Get-NetworkLevelAuthentication
 	}#PROCESS
 	END
 	{
-		
+
 		if ($CimSession)
 		{
 			Write-Verbose -Message "END - Close CIM Session(s)"

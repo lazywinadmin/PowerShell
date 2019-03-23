@@ -12,16 +12,16 @@ Function Get-VMhostHbaInfo
 
 .PARAMETER Username
 	Specify the Username account to use to connect via putty (plink.exe)
-	
+
 .PARAMETER Password
 	Specify the Username account's password to use to connect via putty (plink.exe)
-	
+
 .PARAMETER PlinkPath
 	Specify the plink.exe full path. Default is "C:\Program Files (x86)\PuTTY\plink.exe"
 
 .EXAMPLE
 	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword
-	
+
 	HostName           : vmhost01.fx.lab
 	HostProduct        : VMware ESXi 5.1.0 build-1157734
 	HbaDevice          : vmhba2
@@ -41,7 +41,7 @@ Function Get-VMhostHbaInfo
 	HbaFirmwareVersion : 2.82X4 (ZS2.82X4)
 	HWModel            : ProLiant DL365 G5
 
-	
+
 .EXAMPLE
 	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword -PlinkPath "C:\Program Files (x86)\PuTTY\plink.exe"
 
@@ -66,7 +66,7 @@ Function Get-VMhostHbaInfo
 
 .EXAMPLE
 	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword -Verbose
-	
+
 	VERBOSE: PROCESS - vmhost01.fx.lab - Retrieving General Information ...
 	VERBOSE: 6/10/2014 12:38:51 PM Get-View Started execution
 	VERBOSE: 6/10/2014 12:38:52 PM Get-View Finished execution
@@ -91,7 +91,7 @@ Function Get-VMhostHbaInfo
 	VERBOSE: 6/10/2014 12:38:53 PM Get-View Started execution
 	VERBOSE: 6/10/2014 12:38:54 PM Get-View Finished execution
 	VERBOSE: PROCESS - vmhost01.fx.lab - Output Result
-	
+
 	HostName           : vmhost01.fx.lab
 	HostProduct        : VMware ESXi 5.1.0 build-1157734
 	HbaDevice          : vmhba3
@@ -102,10 +102,10 @@ Function Get-VMhostHbaInfo
 	HWModel            : ProLiant DL365 G5
 
 	VERBOSE: END - End of Get-VMhostHbaInfo
-	
+
 .EXAMPLE
 	Get-VMhostHbaInfo -VMhost "vmhost01.fx.lab" -Username root -Password Secr3tP@ssword | Export-CSV HBAInformation.csv
-	
+
 .INPUTS
 	System.String
 
@@ -115,13 +115,13 @@ Function Get-VMhostHbaInfo
 .NOTES
 	Twitter: @lazywinadm
 	WWW: lazywinadmin.com
-	
+
 	VERSION HISTORY
 	1.0 Original version of this script is from vmdude.fr (http://www.vmdude.fr/en/scripts-en/hba-firmware-version/)
 	2.0 Converted to a reusable function
 #>
-	
-	
+
+
 	[CmdletBinding()]
 	PARAM (
 		[Parameter(
@@ -150,7 +150,7 @@ Function Get-VMhostHbaInfo
 				Write-Verbose -Message "BEGIN - Loading Vmware Snapin VMware.VimAutomation.Core..."
 				Add-PSSnapin -Name VMware.VimAutomation.Core -ErrorAction Stop -ErrorVariable ErrorBeginAddPssnapin
 			}
-			
+
 			# Verify VMware Snapin is connected to at least one vcenter
 			IF (-not ($global:DefaultVIServer.count -gt 0))
 			{
@@ -160,7 +160,7 @@ Function Get-VMhostHbaInfo
 		}
 		CATCH
 		{
-			
+
 			IF ($ErrorBeginAddPssnapin)
 			{
 				Write-Warning -Message "BEGIN - VMware Snapin VMware.VimAutomation.Core does not seem to be available"
@@ -179,7 +179,7 @@ Function Get-VMhostHbaInfo
 		{
 			Write-verbose -Message "PROCESS - $Vmhost - Retrieving General Information ..."
 			$hostsview = Get-View -ViewType HostSystem -Property ("runtime", "name", "config", "hardware") -Filter @{ "Name" = "$VMhost" } -ErrorAction Stop -ErrorVariable ErrorProcessGetView
-			
+
 			IF ($hostsview)
 			{
 				IF ($hostsview.runtime.PowerState -match "poweredOn")
@@ -197,8 +197,8 @@ Function Get-VMhostHbaInfo
 						$line.HbaDriver = $hba.driver
 						$line.HbaModel = $hba.model
 						$line.HWModel = $esx.hardware.systemInfo.model
-						
-						
+
+
 						Write-Verbose -Message "PROCESS - $($esx.name) - Retrieving HBA Advance information - checking SSH Service..."
 						IF (((Get-View -ViewType HostSystem -ErrorAction Stop -ErrorVariable ErrorProcessGetViewTypeService -Filter @{ "Name" = $($ESX.name) }).config.service.service |where-object { $_.key -eq 'tsm-ssh' }).running)
 						{
@@ -211,7 +211,7 @@ Function Get-VMhostHbaInfo
 								$remoteCommand = "head -8 /proc/scsi/qla*/* | grep -B2 $($hba.device) | grep -i 'firmware version' | head -1 | sed 's/.*Firmware version \(.*\), Driver version.*/\1/'"
 							}
 							$tmpStr = [string]::Format('& "{0}" {1} "{2}"', $PlinkPath, "-ssh " + $Username + "@" + $esx.Name + " -pw $Password", $remoteCommand + ";exit")
-							
+
 							#Running plink.exe
 							$line.HbaFirmwareVersion = Invoke-Expression $tmpStr
 						}
@@ -220,7 +220,7 @@ Function Get-VMhostHbaInfo
 							Write-Warning -Message "PROCESS - $($esx.name) - SSH Server is not enabled"
 							$line.HbaFirmwareVersion = ""
 						}
-						
+
 						Write-Verbose -Message "PROCESS - $($esx.name) - Output Result"
 						Write-Output $line
 					}#FOREACH ($hba in ($esx.Config

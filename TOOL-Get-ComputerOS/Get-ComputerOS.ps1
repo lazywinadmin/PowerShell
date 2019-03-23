@@ -3,22 +3,22 @@
 <#
 	.SYNOPSIS
 		function to retrieve the Operating System of a machine
-	
+
 	.DESCRIPTION
 		function to retrieve the Operating System of a machine
-	
+
 	.PARAMETER ComputerName
 		Specifies the ComputerName of the machine to query. Default is localhost.
-	
+
 	.PARAMETER Credential
 		Specifies the credentials to use. Default is Current credentials
-	
+
 	.EXAMPLE
 		PS C:\> Get-ComputerOS -ComputerName "SERVER01","SERVER02","SERVER03"
-	
+
 	.EXAMPLE
 		PS C:\> Get-ComputerOS -ComputerName "SERVER01" -Credential (Get-Credential -cred "FX\SuperAdmin")
-	
+
 	.NOTES
 		Additional information about the function.
 #>
@@ -27,12 +27,12 @@
 		[Parameter(ParameterSetName = "Main")]
 		[Alias("CN","__SERVER","PSComputerName")]
 		[String[]]$ComputerName = $env:ComputerName,
-		
+
 		[Parameter(ParameterSetName="Main")]
 		[Alias("RunAs")]
 		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
-		
+
 		[Parameter(ParameterSetName = "CimSession")]
 		[Microsoft.Management.Infrastructure.CimSession]$CimSession
 	)
@@ -66,7 +66,7 @@
 						class = "Win32_OperatingSystem"
 						ErrorAction = Stop
 					}
-					
+
 					IF ($PSBoundParameters['CimSession'])
 					{
 						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - CimSession")
@@ -81,19 +81,19 @@
 							Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Credential specified $($Credential.username)")
 							$Splatting.Credential = $Credential
 						}
-						
+
 						# Set the ComputerName into the splatting
 						$Splatting.ComputerName = $ComputerName
 						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Get-WmiObject")
 						$Query = Get-WmiObject @Splatting
 					}
-					
+
 					# Prepare output
 					$Properties = @{
 						ComputerName = $Computer
 						OperatingSystem = $Query.Caption
 					}
-					
+
 					# Output
 					New-Object -TypeName PSObject -Property $Properties
 				}
