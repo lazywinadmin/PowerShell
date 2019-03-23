@@ -59,7 +59,7 @@ function Get-ComputerInfo
 
 .EXAMPLE
    Get-Content c:\ServersList.txt | Get-ComputerInfo
-    
+
    ComputerName       : DC
    OSName             : Microsoft Windows Server 2012
    OSVersion          : 6.2.9200
@@ -146,7 +146,7 @@ function Get-ComputerInfo
     PROCESS{
         FOREACH ($Computer in $ComputerName) {
             Write-Verbose -Message "PROCESS - Querying $Computer ..."
-                
+
             TRY{
                 $Splatting = @{
                     ComputerName = $Computer
@@ -164,7 +164,7 @@ function Get-ComputerInfo
                 # Query WMI class Win32_OperatingSystem
                 Write-Verbose -Message "PROCESS - $Computer - WMI:Win32_OperatingSystem"
                 $OperatingSystem = Get-WmiObject -Class Win32_OperatingSystem @Splatting -ErrorAction Stop -ErrorVariable ProcessError
-                    
+
                 # Query WMI class Win32_ComputerSystem
                 Write-Verbose -Message "PROCESS - $Computer - WMI:Win32_ComputerSystem"
                 $ComputerSystem = Get-WmiObject -Class win32_ComputerSystem @Splatting -ErrorAction Stop -ErrorVariable ProcessError
@@ -220,7 +220,7 @@ function Get-ComputerInfo
         Write-Verbose -Message "END - Cleanup Variables"
         Remove-Variable -Name output,info,ProcessError,Sockets,Cores,OperatingSystem,ComputerSystem,Processors,
         ComputerName, ComputerName, Computer, Everything_is_OK -ErrorAction SilentlyContinue
-        
+
         # End
         Write-Verbose -Message "END - Script End !"
     }#END BLOCK

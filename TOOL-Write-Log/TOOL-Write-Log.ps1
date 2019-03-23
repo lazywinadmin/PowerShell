@@ -10,7 +10,7 @@ function Write-Log
         [Parameter()]
         $Path="",
         $LogName = "$(Get-Date -f 'yyyyMMdd').log",
-        
+
         [Parameter(Mandatory=$true)]
         $Message = "",
 
@@ -24,7 +24,7 @@ function Write-Log
         IF (-not(Test-Path -Path $(Join-Path -Path $Path -ChildPath $LogName))){
             New-Item -Path $(Join-Path -Path $Path -ChildPath $LogName) -ItemType file
         }
-    
+
     }
     PROCESS{
         TRY{

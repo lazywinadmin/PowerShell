@@ -3,28 +3,28 @@
 <#
 	.SYNOPSIS
 		The function Set-RDPEnable enable RDP remotely using the registry
-	
+
 	.DESCRIPTION
 		The function Set-RDPEnable enable RDP remotely using the registry
-	
+
 	.PARAMETER ComputerName
 		Specifies the ComputerName
-	
+
 	.EXAMPLE
 		PS C:\> Set-RDPEnable
-	
+
 	.EXAMPLE
 		PS C:\> Set-RDPEnable -ComputerName "DC01"
-	
+
 	.EXAMPLE
 		PS C:\> Set-RDPEnable -ComputerName "DC01","DC02","DC03"
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
 		@lazywinadm
 #>
-	
+
 	[CmdletBinding()]
 	PARAM (
 		[String[]]$ComputerName = $env:COMPUTERNAME

@@ -6,7 +6,7 @@
 	)
 	### Variables to Return
 	$childWIs_obj = @()
-	
+
 	### MAIN
 	$inputPWI_obj = get-scsmobject -id $inputPWI_guid
 	$containsActivity_relclass_id = '2da498be-0485-b2b2-d520-6ebd1698e61b'
@@ -16,7 +16,7 @@
 	{
 		if ($childWI_relobj.IsDeleted -ne 'false')
 		{
-			
+
 			$childWI_id = $childWI_relobj.TargetObject.id.guid
 			$childWI_obj = get-scsmobject -id $childWI_id
 			#filter for DynamicReviewerActivity

@@ -14,7 +14,7 @@
     {
         # Get the content of the current file and remove the diacritics
         $NewContent = Get-content $file | Remove-StringLatinCharacter
-    
+
         # Overwrite the current file with the new content
         $NewContent | Set-Content $file
     }
@@ -29,7 +29,7 @@
 
     BLOG ARTICLE
         http://www.lazywinadmin.com/2015/05/powershell-remove-diacritics-accents.html
-	
+
     VERSION HISTORY
         1.0.0.0 | Francois-Xavier Cat
             Initial version Based on Marcin Krzanowic code

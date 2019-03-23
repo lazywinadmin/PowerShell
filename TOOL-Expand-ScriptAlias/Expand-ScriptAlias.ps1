@@ -3,21 +3,21 @@
 <#
 	.SYNOPSIS
 		Function to replace Aliases used in a script by their fullname
-	
+
 	.DESCRIPTION
 		Function to replace Aliases used in a script by their fullname.
 		Using PowerShell AST we are able to retrieve the functions and cmdlets used in a script.
-	
+
 	.PARAMETER Path
 		Specifies the Path to the file.
 		Alias: FullName
-	
+
 	.EXAMPLE
 		"C:\LazyWinAdmin\testscript.ps1", "C:\LazyWinAdmin\testscript2.ps1" | Expand-ScriptAlias
-	
+
 	.EXAMPLE
 		gci C:\LazyWinAdmin -File | Expand-ScriptAlias
-	
+
 	.EXAMPLE
 		Expand-ScriptAlias -Path "C:\LazyWinAdmin\testscript.ps1"
 
@@ -31,7 +31,7 @@
         What if: Performing the operation "Expand Alias: sort to Sort-Object (startoffset: 10)" on target "C:\LazyWinAdmin\testscript2.ps1".
         What if: Performing the operation "Expand Alias: group to Group-Object (startoffset: 4)" on target "C:\LazyWinAdmin\testscript2.ps1".
         What if: Performing the operation "Expand Alias: gci to Get-ChildItem (startoffset: 0)" on target "C:\LazyWinAdmin\testscript2.ps1".
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
@@ -49,23 +49,23 @@
 		FOREACH ($File in $Path)
 		{
 			Write-Verbose -Message '[PROCESS] $File'
-			
+
 			TRY
 			{
 				# Retrieve file content
 				$ScriptContent = (Get-Content $File -Delimiter $([char]0))
-				
+
 				# AST Parsing
 				$AbstractSyntaxTree = [System.Management.Automation.Language.Parser]::
 				ParseInput($ScriptContent, [ref]$null, [ref]$null)
-				
+
 				# Find Aliases
 				$Aliases = $AbstractSyntaxTree.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true) |
 				ForEach-Object -Process {
 					$Command = $_.CommandElements[0]
 					if ($Alias = Get-Alias | Where-Object { $_.Name -eq $Command })
 					{
-						
+
 						# Output information
 						[PSCustomObject]@{
 							File = $File
@@ -77,11 +77,11 @@
 							EndColumnNumber = $Command.Extent.EndColumnNumber
 							StartOffset = $Command.Extent.StartOffset
 							EndOffset = $Command.Extent.EndOffset
-							
+
 						}#[PSCustomObject]
 					}#if ($Alias)
 				} | Sort-Object -Property EndOffset -Descending
-				
+
 				# The sort-object is important, we change the values from the end first to not lose the positions of every aliases.
 				Foreach ($Alias in $Aliases)
 				{
@@ -94,7 +94,7 @@
 						Set-Content -Path $File -Value $ScriptContent -Confirm:$false
 					}
 				}#ForEach Alias in Aliases
-				
+
 			}#TRY
 			CATCH
 			{

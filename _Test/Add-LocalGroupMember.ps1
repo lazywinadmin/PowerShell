@@ -7,11 +7,11 @@
 	.EXAMPLE
 	.NOTES
 		Add support for local user/group and ad user/group
-	
+
 	 New-ADGroup -Name "AdmServer$env:COMPUTERNAME" -GroupScope Global -GroupCategory Security -Path $ouPath
     $fqdn = $_.DNSRoot
     ([adsi]"WinNT://./Administrators,group").Add("WinNT://$fqdn/AdmServer$env:COMPUTERNAME")
-	
+
 	#>
 	[cmdletBinding()]
 	Param (
@@ -39,7 +39,7 @@
 			$DomainResolved = ($SamAccountName -split '\\')[0]
 			$SamAccountName = 'WinNT://', $DomainResolved, '/', $ADResolved -join ''
 		}
-		
+
 	}
 	PROCESS
 	{
@@ -48,6 +48,6 @@
 	}
 	END
 	{
-		
+
 	}
 }

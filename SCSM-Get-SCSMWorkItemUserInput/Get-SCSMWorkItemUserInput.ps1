@@ -3,7 +3,7 @@
 	<#
 	.NOTES
 		Initial version from http://itblog.no/4462
-	
+
 		Output PSOBject instead of array
 	#>
 	[CmdletBinding()]
@@ -39,7 +39,7 @@
 						$Props = @{
 							Question = $input.question
 							Answer = $([string]::Join(", ", $ListArray))
-							
+
 						}
 						New-Object -TypeName PSObject -Property $Props
 						$ListArray = $null
@@ -51,11 +51,11 @@
 				if ($input.type -eq "enum")
 				{
 					$ListGuid = Get-SCSMEnumeration -Id $input.Answer
-					
+
 					$Props = @{
 						Question = $input.question
 						Answer = $ListGuid.displayname
-						
+
 					}
 					New-Object -TypeName PSObject -Property $Props
 				}
@@ -65,7 +65,7 @@
 						Question = $input.question
 						Answer = $input.answer
 					}
-					
+
 					New-Object -TypeName PSObject -Property $Props
 				}
 			}

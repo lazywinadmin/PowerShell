@@ -3,22 +3,22 @@
 <#
 	.SYNOPSIS
 		The function Set-RDPDisable disable RDP remotely using the registry
-	
+
 	.DESCRIPTION
 		The function Set-RDPDisable disable RDP remotely using the registry
-	
+
 	.PARAMETER ComputerName
 		Specifies the ComputerName
-	
+
 	.EXAMPLE
 		PS C:\> Set-RDPDisable
-	
+
 	.EXAMPLE
 		PS C:\> Set-RDPDisable -ComputerName "DC01"
-	
+
 	.EXAMPLE
 		PS C:\> Set-RDPDisable -ComputerName "DC01","DC02","DC03"
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com

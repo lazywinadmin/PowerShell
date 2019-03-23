@@ -3,21 +3,21 @@ function Get-AsciiReaction
 <#
 
 	.SYNOPSIS
-	
+
 	Displays Ascii for different reactions and copies it to clipboard.
 
 	.DESCRIPTION
-	
+
 	Displays Ascii for different reactions and copies it to clipboard.
 
 	.EXAMPLE
-	
+
 	Get-AsciiReaction -Name Shrug
-	
+
 	Displays a shurg and copies it to clipboard.
 
 	.NOTES
-	
+
 	Based on Reddit Thread https://www.reddit.com/r/PowerShell/comments/4aipw5/%E3%83%84/
 	and Matt Hodge function: https://github.com/MattHodge/MattHodgePowerShell/blob/master/Fun/Get-Ascii.ps1
 #>
@@ -41,9 +41,9 @@ function Get-AsciiReaction
 					 'DontKnow')]
 		[string]$Name
 	)
-	
+
 	$OutputEncoding = [System.Text.Encoding]::unicode
-	
+
 	# Function to write ascii to screen as well as clipboard it
 	function Write-Ascii
 	{
@@ -54,15 +54,15 @@ function Get-AsciiReaction
 			[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, Position = 0)]
 			[string]$Ascii
 		)
-		
+
 		# Clips it without the newline
 		Add-Type -Assembly PresentationCore
 		$clipText = ($Ascii).ToString() | Out-String -Stream
 		[Windows.Clipboard]::SetText($clipText)
-		
+
 		Write-Output $clipText
 	}
-	
+
 	Switch ($Name)
 	{
 		'Shrug' { [char[]]@(175, 92, 95, 40, 12484, 41, 95, 47, 175) -join '' | Write-Ascii }

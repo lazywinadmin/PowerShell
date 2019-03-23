@@ -3,59 +3,59 @@
 <#
 	.SYNOPSIS
 		Function to add a comment inside a Service Request
-	
+
 	.DESCRIPTION
 		Function to add a comment inside a Service Request
 		You need to have SMlets installed and permission to write inside
 		the service request.
-	
+
 	.PARAMETER ServiceRequestObject
 		Specifies the ServiceRequest where the comment will be added
-	
+
 	.PARAMETER Comment
 		Specifies the comment to add.
-	
+
 	.PARAMETER CommentType
 		Specifies the comment type.
 		You need to specify 'User' or 'Analyst'.
-	
+
 	.PARAMETER EnteredBy
 		Specifies your name.
-	
+
 	.PARAMETER IsPrivate
 		Specifies if the switch is private
-	
+
 	.EXAMPLE
 		PS C:\> Add-SRComment -ServiceRequestObject $SR -Comment "Task Completed" -CommentType Analyst -EnteredBy 'Francois-Xavier Cat'
-	
+
 	.EXAMPLE
 		PS C:\> Add-SRComment -ServiceRequestObject $SR -Comment "Task Completed" -CommentType Analyst -EnteredBy 'Francois-Xavier Cat' -IsPrivate
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
 		@lazywinadm
-	
+
 		Script inspired from http://www.scsm.se/?p=1423 by Anders Asp
 #>
 	[CmdletBinding()]
 	PARAM (
-		
+
 		[Alias("SRObject")]
 		[parameter(Mandatory = $true)]
 		[System.WorkItem.ServiceRequest]$ServiceRequestObject,
-		
+
 		[parameter(Mandatory = $True)]
 		[String]$Comment,
-		
+
 		[ValidateSet("User", "Analyst")]
 		[parameter(Mandatory = $True)]
 		[System.WorkItem.TroubleTicket]
 		[String]$CommentType,
-		
+
 		[parameter(Mandatory = $True)]
 		[String]$EnteredBy,
-		
+
 		[Switch]$IsPrivate
 	)
 	BEGIN
@@ -92,7 +92,7 @@
 				}
 				# Generate a new GUID for the comment
 				$NewGUID = ([guid]::NewGuid()).ToString()
-				
+
 				# Create the object projection with properties
 				$Projection = @{
 					__CLASS = "System.WorkItem.ServiceRequest";
@@ -109,7 +109,7 @@
 						}
 					}
 				}
-				
+
 				# Create the actual comment
 				New-SCSMObjectProjection -Type "System.WorkItem.ServiceRequestProjection" -Projection $Projection
 			}

@@ -3,23 +3,23 @@
 <#
 	.SYNOPSIS
 		Function to convert an image to Base64
-	
+
 	.DESCRIPTION
 		Function to convert an image to Base64
-	
+
 	.PARAMETER Path
 		Specifies the path of the file
-	
+
 	.EXAMPLE
 		ConvertTo-Base64 -Path "C:\images\PowerShellLogo.png"
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		@lazywinadm
 		www.lazywinadmin.com
 		github.com/lazywinadmin
 #>
-	
+
 	[CmdletBinding()]
 	param
 	(

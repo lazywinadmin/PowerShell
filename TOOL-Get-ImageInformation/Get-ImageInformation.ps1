@@ -26,7 +26,7 @@
 	{
 		# Load Assembly
 		Add-type -AssemblyName System.Drawing
-		
+
 		# Retrieve information
 		New-Object -TypeName System.Drawing.Bitmap -ArgumentList $Image
 	}

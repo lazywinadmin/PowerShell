@@ -3,28 +3,28 @@
 <#
 	.SYNOPSIS
 		function to retrieve the local Administrator account
-	
+
 	.DESCRIPTION
 		function to retrieve the local Administrator account
-	
+
 	.PARAMETER ComputerName
 		Specifies the computername
-	
+
 	.EXAMPLE
 		PS C:\> Get-LocalAdministratorBuiltin
-	
+
 	.EXAMPLE
 		PS C:\> Get-LocalAdministratorBuiltin -ComputerName SERVER01
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
 		@lazywinadm
-	
+
 	#function to get the BUILTIN LocalAdministrator
 	#http://blog.simonw.se/powershell-find-builtin-local-administrator-account/
 #>
-	
+
 	[CmdletBinding()]
 	param (
 		[Parameter()]

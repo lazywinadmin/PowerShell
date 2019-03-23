@@ -3,32 +3,32 @@
 <#
 	.SYNOPSIS
 		The function Get-Uptime will get uptime of a local or remote machine.
-	
+
 	.DESCRIPTION
 		The function Get-Uptime will get uptime of a local or remote machine.
 		This function is compatible with CIM sessions and alternative credentials.
-	
+
 	.PARAMETER ComputerName
 		Specifies the computername
-	
+
 	.PARAMETER Credential
 		Specifies the credential to use
-	
+
 	.PARAMETER CimSession
 		Specifies one or more existing CIM Session(s) to use
-	
+
 	.EXAMPLE
 		PS C:\> Get-Uptime -ComputerName DC01
-	
+
 	.EXAMPLE
 		PS C:\> Get-Uptime -ComputerName DC01 -Credential (Get-Credential -cred "FX\SuperAdmin")
-	
+
 	.EXAMPLE
 		PS C:\> Get-Uptime -CimSession $Session
-	
+
 	.EXAMPLE
 		PS C:\> Get-Uptime -CimSession $Session1,$session2,$session3
-	
+
 	.NOTES
 		Francois-Xavier Cat
 		@lazywinadm
@@ -42,12 +42,12 @@
 				   ValueFromPipelineByPropertyName = $True)]
 		[Alias("CN", "__SERVER", "PSComputerName")]
 		[String[]]$ComputerName=$env:COMPUTERNAME,
-		
+
 		[Parameter(ParameterSetName = "Main")]
 		[Alias("RunAs")]
 		[System.Management.Automation.Credential()]
 		$Credential = [System.Management.Automation.PSCredential]::Empty,
-		
+
 		[Parameter(ParameterSetName = "CimSession")]
 		[Microsoft.Management.Infrastructure.CimSession[]]$CimSession
 	)
@@ -63,7 +63,7 @@
 	Helper Function to show default message used in VERBOSE/DEBUG/WARNING
 	and... HOST in some case.
 	This is helpful to standardize the output messages
-	
+
 .PARAMETER Message
 	Specifies the message to show
 .NOTES
@@ -84,7 +84,7 @@
 			FOREACH ($Cim in $CimSession)
 			{
 				$CIMComputer = $($Cim.ComputerName).ToUpper()
-				
+
 				TRY
 				{
 					# Parameters for Get-CimInstance
@@ -94,14 +94,14 @@
 						ErrorAction = 'Stop'
 						ErrorVariable = "ErrorProcessGetCimInstance"
 					}
-					
-					
+
+
 					Write-Verbose -Message (Get-DefaultMessage -Message "$CIMComputer - Get-Uptime")
 					$CimResult = Get-CimInstance @CIMSplatting
-					
+
 					# Prepare output
 					$Uptime = New-TimeSpan -Start $($CimResult.lastbootuptime) -End (get-date)
-					
+
 					$Properties = @{
 						ComputerName = $CIMComputer
 						Days = $Uptime.days
@@ -110,10 +110,10 @@
 						Seconds = $Uptime.seconds
 						LastBootUpTime = $CimResult.lastbootuptime
 					}
-					
+
 					# Output the information
 					New-Object -TypeName PSObject -Property $Properties
-					
+
 				}
 				CATCH
 				{
@@ -132,7 +132,7 @@
 			FOREACH ($Computer in $ComputerName)
 			{
 				$Computer = $Computer.ToUpper()
-				
+
 				TRY
 				{
 					Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
@@ -144,20 +144,20 @@
 							ErrorAction = 'Stop'
 							ErrorVariable = 'ErrorProcessGetWmi'
 						}
-						
+
 						IF ($PSBoundParameters['Credential'])
 						{
 							$Splatting.credential = $Credential
 						}
-						
+
 						Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Getting Uptime")
 						$result = Get-WmiObject @Splatting
-						
-						
+
+
 						# Prepare output
 						$HumanTimeFormat = $Result.ConvertToDateTime($Result.Lastbootuptime)
 						$Uptime = New-TimeSpan -Start $HumanTimeFormat -End $(get-date)
-						
+
 						$Properties = @{
 							ComputerName = $Computer
 							Days = $Uptime.days

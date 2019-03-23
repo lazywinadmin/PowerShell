@@ -7,7 +7,7 @@
 .DESCRIPTION
     List ISE Shortcuts.
     This won't run in a regular powershell console, only in ISE.
-	
+
 .EXAMPLE
     Get-ISEShortcut
 
@@ -18,12 +18,12 @@
     Will show technet page of ISE Shortcuts
 .LINK
 	http://technet.microsoft.com/en-us/library/jj984298.aspx
-	
+
 .NOTES
 	Francois-Xavier Cat
 	www.lazywinadmin.com
 	@lazywinadm
-	
+
 	VERSION HISTORY
 	2015/01/10 Initial Version
 #>
@@ -49,14 +49,14 @@
 		if ($(Test-IsISE) -eq $true)
 		{
 			# http://www.powershellmagazine.com/2013/01/29/the-complete-list-of-powershell-ise-3-0-keyboard-shortcuts/
-			
+
 			# Reference to the ISE Microsoft.PowerShell.GPowerShell assembly (DLL)
 			$gps = $psISE.GetType().Assembly
 			$rm = New-Object System.Resources.ResourceManager GuiStrings, $gps
 			$rs = $rm.GetResourceSet((Get-Culture), $true, $true)
 			$rs | Where-Object Name -match 'Shortcut\d?$|^F\d+Keyboard' |
 			Sort-Object Value
-			
+
 		}
 	}
 }
