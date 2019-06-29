@@ -11,22 +11,46 @@
 
     .PARAMETER EmailServer
         Specifies the Email Server IPAddress/FQDN
+
     .PARAMETER EmailTo
         Specifies the Email Address(es) of the Destination
+
     .PARAMETER EmailFrom
         Specifies the Email Address of the Sender
+
     .PARAMETER EmailSubject
         Specifies the Email Subject
+
     .PARAMETER LogsLines
         Specifies the number of Lines to check in the NETLOGON.LOG files
         Default is '-200'.
         This number is negative, so the script check the last x lines (newest entry).
         If you put a positive number it will check the first lines (oldest entry).
 
+    .PARAMETER StartDate
+        Specify the start date, example: "2019/06/01"
+        Note that this might not be accurate as the file NETLOGON only refer to month/date 'MM/dd'
+        
+
     .EXAMPLE
         ./TOOL-AD-SITE-Report_Missing_Subnets.ps1 -Verbose -EmailServer mail.fx.local -EmailTo "Contact1@fx.local","Contact2@fx.local" -EmailFrom ADREPORT@fx.local -EmailSubject "Report - AD - Missing Subnets"
 
         This example will query all the Domain Controllers in the Active Directory and get the last 200 lines (Default) of each NETLOGON.log files. It will then send an email report to Contact1@fx.local and Contact2@fx.local.
+
+    .EXAMPLE
+        ./TOOL-AD-SITE-Report_Missing_Subnets.ps1 `
+            -Verbose `
+            -EmailServer mail.fx.local `
+            -EmailTo "Contact1@fx.local","Contact2@fx.local" `
+            -EmailFrom ADREPORT@fx.local `
+            -EmailSubject "Report - AD - Missing Subnets" `
+            -StartDate '2019/06/01'
+
+        This example will query all the Domain Controllers in the Active Directory and
+        get the last 200 lines (Default) of each NETLOGON.log files. It will then send
+        an email report to Contact1@fx.local and Contact2@fx.local.
+        Additionally, the script is looking for lines newer that June 1st.
+        Note that the NETLOGON file does not contains the year information so it could be misleading.
 
     .NOTES
         NAME:    TOOL-AD-SITE-Report_Missing_Subnets.ps1
@@ -40,20 +64,20 @@
         -Permission to write locally in the Output folder ($ScriptPath\Output)
 
         VERSION HISTORY:
-        1.0 2011.10.11
+        1.0 | 2011.10.11 | francois-xavier cat (@lazywinadmin)
             Initial Version.
-        1.1 2011.11.12
+        1.1 | 2011.11.12 | francois-xavier cat (@lazywinadmin)
             FIX System.OutOfMemoryException Error when too many logs to process
                 Now the script will copy the file locally.
-        1.2 2012.09.22
+        1.2 | 2012.09.22 | francois-xavier cat (@lazywinadmin)
             UPDATE Code to report via CSV/Email
-        1.3 2013.10.14
+        1.3 | 2013.10.14 | francois-xavier cat (@lazywinadmin)
             UPDATE the syntax of the script
-        1.4 2013.10.20
+        1.4 | 2013.10.20 | francois-xavier cat (@lazywinadmin)
             ADD ValidatePattern on Email parameters, instead of [mailaddress] which is only supported on PS v3
-        1.4.1 2014.02.24
+        1.4.1 | 2014.02.24 | francois-xavier cat (@lazywinadmin)
             FIX issue with sending the email
-        1.5.0 2015.03.12
+        1.5.0 | 2015.03.12 | francois-xavier cat (@lazywinadmin)
             ADD Search all domains in the forest
             ADD NETLOGON file version detection (from 2012, NETLOGON contains a colomn for ErrorCode)
             ADD some Verbose/Warning message
@@ -64,6 +88,10 @@
             REMOVE the ExportCSV part, it is saved by default
             ADD HTMLReportPath Parameter, Just need to specify the folder. default file name will be: $ForestName-DateFormat-Report.html
             ADD Table CSS
+        1.5.1 | 2019.06.28 | francois-xavier cat (@lazywinadmin)
+            Add 'StartDate' parameter
+            Add Example for startdate
+            Update change history
 #>
 
 #requires -version 2.0
@@ -91,8 +119,10 @@ PARAM (
     [Switch]$KeepLogs,
 
     [ValidateScript({ Test-Path -Path $_})]
-    [String]$HTMLReportPath
+    [String]$HTMLReportPath,
 
+    [validatescript({Get-Date $StartDate})]
+    [string]$StartDate
 )
 
 BEGIN
@@ -111,6 +141,7 @@ BEGIN
         # Date and Time Information
         $DateFormat = Get-Date -Format "yyyyMMdd_HHmmss"
         $ReportDateFormat = Get-Date -Format "yyyy\MM\dd HH:mm:ss"
+        $StartDateObject = Get-Date $StartDate
 
         # HTML Report settings
         $ReportTitle = "<H2>" +
@@ -283,10 +314,31 @@ PROCESS
                         Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Importing exported data to a CSV format..."
                         $ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
 
-                        # Append Missing Subnet File
-                        $importString | Where-Object { $_.Error -like "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-NOCLIENTSITE.csv -Append
-                        # Append Other Error File
-                        $importString | Where-Object { $_.Error -notlike "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-OTHERERRORS.csv -Append
+                        
+                        if($StartDateObject)
+                        {
+                            # Look for logs from the start date specified
+                            # Append Missing Subnet File
+                            $importString |
+                                Where-Object { [datetime]::ParseExact("$($_.date)",'MM/dd',$null) -gt $StartDateObject } |
+                                Where-Object { $_.Error -like "*NO_CLIENT_SITE*" } |
+                                Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-NOCLIENTSITE.csv -Append
+                            # Append Other Error File
+                            $importString |
+                                Where-Object { [datetime]::ParseExact("$($_.date)",'MM/dd',$null) -gt $StartDateObject } |
+                                Where-Object { $_.Error -notlike "*NO_CLIENT_SITE*" } |
+                                Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-OTHERERRORS.csv -Append
+                        }
+                        else{
+                            # Append Missing Subnet File
+                            $importString |
+                                Where-Object { $_.Error -like "*NO_CLIENT_SITE*" } |
+                                Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-NOCLIENTSITE.csv -Append
+                            # Append Other Error File
+                            $importString |
+                                Where-Object { $_.Error -notlike "*NO_CLIENT_SITE*" } |
+                                Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-OTHERERRORS.csv -Append
+                        }
 
                     }#IF File to Combine
                     ELSE { Write-Verbose -Message "[PROCESS] Nothing to process" }
