@@ -12,7 +12,7 @@
 	.NOTES
 		Francois-Xavier Cat
 		@lazywinadmin
-		www.lazywinadmin.com
+		lazywinadmin.com
 	#>
 	PARAM ([String]$String)
 	($String -as [Char[]]).count

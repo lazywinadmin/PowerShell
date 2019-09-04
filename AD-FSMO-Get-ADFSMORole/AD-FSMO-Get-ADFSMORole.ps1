@@ -13,7 +13,7 @@
     Get-ADFSMORole -Credential (Get-Credential -Credential "CONTOSO\SuperAdmin")
 .NOTES
     Francois-Xavier Cat
-    www.lazywinadmin.com
+    lazywinadmin.com
     @lazywinadmin
     github.com/lazywinadmin
 

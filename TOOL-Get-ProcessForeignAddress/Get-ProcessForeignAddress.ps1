@@ -27,7 +27,7 @@
 
 .NOTES
 	Author	: Francois-Xavier Cat
-	Website	: www.lazywinadmin.com
+	Website	: lazywinadmin.com
 	Github	: github.com/lazywinadmin
 	Twitter	: @lazywinadmin
 #>

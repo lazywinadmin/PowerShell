@@ -24,7 +24,7 @@
 
     .NOTES
         Francois-Xavier Cat
-        www.LazyWinAdmin.com
+        lazywinadmin.com
         @lazywinadmin
 #>
 

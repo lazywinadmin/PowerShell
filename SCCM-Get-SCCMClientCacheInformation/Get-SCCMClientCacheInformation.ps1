@@ -16,7 +16,7 @@
         This will get the client cache size on the computer Client01
     .NOTES
         Francois-Xavier Cat
-        www.lazywinadmin.com
+        lazywinadmin.com
         @lazywinadmin
         github.com/lazywinadmin
 

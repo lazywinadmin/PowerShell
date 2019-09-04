@@ -117,7 +117,7 @@
 	.NOTES
 		Francois-Xavier Cat
 		fxcat@lazywinadmin.com
-		www.lazywinadmin.com
+		lazywinadmin.com
 		@lazywinadmin
 
 		VERSION HISTORY

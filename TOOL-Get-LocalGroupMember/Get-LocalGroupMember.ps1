@@ -14,7 +14,7 @@
     .NOTES
         Francois-Xavier Cat
         @lazywinadmin
-        www.lazywinadmin.com
+        lazywinadmin.com
 
         To Add:
             Credential param

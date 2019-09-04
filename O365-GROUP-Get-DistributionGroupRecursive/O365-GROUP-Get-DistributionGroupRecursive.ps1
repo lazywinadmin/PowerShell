@@ -8,7 +8,7 @@ function Get-DistributionGroupMemberRecursive
     Get-DistributionGroupMemberRecursive -Group TestDG  -Verbose
 .NOTES
     Francois-Xavier Cat
-    www.lazywinadmin.com
+    lazywinadmin.com
     @lazywinadmin
 #>
     [CmdletBinding()]

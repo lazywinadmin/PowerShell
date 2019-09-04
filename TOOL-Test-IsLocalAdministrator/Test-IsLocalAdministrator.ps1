@@ -12,7 +12,7 @@
 .NOTES
 	Francois-Xavier Cat
 	@lazywinadmin
-	www.lazywinadmin.com
+	lazywinadmin.com
 	github.com/lazywinadmin
 #>
 	([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")

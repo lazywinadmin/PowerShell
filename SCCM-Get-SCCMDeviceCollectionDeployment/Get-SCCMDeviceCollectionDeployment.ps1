@@ -32,7 +32,7 @@
 
     .NOTES
         Francois-Xavier cat
-        www.lazywinadmin.com
+        lazywinadmin.com
         @lazywinadmin
 
         CHANGE HISTORY

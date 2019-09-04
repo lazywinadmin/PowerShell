@@ -18,7 +18,7 @@
 
     .NOTES
         Francois-Xavier Cat
-        www.lazywinadmin.com
+        lazywinadmin.com
         @lazywinadmin
 
     #function to get the BUILTIN LocalAdministrator

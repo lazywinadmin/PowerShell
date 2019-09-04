@@ -26,7 +26,7 @@
     .NOTES
         Francois-Xavier.Cat
         @lazywinadmin
-        www.lazywinadmin.com
+        lazywinadmin.com
 
         1.0 Function based on the work from Prosum and Cireson consultants
     #>

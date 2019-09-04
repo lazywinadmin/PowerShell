@@ -37,7 +37,7 @@
         **W.)60kY4$V
 .NOTES
     francois-xavier.cat
-    www.lazywinadmin.com
+    lazywinadmin.com
     @lazywinadmin
     github.com/lazywinadmin
 #>

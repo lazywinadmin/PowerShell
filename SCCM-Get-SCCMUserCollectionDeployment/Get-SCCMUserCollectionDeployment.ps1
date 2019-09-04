@@ -35,7 +35,7 @@
 
     .NOTES
         Francois-Xavier cat
-        www.lazywinadmin.com
+        lazywinadmin.com
         @lazywinadmin
 
         SMS_R_User: https://msdn.microsoft.com/en-us/library/hh949577.aspx

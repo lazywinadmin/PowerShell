@@ -9,7 +9,7 @@
     https://lazywinadmin.com/2014/08/powershell-parse-this-netstatexe.html
 .NOTES
     Francois-Xavier Cat
-    www.lazywinadmin.com
+    lazywinadmin.com
     @lazywinadmin
 #>
     PROCESS

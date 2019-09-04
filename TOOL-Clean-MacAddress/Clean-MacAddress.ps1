@@ -53,7 +53,7 @@ function Clean-MacAddress
 
 	.NOTES
 		Francois-Xavier Cat
-		www.lazywinadmin.com
+		lazywinadmin.com
 		@lazywinadmin
 #>
 	[OutputType([String], ParameterSetName = "Upper")]

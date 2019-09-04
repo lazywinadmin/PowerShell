@@ -20,7 +20,7 @@
 	.NOTES
 		Francois-Xavier cat
 		@lazywinadmin
-		www.lazywinadmin.com
+		lazywinadmin.com
 		github.com/lazywinadmin
 
 #>

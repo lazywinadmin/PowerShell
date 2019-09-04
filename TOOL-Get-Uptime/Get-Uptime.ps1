@@ -32,7 +32,7 @@
     .NOTES
         Francois-Xavier Cat
         @lazywinadmin
-        www.lazywinadmin.com
+        lazywinadmin.com
 #>
     [CmdletBinding()]
     PARAM (
@@ -68,7 +68,7 @@
     Specifies the message to show
 .NOTES
     Francois-Xavier Cat
-    www.lazywinadmin.com
+    lazywinadmin.com
     @lazywinadmin
 #>
             PARAM ($Message)

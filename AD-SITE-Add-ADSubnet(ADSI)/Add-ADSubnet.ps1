@@ -35,7 +35,7 @@
         AUTHOR:    Francois-Xavier CAT
         DATE:    2013/11/07
         EMAIL:    info@lazywinadmin.com
-        WWW:    www.lazywinadmin.com
+        WWW:    lazywinadmin.com
         TWITTER:@lazywinadmin
 
         https://lazywinadmin.com/2013/11/powershell-add-ad-site-subnet.html

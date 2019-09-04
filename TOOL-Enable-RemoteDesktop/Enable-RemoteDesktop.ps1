@@ -31,7 +31,7 @@ function Enable-RemoteDesktop
     .NOTES
         Francois-Xavier Cat
         @lazywinadmin
-        www.lazywinadmin.com
+        lazywinadmin.com
         github.com/lazywinadmin
 #>
     #Requires -RunAsAdministrator
@@ -71,7 +71,7 @@ function Enable-RemoteDesktop
     Specifies the message to show
 .NOTES
     Francois-Xavier Cat
-    www.lazywinadmin.com
+    lazywinadmin.com
     @lazywinadmin
 #>
             PARAM ($Message)

@@ -17,7 +17,7 @@
     .\AD-USER-Report_Expiring_Users.ps1 -days 5 -EmailFrom "ScriptBox@lazywinadmin.com" -EmailSMTPServer smtp.lazywinadmin.com -EmailTo fxcat@lazywinadmin.com
 .NOTES
     Francois-Xavier Cat
-    www.lazywinadmin.com
+    lazywinadmin.com
     @lazywinadmin
 
     VERSION HISTORY
@@ -70,7 +70,7 @@ BEGIN
     .NOTES
         Francois-Xavier Cat
         fxcat@lazywinadmin.com
-        www.lazywinadmin.com
+        lazywinadmin.com
         @lazywinadmin
 
         VERSION HISTORY
