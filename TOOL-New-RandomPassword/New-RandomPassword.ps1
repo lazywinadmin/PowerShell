@@ -2,14 +2,14 @@
 {
 <#
 .SYNOPSIS
-	Function to generate a complex and random password
+    Function to generate a complex and random password
 .DESCRIPTION
     Function to generate a complex and random password
 
-	This is using the GeneratePassword method from the
-	system.web.security.membership NET Class.
+    This is using the GeneratePassword method from the
+    system.web.security.membership NET Class.
 
-	https://msdn.microsoft.com/en-us/library/system.web.security.membership.generatepassword(v=vs.100).aspx
+    https://msdn.microsoft.com/en-us/library/system.web.security.membership.generatepassword(v=vs.100).aspx
 
 .PARAMETER Length
     The number of characters in the generated password. The length must be between 1 and 128 characters.
@@ -41,23 +41,23 @@
     @lazywinadmin
     github.com/lazywinadmin
 #>
-	PARAM (
-		[Int32]$Length = 12,
+    PARAM (
+        [Int32]$Length = 12,
 
-		[Int32]$NumberOfNonAlphanumericCharacters = 5,
+        [Int32]$NumberOfNonAlphanumericCharacters = 5,
 
-		[Int32]$Count = 1
-	)
+        [Int32]$Count = 1
+    )
 
-	BEGIN
-	{
-		Add-Type -AssemblyName System.web;
-	}
+    BEGIN
+    {
+        Add-Type -AssemblyName System.web;
+    }
 
-	PROCESS
-	{
-		1..$Count | ForEach-Object {
-			[System.Web.Security.Membership]::GeneratePassword($Length, $NumberOfNonAlphanumericCharacters)
-		}
-	}
+    PROCESS
+    {
+        1..$Count | ForEach-Object {
+            [System.Web.Security.Membership]::GeneratePassword($Length, $NumberOfNonAlphanumericCharacters)
+        }
+    }
 }

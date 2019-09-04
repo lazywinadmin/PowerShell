@@ -72,13 +72,13 @@
                     TicketTierQueue = $CurrentTicket.TierQueue.displayname
                     TicketAssignedTo = $AssignedTo.DisplayName
                     TicketCreatedDate = $CurrentTicket.CreatedDate
-					Comment = $Comment.Comment
-					CommentEnteredBy = $Comment.EnteredBy
-					CommentEnteredDate = $Comment.EnteredDate
-					CommentClassName = $Comment.ClassName
-				}
-			}
-		}
+                    Comment = $Comment.Comment
+                    CommentEnteredBy = $Comment.EnteredBy
+                    CommentEnteredDate = $Comment.EnteredDate
+                    CommentClassName = $Comment.ClassName
+                }
+            }
+        }
 
-	}
+    }
 }

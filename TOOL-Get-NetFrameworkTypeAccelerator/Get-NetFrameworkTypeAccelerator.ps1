@@ -2,23 +2,23 @@
 {
 <#
 .SYNOPSIS
-	Function to retrieve the list of Type Accelerator available
+    Function to retrieve the list of Type Accelerator available
 .EXAMPLE
-	Get-NetFrameworkTypeAccelerator
+    Get-NetFrameworkTypeAccelerator
 
-	Return the list of Type Accelerator available on your system
+    Return the list of Type Accelerator available on your system
 .EXAMPLE
-	Get-Accelerator
+    Get-Accelerator
 
-	Return the list of Type Accelerator available on your system
-	This is a function alias created by [Alias()]
+    Return the list of Type Accelerator available on your system
+    This is a function alias created by [Alias()]
 .NOTES
-	Francois-Xavier Cat
-	lazywinadmin.com
-	@lazywinadmin
-	github.com/lazywinadmin
+    Francois-Xavier Cat
+    lazywinadmin.com
+    @lazywinadmin
+    github.com/lazywinadmin
 #>
-	[Alias('Get-Acceletrator')]
-	PARAM ()
-	[System.Management.Automation.PSObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+    [Alias('Get-Acceletrator')]
+    PARAM ()
+    [System.Management.Automation.PSObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 }

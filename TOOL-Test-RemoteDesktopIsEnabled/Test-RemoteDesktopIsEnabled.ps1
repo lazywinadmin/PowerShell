@@ -18,10 +18,10 @@
   Test if Remote Desktop is enabled on the remote machine SERVER01 and SERVER02
 
 .NOTES
-	Francois-Xavier Cat
-	@lazywinadmin
-	www.lazywinadmin.com
-	github.com/lazywinadmin
+    Francois-Xavier Cat
+    @lazywinadmin
+    www.lazywinadmin.com
+    github.com/lazywinadmin
 #>
 
 
