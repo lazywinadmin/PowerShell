@@ -13,5 +13,7 @@
         80
     ],
 
-    "editor.renderWhitespace": "all"
+    "editor.renderWhitespace": "all",
+
+    "files.trimTrailingWhitespace": true
 }
