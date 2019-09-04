@@ -15,7 +15,7 @@
         Get-ADGPOReplication -All
     .NOTES
         Francois-Xavier Cat
-        @lazywinadm
+        @lazywinadmin
         lazywinadmin.com
 
         VERSION HISTORY

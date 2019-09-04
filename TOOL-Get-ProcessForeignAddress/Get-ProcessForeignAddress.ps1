@@ -29,7 +29,7 @@
 	Author	: Francois-Xavier Cat
 	Website	: www.lazywinadmin.com
 	Github	: github.com/lazywinadmin
-	Twitter	: @lazywinadm
+	Twitter	: @lazywinadmin
 #>
 	PARAM ($ProcessName)
 	$netstat = netstat -no

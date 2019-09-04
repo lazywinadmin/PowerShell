@@ -114,7 +114,7 @@
     AUTHOR:    Francois-Xavier Cat 
     EMAIL:    info@lazywinadmin.com
     WWW:    www.lazywinadmin
-    Twitter:@lazywinadm
+    Twitter:@lazywinadmin
 
     REQUIREMENTS:
         -Read Permission in Active Directory on the monitored groups

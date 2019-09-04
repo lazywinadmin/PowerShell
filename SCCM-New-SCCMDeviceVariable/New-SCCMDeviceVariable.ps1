@@ -60,7 +60,7 @@ function New-SCCMDeviceVariable
     .NOTES
         Francois-Xavier Cat
         lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
         github.com/lazywinadmin
     #>
     [cmdletbinding()]

@@ -11,7 +11,7 @@
     Get-HashTableNotEmptyOrNullValue -HashTable $SplattingVariable
 .NOTES
     Francois-Xavier Cat
-    @lazywinadm
+    @lazywinadmin
     www.lazywinadmin.com
 #>
     PARAM([System.Collections.Hashtable]$HashTable)

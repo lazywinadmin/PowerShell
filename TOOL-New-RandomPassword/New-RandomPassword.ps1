@@ -38,7 +38,7 @@
 .NOTES
     francois-xavier.cat
     www.lazywinadmin.com
-    @lazywinadm
+    @lazywinadmin
     github.com/lazywinadmin
 #>
 	PARAM (

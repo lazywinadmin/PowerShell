@@ -19,7 +19,7 @@
 
 	.NOTES
 		Francois-Xavier cat
-		@lazywinadm
+		@lazywinadmin
 		www.lazywinadmin.com
 		github.com/lazywinadmin
 

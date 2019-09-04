@@ -16,7 +16,7 @@ This Script retrieve the VIB information on all the VMware Host
 .NOTES
 	Francois-Xavier Cat
 	www.lazywinadmin.com
-	@lazywinadm
+	@lazywinadmin
 #>
 [CmdletBinding(DefaultParameterSetName="All")]
 PARAM (

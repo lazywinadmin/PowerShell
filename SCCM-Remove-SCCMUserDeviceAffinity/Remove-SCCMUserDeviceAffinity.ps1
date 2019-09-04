@@ -25,7 +25,7 @@
     .NOTES
         Francois-Xavier Cat
         lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ResourceName')]

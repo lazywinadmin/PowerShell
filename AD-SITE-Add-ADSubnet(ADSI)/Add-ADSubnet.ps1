@@ -36,7 +36,7 @@
         DATE:    2013/11/07
         EMAIL:    info@lazywinadmin.com
         WWW:    www.lazywinadmin.com
-        TWITTER:@lazywinadm
+        TWITTER:@lazywinadmin
 
         http://www.lazywinadmin.com/2013/11/powershell-add-ad-site-subnet.html
 

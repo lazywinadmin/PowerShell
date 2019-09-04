@@ -19,7 +19,7 @@
 .NOTE
     Francois-Xavier Cat
     lazywinadmin.com
-    @lazywinadm
+    @lazywinadmin
 #>
 	[CmdletBinding()]
 	PARAM ()

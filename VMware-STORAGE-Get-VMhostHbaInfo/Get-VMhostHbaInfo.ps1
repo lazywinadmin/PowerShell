@@ -113,7 +113,7 @@ Function Get-VMhostHbaInfo
 	PSObject
 
 .NOTES
-	Twitter: @lazywinadm
+	Twitter: @lazywinadmin
 	WWW: lazywinadmin.com
 
 	VERSION HISTORY

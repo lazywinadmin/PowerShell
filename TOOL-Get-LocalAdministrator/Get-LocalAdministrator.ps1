@@ -19,7 +19,7 @@
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
-		@lazywinadm
+		@lazywinadmin
 
 	#function to get the BUILTIN LocalAdministrator
 	#http://blog.simonw.se/powershell-find-builtin-local-administrator-account/

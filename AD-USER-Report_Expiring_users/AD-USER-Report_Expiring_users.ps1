@@ -18,7 +18,7 @@
 .NOTES
     Francois-Xavier Cat
     www.lazywinadmin.com
-    @lazywinadm
+    @lazywinadmin
 
     VERSION HISTORY
     1.0 2015/02/03    Initial Version
@@ -71,7 +71,7 @@ BEGIN
         Francois-Xavier Cat
         fxcat@lazywinadmin.com
         www.lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
 
         VERSION HISTORY
         1.0 2014/12/25     Initial Version

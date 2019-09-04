@@ -24,7 +24,7 @@
 
 	.NOTES
 		Francois-Xavier Cat
-		@lazywinadm
+		@lazywinadmin
 		www.lazywinadmin.com
 
 		1.0 Based on Cireson's consultant function

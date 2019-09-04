@@ -50,7 +50,7 @@ function Update-O365UserUPNSuffix
     .NOTES
         Francois-Xavier Cat
         www.lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
         github.com/lazywinadmin
 #>
 

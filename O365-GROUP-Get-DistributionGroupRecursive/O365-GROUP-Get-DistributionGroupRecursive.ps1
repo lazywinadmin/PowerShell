@@ -9,7 +9,7 @@ function Get-DistributionGroupMemberRecursive
 .NOTES
     Francois-Xavier Cat
     www.lazywinadmin.com
-    @lazywinadm
+    @lazywinadmin
 #>
     [CmdletBinding()]
     PARAM ($Group)

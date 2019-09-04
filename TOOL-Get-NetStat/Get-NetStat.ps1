@@ -10,7 +10,7 @@
 .NOTES
 	Francois-Xavier Cat
 	www.lazywinadmin.com
-	@LazyWinAdm
+	@lazywinadmin
 #>
 	PROCESS
 	{

@@ -37,7 +37,7 @@
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
-		@lazywinadm
+		@lazywinadmin
 
 		I used this function in System Center Orchestrator (SCORCH).
 		This is sometime easier to pass data between activities

@@ -22,7 +22,7 @@
         VERBOSE: The following string does not finish by a digit: Francois-Xavier.cat
     .NOTES
         Francois-Xavier Cat
-        @lazywinadm
+        @lazywinadmin
         www.lazywinadmin.com
 #>
 [CmdletBinding()]

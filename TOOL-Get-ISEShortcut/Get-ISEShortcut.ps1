@@ -22,7 +22,7 @@
 .NOTES
 	Francois-Xavier Cat
 	www.lazywinadmin.com
-	@lazywinadm
+	@lazywinadmin
 
 	VERSION HISTORY
 	2015/01/10 Initial Version

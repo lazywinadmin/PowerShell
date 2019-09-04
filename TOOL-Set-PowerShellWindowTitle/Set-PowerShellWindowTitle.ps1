@@ -16,7 +16,7 @@
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
-		@lazywinadm
+		@lazywinadmin
 #>
 	PARAM($Title)
 	$Host.UI.RawUI.WindowTitle = $Title	

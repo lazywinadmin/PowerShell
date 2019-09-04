@@ -118,7 +118,7 @@
 		Francois-Xavier Cat
 		fxcat@lazywinadmin.com
 		www.lazywinadmin.com
-		@lazywinadm
+		@lazywinadmin
 
 		VERSION HISTORY
 		1.0 2014/12/25 	Initial Version

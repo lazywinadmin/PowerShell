@@ -31,7 +31,7 @@
 
 	.NOTES
 		Francois-Xavier Cat
-		@lazywinadm
+		@lazywinadmin
 		www.lazywinadmin.com
 #>
 	[CmdletBinding()]
@@ -69,7 +69,7 @@
 .NOTES
 	Francois-Xavier Cat
 	www.lazywinadmin.com
-	@lazywinadm
+	@lazywinadmin
 #>
 			PARAM ($Message)
 			$DateFormat = Get-Date -Format 'yyyy/MM/dd-HH:mm:ss:ff'

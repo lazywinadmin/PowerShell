@@ -19,7 +19,7 @@
 	.NOTES
 		Francois-Xavier Cat	
 		www.lazywinadmin.com
-		@lazywinadm
+		@lazywinadmin
 #>
 	PARAM (
 		$PSObject,

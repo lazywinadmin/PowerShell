@@ -34,7 +34,7 @@ function Get-SCSMObjectPrefix
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin
-		@lazywinadm
+		@lazywinadmin
 		github.com/lazywinadmin
 #>
 

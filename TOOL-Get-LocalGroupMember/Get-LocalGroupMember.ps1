@@ -13,7 +13,7 @@
         Get-LocalGroupMember
     .NOTES
         Francois-Xavier Cat
-        @lazywinadm
+        @lazywinadmin
         www.lazywinadmin.com
 
         To Add:

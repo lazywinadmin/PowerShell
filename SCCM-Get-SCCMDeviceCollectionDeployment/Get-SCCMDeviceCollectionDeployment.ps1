@@ -33,7 +33,7 @@
     .NOTES
         Francois-Xavier cat
         www.lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
 
         CHANGE HISTORY
             1.0 | 2015/09/03 | Francois-Xavier Cat

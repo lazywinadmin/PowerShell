@@ -15,7 +15,7 @@
 
 	.NOTES
 		Francois-Xavier.Cat
-		@lazywinadm
+		@lazywinadmin
 		www.lazywinadmin.com
 #>
 	PARAM (

@@ -23,7 +23,7 @@
     .NOTES
         Francois-Xavier Cat
         www.lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
 #>
     PARAM (
         [Parameter(Mandatory,HelpMessage= 'http://<ServerFQDN>/powershell')]

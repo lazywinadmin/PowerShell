@@ -34,7 +34,7 @@
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
-		@lazywinadm
+		@lazywinadmin
 
 		Script inspired from http://www.scsm.se/?p=1423 by Anders Asp
 #>

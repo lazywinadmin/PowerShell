@@ -34,7 +34,7 @@
     .NOTES
         Francois-Xavier Cat
         www.lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
 #>
     [CmdletBinding()]
     Param (

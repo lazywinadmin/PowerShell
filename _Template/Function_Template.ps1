@@ -20,7 +20,7 @@
     Francois-Xavier Cat
     lazywinadmin.github.io
     www.lazywinadmin.com
-    @lazywinadm
+    @lazywinadmin
 
     1.0 | 2016/00/00 | Francois-Xavier Cat
         Initial Version

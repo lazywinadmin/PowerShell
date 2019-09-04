@@ -54,7 +54,7 @@ function Clean-MacAddress
 	.NOTES
 		Francois-Xavier Cat
 		www.lazywinadmin.com
-		@lazywinadm
+		@lazywinadmin
 #>
 	[OutputType([String], ParameterSetName = "Upper")]
 	[OutputType([String], ParameterSetName = "Lower")]

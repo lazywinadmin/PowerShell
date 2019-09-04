@@ -19,7 +19,7 @@ function Resolve-ShortURL
 .NOTES
 	Francois-Xavier Cat
 	lazywinadmin.com
-	@lazywinadm
+	@lazywinadmin
 	github.com/lazywinadmin
 #>
 

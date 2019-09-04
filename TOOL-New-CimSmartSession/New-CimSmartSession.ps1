@@ -24,7 +24,7 @@
 .NOTES 
     Francois-Xavier Cat
 	lazywinadmin.com
-	@lazywinadm
+	@lazywinadmin
 #>
 	#Requires -Version 3.0
 	[CmdletBinding()]

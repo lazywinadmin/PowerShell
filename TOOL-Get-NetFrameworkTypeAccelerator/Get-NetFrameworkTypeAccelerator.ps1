@@ -15,7 +15,7 @@
 .NOTES
 	Francois-Xavier Cat
 	lazywinadmin.com
-	@lazywinadm
+	@lazywinadmin
 	github.com/lazywinadmin
 #>
 	[Alias('Get-Acceletrator')]

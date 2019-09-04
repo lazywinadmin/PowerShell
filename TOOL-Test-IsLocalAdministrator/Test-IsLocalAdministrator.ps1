@@ -11,7 +11,7 @@
 	True
 .NOTES
 	Francois-Xavier Cat
-	@lazywinadm
+	@lazywinadmin
 	www.lazywinadmin.com
 	github.com/lazywinadmin
 #>

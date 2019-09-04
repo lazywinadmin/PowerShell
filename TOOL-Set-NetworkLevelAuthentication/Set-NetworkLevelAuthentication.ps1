@@ -29,7 +29,7 @@
 	DATE	: 2014/04/01
 	AUTHOR	: Francois-Xavier Cat
 	WWW		: http://lazywinadmin.com
-	Twitter	: @lazywinadm
+	Twitter	: @lazywinadmin
 
 	Article : http://lazywinadmin.com/2014/04/powershell-getset-network-level.html
 	GitHub	: https://github.com/lazywinadmin/PowerShell
