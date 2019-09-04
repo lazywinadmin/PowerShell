@@ -28,7 +28,7 @@
 	[CmdletBinding()]
 	PARAM (
 		[String[]]$ComputerName = $env:COMPUTERNAME,
-		[Parameter(Mandatory = $true)]	
+		[Parameter(Mandatory = $true)]
 		[Boolean]$Enable
 	)
 	PROCESS

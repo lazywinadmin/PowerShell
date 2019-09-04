@@ -69,7 +69,7 @@
 		}
 		CATCH
 		{
-			$Error[0]	
+			$Error[0]
 		}
 	}
 	PROCESS
@@ -120,7 +120,7 @@
 		}
 		CATCH
 		{
-			$Error[0]	
+			$Error[0]
 		} #CATCH
 	} #PROCESS
 } # Function

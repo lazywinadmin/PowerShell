@@ -17,7 +17,7 @@
 		PS C:\> Remove-PSObjectProperty -PSObject $UserInfo -Property Info
 
 	.NOTES
-		Francois-Xavier Cat	
+		Francois-Xavier Cat
 		www.lazywinadmin.com
 		@lazywinadmin
 #>

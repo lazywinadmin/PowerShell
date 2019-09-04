@@ -97,7 +97,7 @@ function Clean-MacAddress
 		IF ($PSBoundParameters['Lowercase'])
 		{
 			$MacAddress = $macaddress.tolower()
-		}	
+		}
 		IF ($PSBoundParameters['Separator'])
 		{
 			IF ($Separator -ne "None")

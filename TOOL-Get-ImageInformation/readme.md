@@ -8,7 +8,7 @@ Get-ImageInformation -FilePath c:\test\image.png
 ## Output example
 
 ``` powershell
-Tag                  : 
+Tag                  :
 PhysicalDimension    : {Width=301, Height=308}
 Size                 : {Width=301, Height=308}
 Width                : 301

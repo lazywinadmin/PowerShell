@@ -6,16 +6,16 @@
 	.EXAMPLE
 		Get-NetFramework
 
-		PSChildName                                   Version                                      
-		-----------                                   -------                                      
-		v2.0.50727                                    2.0.50727.4927                               
-		v3.0                                          3.0.30729.4926                               
-		Windows Communication Foundation              3.0.4506.4926                                
-		Windows Presentation Foundation               3.0.6920.4902                                
-		v3.5                                          3.5.30729.4926                               
-		Client                                        4.5.51641                                    
-		Full                                          4.5.51641                                    
-		Client                                        4.0.0.0        
+		PSChildName                                   Version
+		-----------                                   -------
+		v2.0.50727                                    2.0.50727.4927
+		v3.0                                          3.0.30729.4926
+		Windows Communication Foundation              3.0.4506.4926
+		Windows Presentation Foundation               3.0.6920.4902
+		v3.5                                          3.5.30729.4926
+		Client                                        4.5.51641
+		Full                                          4.5.51641
+		Client                                        4.0.0.0
 
 	.NOTES
 		TODO:

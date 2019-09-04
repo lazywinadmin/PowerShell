@@ -19,6 +19,6 @@
 		@lazywinadmin
 #>
 	PARAM($Title)
-	$Host.UI.RawUI.WindowTitle = $Title	
+	$Host.UI.RawUI.WindowTitle = $Title
 }
 

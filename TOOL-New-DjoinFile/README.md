@@ -15,7 +15,7 @@ This blob file can then be passed to djoin to join the machine to the Active Dir
 # Load the function (Dot Sourcing)
 . C:\MyScripts\New-DjoinFile.ps1
 
-# Blob generated 
+# Blob generated
 $Blob = "<Blob generated previously on the domain machine>"
 
 # Recreate djoin file

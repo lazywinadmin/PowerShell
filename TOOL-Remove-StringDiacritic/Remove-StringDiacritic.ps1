@@ -38,7 +38,7 @@
 	{
 		Write-Verbose -Message "$StringValue"
 		try
-		{	
+		{
 			# Normalize the String
 			$Normalized = $StringValue.Normalize($NormalizationForm)
 			$NewString = New-Object -TypeName System.Text.StringBuilder

@@ -22,7 +22,7 @@ function Get-NetworkLevelAuthentication
 	NLAEnabled       : True
 	TerminalName     : RDP-Tcp
 	TerminalProtocol : Microsoft RDP 8.0
-	Transport        : tcp	
+	Transport        : tcp
 
 .EXAMPLE
 	Get-NetworkLevelAuthentication -ComputerName DC01

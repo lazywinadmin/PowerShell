@@ -17,21 +17,21 @@
 		$Computers = "Computer1","Computer2"
 		ConvertTo-StringList -Array $Computers
 
-		Output: 
+		Output:
 		Computer1,Computer2
 
 	.EXAMPLE
 		$Computers = "Computer1","Computer2"
 		ConvertTo-StringList -Array $Computers -Delimiter "__"
 
-		Output: 
+		Output:
 		Computer1__Computer2
 
 	.EXAMPLE
 		$Computers = "Computer1"
 		ConvertTo-StringList -Array $Computers -Delimiter "__"
 
-		Output: 
+		Output:
 		Computer1
 
 	.NOTES

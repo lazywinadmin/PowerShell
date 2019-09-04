@@ -201,7 +201,7 @@
         }
         CATCH
         {
-            $PSCmdlet.ThrowTerminatingError($_)    
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
 }

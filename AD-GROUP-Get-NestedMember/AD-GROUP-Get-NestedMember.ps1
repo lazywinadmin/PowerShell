@@ -74,7 +74,7 @@
                         Write-Verbose -Message "[$FunctionName] Group '$Group' - Name:$($_.name) | ObjectClass:$($_.ObjectClass)"
                         $CurrentObject = $_
                         switch ($_.ObjectClass)
-                        {   
+                        {
                             "group" {
                                 # Output Object
                                 $CurrentObject | Select-Object Name,SamAccountName,ObjectClass,DistinguishedName,@{Label="ParentGroup";Expression={$ParentGroup}}, @{Label="RelationShipPath";Expression={$RelationShipPath}}

@@ -25,7 +25,7 @@
 	)
 	PROCESS
 	{
-		# Find the Ticket Object 
+		# Find the Ticket Object
 		$WorkItemObject = Get-SCSMObject -id $GUID
 
 		# Find the Related Configuration Items

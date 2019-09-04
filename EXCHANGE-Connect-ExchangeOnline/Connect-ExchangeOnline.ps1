@@ -56,7 +56,7 @@
         }
         CATCH
         {
-            $Error[0]    
+            $Error[0]
         }
     }
 }

@@ -1,11 +1,11 @@
 <#
     .SYNOPSIS
-        This script goal is to get all the missing subnets from the 
+        This script goal is to get all the missing subnets from the
         NETLOGON.LOG file from each Domain Controllers in the Active Directory.
         It will copy all the NETLOGON.LOG locally and parse them.
 
     .DESCRIPTION
-        This script goal is to get all the missing subnets from the 
+        This script goal is to get all the missing subnets from the
         NETLOGON.LOG file from each Domain Controllers in the Active Directory.
         It will copy all the NETLOGON.LOG locally and parse them.
 
@@ -30,7 +30,7 @@
 
     .NOTES
         NAME:    TOOL-AD-SITE-Report_Missing_Subnets.ps1
-        AUTHOR:    Francois-Xavier CAT 
+        AUTHOR:    Francois-Xavier CAT
         DATE:    2011/10/11
         EMAIL:    info@lazywinadmin.com
 

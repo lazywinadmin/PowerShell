@@ -32,7 +32,7 @@
 
     .NOTES
         NAME:    FUNCT-AD-SITE-Add-ADSubnet_using_ADSI.ps1
-        AUTHOR:    Francois-Xavier CAT 
+        AUTHOR:    Francois-Xavier CAT
         DATE:    2013/11/07
         EMAIL:    info@lazywinadmin.com
         WWW:    www.lazywinadmin.com

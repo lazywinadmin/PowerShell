@@ -26,7 +26,7 @@
         [Parameter(Mandatory = $true)]
         [String[]]$Name
     )
-    BEGIN 
+    BEGIN
     {
         TRY{
             if(-not(Get-Module Activedirectory -ErrorAction Stop)){

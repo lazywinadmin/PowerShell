@@ -1,27 +1,27 @@
 ﻿function New-CimSmartSession
 {
-<# 
-.SYNOPSIS 
+<#
+.SYNOPSIS
     Function to create a CimSession to remote computer using either WSMAN or DCOM protocol.
 
-.DESCRIPTION 
+.DESCRIPTION
     Function to create a CimSession to remote computer using either WSMAN or DCOM protocol.
 	This function requires at least PowerShell v3.
 
-.PARAMETER ComputerName 
-    Specifies the ComputerName 
+.PARAMETER ComputerName
+    Specifies the ComputerName
 
-.PARAMETER Credential 
+.PARAMETER Credential
     Specifies alternative credentials
 
-.EXAMPLE 
+.EXAMPLE
     New-CimSmartSession -ComputerName DC01,DC02
 
-.EXAMPLE 
+.EXAMPLE
     $Session = New-CimSmartSession -ComputerName DC01 -Credential (Get-Credential -Credential "FX\SuperAdmin")
 	New-CimInstance -CimSession $Session -Class Win32_Bios
 
-.NOTES 
+.NOTES
     Francois-Xavier Cat
 	lazywinadmin.com
 	@lazywinadmin

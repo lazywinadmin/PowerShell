@@ -17,13 +17,13 @@ Function Find-Apartment
     For ($CurrentPage=0;$CurrentPage -le $MaxPages;$CurrentPage++) {
         $WebPage = Invoke-WebRequest "$URL/search/roo?=roo&s=$Start&query=&zoomToPosting=&minAsk=$MinPrice&maxAsk=$MaxPrice&hasPic=1"
         $Results = $WebPage.ParsedHtml.body.innerHTML.Split("`n") | ? { $_ -like "<P class=row*" }
-        ForEach ($Item in $Results) { 
+        ForEach ($Item in $Results) {
             $ItemObject=$ID=$Price=$DatePosted=$Neighborhood=$Link=$Description=$Email=$null
             $ID = ($Item -replace ".*pid\=`"","") -replace "`".*"
             $Price = ($Item -replace ".*class=price>","") -replace "</SPAN>.*"
             $DatePosted = ($Item -replace ".*class=date>","") -replace "</SPAN>.*"
             $Neighborhood = ($Item -replace ".*\<SMALL\>\(","") -replace "\)\</SMALL>.*"
-            If ($Neighborhood -like "<*") { $Neighborhood = "N/A" } 
+            If ($Neighborhood -like "<*") { $Neighborhood = "N/A" }
             $Link = $URL + ((($Item -replace ".*\<A href\=`"","") -replace "\<.*") -split('">'))[0]
             $Email = (($(Invoke-WebRequest $Link).ParsedHtml.body.innerHTML.Split("`n") | ? { $_ -like "var displayEmail*" }) -replace "var displayEmail \= `"") -replace "`";"
             $Description = ((($Item -replace ".*\<A href\=`"","") -replace "\<.*") -split('">'))[1]

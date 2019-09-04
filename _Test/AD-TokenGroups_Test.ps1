@@ -19,23 +19,23 @@ $Search.FindAll() | ForEach-Object -Process {
                         <#
                            TypeName: System.Security.Principal.SecurityIdentifier
 
-                        Name              MemberType Definition                                                                                                                                          
-                        ----              ---------- ----------                                                                                                                                          
+                        Name              MemberType Definition
+                        ----              ---------- ----------
                         CompareTo         Method     int CompareTo(System.Security.Principal.SecurityIdentifier sid), int IComparable[SecurityIdentifier].CompareTo(System.Security.Principal.Security...
-                        Equals            Method     bool Equals(System.Object o), bool Equals(System.Security.Principal.SecurityIdentifier sid)                                                         
-                        GetBinaryForm     Method     void GetBinaryForm(byte[] binaryForm, int offset)                                                                                                   
-                        GetHashCode       Method     int GetHashCode()                                                                                                                                   
-                        GetType           Method     type GetType()                                                                                                                                      
-                        IsAccountSid      Method     bool IsAccountSid()                                                                                                                                 
-                        IsEqualDomainSid  Method     bool IsEqualDomainSid(System.Security.Principal.SecurityIdentifier sid)                                                                             
-                        IsValidTargetType Method     bool IsValidTargetType(type targetType)                                                                                                             
-                        IsWellKnown       Method     bool IsWellKnown(System.Security.Principal.WellKnownSidType type)                                                                                   
-                        ToString          Method     string ToString()                                                                                                                                   
-                        Translate         Method     System.Security.Principal.IdentityReference Translate(type targetType)                                                                              
-                        AccountDomainSid  Property   System.Security.Principal.SecurityIdentifier AccountDomainSid {get;}                                                                                
-                        BinaryLength      Property   int BinaryLength {get;}                                                                                                                             
-                        Value             Property   string Value {get;}     
-                        #>                                                                                                                            
+                        Equals            Method     bool Equals(System.Object o), bool Equals(System.Security.Principal.SecurityIdentifier sid)
+                        GetBinaryForm     Method     void GetBinaryForm(byte[] binaryForm, int offset)
+                        GetHashCode       Method     int GetHashCode()
+                        GetType           Method     type GetType()
+                        IsAccountSid      Method     bool IsAccountSid()
+                        IsEqualDomainSid  Method     bool IsEqualDomainSid(System.Security.Principal.SecurityIdentifier sid)
+                        IsValidTargetType Method     bool IsValidTargetType(type targetType)
+                        IsWellKnown       Method     bool IsWellKnown(System.Security.Principal.WellKnownSidType type)
+                        ToString          Method     string ToString()
+                        Translate         Method     System.Security.Principal.IdentityReference Translate(type targetType)
+                        AccountDomainSid  Property   System.Security.Principal.SecurityIdentifier AccountDomainSid {get;}
+                        BinaryLength      Property   int BinaryLength {get;}
+                        Value             Property   string Value {get;}
+                        #>
 					    # Prepare Output
 					    $Properties = @{
 						    SamAccountName = $Account.properties.samaccountname -as [string]
@@ -43,5 +43,5 @@ $Search.FindAll() | ForEach-Object -Process {
 					    }
 					    # Output Information
 					    New-Object -TypeName PSObject -Property $Properties
-				    } 
+				    }
 }

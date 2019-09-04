@@ -53,7 +53,7 @@
 			}
 			CATCH
 			{
-				$Error[0]	
+				$Error[0]
 			}
 		} #FOREACH ($IR in $Incident)
 

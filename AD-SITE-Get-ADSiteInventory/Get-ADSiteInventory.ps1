@@ -86,7 +86,7 @@
                         NotificationEnabled = $LinksInfo.NotificationEnabled -join ','
                         TransportType = $LinksInfo.TransportType -join ','
                         InterSiteReplicationSchedule = $LinksInfo.InterSiteReplicationSchedule -join ','
-                        DataCompressionEnabled = $LinksInfo.DataCompressionEnabled -join ',' 
+                        DataCompressionEnabled = $LinksInfo.DataCompressionEnabled -join ','
                     #}
                     #>
                 }#New-Object -TypeName PSoBject

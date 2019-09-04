@@ -14,7 +14,7 @@
 		PS C:\> Remove-PSObjectEmptyOrNullProperty -PSObject $UserInfo
 
 	.NOTES
-		Francois-Xavier Cat	
+		Francois-Xavier Cat
 		www.lazywinadmin.com
 		@lazywinadmin
 #>

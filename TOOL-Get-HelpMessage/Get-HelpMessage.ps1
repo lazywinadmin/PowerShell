@@ -27,7 +27,7 @@ function Get-HelpMessage
     Another installation is already in progress. Complete that installation before proceeding with this install
 
     .EXAMPLE
-    Get-HelpMessage –2147023278 
+    Get-HelpMessage –2147023278
     Another installation is already in progress. Complete that installation before proceeding with this install
 
     .NOTES

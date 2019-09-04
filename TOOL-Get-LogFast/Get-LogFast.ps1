@@ -11,11 +11,11 @@
         Get-LogFast -Path C:\367.msp.0.log -Match "09:36:43:417" -Verbose
 
         VERBOSE: [PROCESS] Match found
-        MSI (s) (A8:14) [09:36:43:417]: Note: 1: 2205 2:  3: Font 
+        MSI (s) (A8:14) [09:36:43:417]: Note: 1: 2205 2:  3: Font
         VERBOSE: [PROCESS] Match found
-        MSI (s) (A8:14) [09:36:43:417]: Note: 1: 2205 2:  3: Class 
+        MSI (s) (A8:14) [09:36:43:417]: Note: 1: 2205 2:  3: Class
         VERBOSE: [PROCESS] Match found
-        MSI (s) (A8:14) [09:36:43:417]: Note: 1: 2205 2:  3: TypeLib 
+        MSI (s) (A8:14) [09:36:43:417]: Note: 1: 2205 2:  3: TypeLib
 
 	.NOTES
 		Francois-Xavier cat

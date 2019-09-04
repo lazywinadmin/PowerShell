@@ -24,13 +24,13 @@
             object and all its child objects.
 
 .PARAMETER GroupScope
-    Specify the group scope of groups you want to find. Acceptable values are: 
-        'Global'; 
-        'Universal'; 
+    Specify the group scope of groups you want to find. Acceptable values are:
+        'Global';
+        'Universal';
         'DomainLocal'.
 
 .PARAMETER GroupType
-    Specify the group type of groups you want to find. Acceptable values are: 
+    Specify the group type of groups you want to find. Acceptable values are:
         'Security';
         'Distribution'.
 
@@ -111,7 +111,7 @@
 
 .NOTES
     NAME:    AD-GROUP-Monitor_MemberShip.ps1
-    AUTHOR:    Francois-Xavier Cat 
+    AUTHOR:    Francois-Xavier Cat
     EMAIL:    info@lazywinadmin.com
     WWW:    www.lazywinadmin
     Twitter:@lazywinadmin

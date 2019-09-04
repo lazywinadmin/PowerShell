@@ -110,7 +110,7 @@
         # Find the User in SCCM CMDB
         $User = Get-WMIObject @Splatting -Query "Select * From SMS_R_User WHERE UserName='$UserName'"
 
-        # Find the collections where the user is member of        
+        # Find the collections where the user is member of
         Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($user.resourceid)'" |
         ForEach-Object {
 
@@ -123,7 +123,7 @@
             {
                 IF ($DeploymentIntent -eq 'NA')
                 {
-                    # Find the Deployment on one collection                    
+                    # Find the Deployment on one collection
                     $Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)'")
                 }
                 ELSE

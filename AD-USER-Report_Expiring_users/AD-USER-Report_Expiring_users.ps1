@@ -43,7 +43,7 @@ PARAM (
 )
 BEGIN
 {
-    # Add Active Directory Module    
+    # Add Active Directory Module
 
     # Define Email Subject
     [String]$EmailSubject = "PS Report-ActiveDirectory-Expiring Users (in the next $days days)"

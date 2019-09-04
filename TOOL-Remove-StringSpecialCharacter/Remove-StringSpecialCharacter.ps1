@@ -8,7 +8,7 @@ function Remove-StringSpecialCharacter
 	This function will remove the special character from a string.
 	I'm using Unicode Regular Expressions with the following categories
 	\p{L} : any kind of letter from any language.
-	\p{Nd} : a digit zero through nine in any script except ideographic 
+	\p{Nd} : a digit zero through nine in any script except ideographic
 
 	http://www.regular-expressions.info/unicode.html
 	http://unicode.org/reports/tr18/

@@ -1,7 +1,7 @@
 ﻿function Get-NetFrameworkTypeAccelerator
 {
 <#
-.SYNOPSIS 
+.SYNOPSIS
 	Function to retrieve the list of Type Accelerator available
 .EXAMPLE
 	Get-NetFrameworkTypeAccelerator

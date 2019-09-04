@@ -87,7 +87,7 @@ function PopulateNode($node, $object)
             }
 
             $newChildNode.Name += "[$count]"
-            $null = $node.Nodes.Add($newChildNode)               
+            $null = $node.Nodes.Add($newChildNode)
 
             ## If this node has children or properties, add a placeholder
             ## node underneath so that the node shows a '+' sign to be
@@ -163,7 +163,7 @@ function OnAfterSelect
     ## information in the text box.
     if($resultObject)
     {
-        $members = Get-Member -InputObject $resultObject | Out-String       
+        $members = Get-Member -InputObject $resultObject | Out-String
         $outputPane.Text += "`n" + $members
     }
 }
@@ -190,7 +190,7 @@ function OnBeforeExpand
 
     ## Walk through its parents, creating the virtual
     ## PowerShell syntax to access this property.
-    $nodePath = GetPathForNode $selectedNode 
+    $nodePath = GetPathForNode $selectedNode
 
     ## Now, invoke that PowerShell syntax to retrieve
     ## the value of the property.

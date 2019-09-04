@@ -17,8 +17,8 @@ function View-Cats
     $shell.AppActivate("Internet Explorer")
 
     while($true){
-        $request = Invoke-WebRequest -Uri "http://thecatapi.com/api/images/get" -Method get 
+        $request = Invoke-WebRequest -Uri "http://thecatapi.com/api/images/get" -Method get
         $IE.Navigate($request.BaseResponse.ResponseUri.AbsoluteUri)
         Start-Sleep -Seconds $refreshtime
     }
-} 
+}

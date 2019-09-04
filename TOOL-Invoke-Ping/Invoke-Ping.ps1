@@ -170,8 +170,8 @@ Function Invoke-Ping
 						$VariablesToExclude = @((Get-Command _temp | Select -ExpandProperty parameters).Keys + $PSBoundParameters.Keys + $StandardUserEnv.Variables)
 						Write-Verbose "Excluding variables $(($VariablesToExclude | sort) -join ", ")"
 
-						# we don't use 'Get-Variable -Exclude', because it uses regexps. 
-						# One of the veriables that we pass is '$?'. 
+						# we don't use 'Get-Variable -Exclude', because it uses regexps.
+						# One of the veriables that we pass is '$?'.
 						# There could be other variables with such problems.
 						# Scope 2 required if we move to a real module
 						$UserVariables = @(Get-Variable | Where { -not ($VariablesToExclude -contains $_.Name) })
@@ -210,7 +210,7 @@ Function Invoke-Ping
 							Catch { 0 })
 						}
 
-						#run through each runspace.           
+						#run through each runspace.
 						Foreach ($runspace in $runspaces)
 						{
 
@@ -279,7 +279,7 @@ Function Invoke-Ping
 
 							}
 
-							#If runspace isn't null set more to true  
+							#If runspace isn't null set more to true
 							ElseIf ($runspace.Runspace -ne $null)
 							{
 								$log = $null
