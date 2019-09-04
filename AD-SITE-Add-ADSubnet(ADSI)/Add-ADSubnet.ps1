@@ -38,7 +38,7 @@
         WWW:    www.lazywinadmin.com
         TWITTER:@lazywinadmin
 
-        http://www.lazywinadmin.com/2013/11/powershell-add-ad-site-subnet.html
+        https://lazywinadmin.com/2013/11/powershell-add-ad-site-subnet.html
 
         VERSION HISTORY:
         1.0 2013.11.07

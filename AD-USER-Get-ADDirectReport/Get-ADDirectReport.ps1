@@ -16,7 +16,7 @@ function Get-ADDirectReports
         www.lazywinadmin.com
         @lazywinadmin
 
-        Blog post: http://www.lazywinadmin.com/2014/10/powershell-who-reports-to-whom-active.html
+        Blog post: https://lazywinadmin.com/2014/10/powershell-who-reports-to-whom-active.html
 
         VERSION HISTORY
         1.0 2014/10/05 Initial Version

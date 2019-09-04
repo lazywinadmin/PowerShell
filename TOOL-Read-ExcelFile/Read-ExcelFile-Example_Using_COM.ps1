@@ -1,5 +1,5 @@
 ﻿<#
-http://www.lazywinadmin.com/2014/03/powershell-read-excel-file-using-com.html
+https://lazywinadmin.com/2014/03/powershell-read-excel-file-using-com.html
 #>
 [cmdletbinding()]
 PARAM (

@@ -28,7 +28,7 @@
     github.com/lazywinadmin
 
     BLOG ARTICLE
-        http://www.lazywinadmin.com/2015/05/powershell-remove-diacritics-accents.html
+        https://lazywinadmin.com/2015/05/powershell-remove-diacritics-accents.html
 
     VERSION HISTORY
         1.0.0.0 | Francois-Xavier Cat

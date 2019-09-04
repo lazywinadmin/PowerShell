@@ -6,7 +6,7 @@
 .DESCRIPTION
     This function will get the output of netstat -n and parse the output
 .LINK
-    http://www.lazywinadmin.com/2014/08/powershell-parse-this-netstatexe.html
+    https://lazywinadmin.com/2014/08/powershell-parse-this-netstatexe.html
 .NOTES
     Francois-Xavier Cat
     www.lazywinadmin.com

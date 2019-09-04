@@ -29,7 +29,7 @@
     .LINK
         https://github.com/lazywinadmin/PowerShell/tree/master/TOOL-New-DjoinFile
     .LINK
-        http://www.lazywinadmin.com/2016/07/offline-domain-join-copying-djoin.html
+        https://lazywinadmin.com/2016/07/offline-domain-join-copying-djoin.html
     .LINK
         https://msdn.microsoft.com/en-us/library/system.io.fileinfo(v=vs.110).aspx
     #>
