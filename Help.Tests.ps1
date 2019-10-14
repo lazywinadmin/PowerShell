@@ -12,6 +12,10 @@ Describe -Tag 'Help' 'Help' {
             # Correct name where file name does not match function name
             if ($script.Name -Match $regex) {
                 $name = $script.BaseName.Replace($Matches[0], '')
+            } elseif ($script.Name -match 'O365-') {
+                $name = $script.BaseName.Replace($Matches[0], '')
+            } elseif ($script.Name -match 'Function_Template.ps1') {
+                $name = 'Get-Something' 
             } else {
                 $name = $script.BaseName
             }
