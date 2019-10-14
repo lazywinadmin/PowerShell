@@ -105,4 +105,4 @@
 }#get-ADSiteServicesInfo
 
 #get-ADSiteServicesInfo #| export-csv .\test.csv
-Get-ADSiteInventory
+#Get-ADSiteInventory
