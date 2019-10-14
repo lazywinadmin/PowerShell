@@ -6,9 +6,9 @@ Describe -Tag 'Help' 'Help' {
 
     foreach ($script in $scripts) {
 
-        Context "[$(($script.Name).TrimEnd('.ps1'))] Validate Comment Based Help" {
+        Context "[$($script.BaseName)] Validate Comment Based Help" {
             # Dot Source script
-            . .\$script.FullName
+            . $($script.FullName)
 
             $functionHelp = Get-Help ($script.Name).TrimEnd('.ps1') -Full
 
