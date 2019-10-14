@@ -6,7 +6,7 @@ Describe -Tag 'Help' 'Help' {
 
     foreach ($script in $scripts) {
 
-        Context "[$($script.FullName)] Validate Comment Based Help" {
+        Context "[$(($script.Name).TrimEnd('.ps1'))] Validate Comment Based Help" {
             # Dot Source script
             . .\$script.FullName
 
