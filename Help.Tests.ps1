@@ -1,3 +1,7 @@
+$scripts = Get-ChildItem -Path $PSScriptRoot -Recurse -Filter *.ps1 | 
+                Where-Object FullName -NotMatch '.Tests.'
+
+
 Describe -Tag 'Help' 'Help' {
     # dot source script
     . .\TOOL-ConvertFrom-Base64\ConvertFrom-Base64.ps1
