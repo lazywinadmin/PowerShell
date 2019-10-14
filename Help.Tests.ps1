@@ -3,15 +3,14 @@ $scripts = Get-ChildItem -Path $PSScriptRoot -Recurse -Filter *.ps1 |
 
 
 Describe -Tag 'Help' 'Help' {
-    # dot source script
-    . .\TOOL-ConvertFrom-Base64\ConvertFrom-Base64.ps1
-    . .\TOOL-Get-NetStat\Get-NetStat.ps1
 
-    $scriptName = 'ConvertFrom-Base64', 'Get-NetStat'
+    foreach ($script in $scripts) {
 
-    foreach ($script in $scriptName) {
-        Context "[$script] Validate Comment Based Help" {
-            $functionHelp = Get-Help $script -Full
+        Context "[$($script.FullName)] Validate Comment Based Help" {
+            # Dot Source script
+            . .\$script.FullName
+
+            $functionHelp = Get-Help ($script.Name).TrimEnd('.ps1') -Full
 
             It 'Contains Description' {
                 $functionHelp.Description | Should Not BeNullOrEmpty
