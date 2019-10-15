@@ -45,8 +45,7 @@ Describe -Tag 'Help' 'Help' {
                 }
             } else {
                 It "[$($script.BaseName)] is not a function and skipped" {
-                    $true | Should Be $true
-                }
+                } -Skip
             }
         }
     }
