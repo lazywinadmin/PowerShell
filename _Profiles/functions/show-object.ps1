@@ -35,7 +35,7 @@ Add-Type -Assembly System.Windows.Forms
 ## Figure out the variable name to use when displaying the
 ## object navigation syntax. To do this, we look through all
 ## of the variables for the one with the same object identifier.
-$rootVariableName = dir variable:\* -Exclude InputObject,Args |
+$rootVariableName = Get-ChildItem variable:\* -Exclude InputObject,Args |
     Where-Object {
         $_.Value -and
         ($_.Value.GetType() -eq $InputObject.GetType()) -and
@@ -43,7 +43,7 @@ $rootVariableName = dir variable:\* -Exclude InputObject,Args |
 }
 
 ## If we got multiple, pick the first
-$rootVariableName = $rootVariableName| % Name | Select -First 1
+$rootVariableName = $rootVariableName| ForEach-Object Name | Select-Object -First 1
 
 ## If we didn't find one, use a default name
 if(-not $rootVariableName)

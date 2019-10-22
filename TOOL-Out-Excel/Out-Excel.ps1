@@ -43,11 +43,11 @@
 				$property = @()
 				if ($raw)
 				{
-					$_.properties.PropertyNames | %{ $property += @($_) }
+					$_.properties.PropertyNames | ForEach-Object{ $property += @($_) }
 				}
 				else
 				{
-					$_.PsObject.get_properties() | % { $property += @($_.Name.ToString()) }
+					$_.PsObject.get_properties() | ForEach-Object { $property += @($_.Name.ToString()) }
 				}
 			}
 			$Column = 1
