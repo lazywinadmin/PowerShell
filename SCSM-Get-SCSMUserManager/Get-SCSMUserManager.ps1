@@ -10,7 +10,7 @@
     ## MAIN
     $affectedUser_obj = get-scsmobject -id $input_affectedUser_id
     $userManagesUser_relclass_id = '4a807c65-6a1f-15b2-bdf3-e967e58c254a'
-    $managerOfAffectedUser_relobjs = Get-SCSMRelationshipObject -ByTarget $affectedUser_obj | where{ $_.relationshipId -eq $userManagesUser_relclass_id }
+    $managerOfAffectedUser_relobjs = Get-SCSMRelationshipObject -ByTarget $affectedUser_obj | Where-Object{ $_.relationshipId -eq $userManagesUser_relclass_id }
 
     ## Check if Manager User Exists and that the relationship is current.
     ##  get-scsmrelationshipobject tends to keep track of relationship history. It returns old and new
