@@ -1,12 +1,12 @@
 function View-Cats
 {
-	<#
-	.SYNOPSIS
-		This will open Internet explorer and show a different cat every 5 seconds
-	.DESCRIPTION
-	.NOTES
-		#http://www.reddit.com/r/PowerShell/comments/2htfog/viewcats/
-	#>
+    <#
+    .SYNOPSIS
+        This will open Internet explorer and show a different cat every 5 seconds
+    .DESCRIPTION
+    .NOTES
+        #http://www.reddit.com/r/PowerShell/comments/2htfog/viewcats/
+    #>
     Param(
         [int]$refreshtime=5
     )
