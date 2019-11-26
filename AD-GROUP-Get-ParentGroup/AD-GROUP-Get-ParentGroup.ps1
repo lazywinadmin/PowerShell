@@ -5,7 +5,7 @@
         Find all Nested members of a group
     .DESCRIPTION
         Find all Nested members of a group
-    .PARAMETER GroupName
+    .PARAMETER Name
         Specify one or more GroupName to audit
     .Example
         Get-NestedMember -GroupName TESTGROUP
