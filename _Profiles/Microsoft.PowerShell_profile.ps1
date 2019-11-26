@@ -1,12 +1,12 @@
 <#
-	.SYNOPSIS
-		Profile File
-	.DESCRIPTION
-		Profile File
-	.NOTES
-		Francois-Xavier Cat
-		lazywinadmin.com
-		@lazywinadmin
+    .SYNOPSIS
+        Profile File
+    .DESCRIPTION
+        Profile File
+    .NOTES
+        Francois-Xavier Cat
+        lazywinadmin.com
+        @lazywinadmin
 #>
 
 #########################
@@ -34,11 +34,11 @@ $IsAdmin = $WindowsPrincipal.IsInRole($Administrator)
 #  Set Window Title
 if ($isAdmin)
 {
-	$host.UI.RawUI.WindowTitle = "Administrator: $ENV:USERNAME@$ENV:COMPUTERNAME - $env:userdomain"
+    $host.UI.RawUI.WindowTitle = "Administrator: $ENV:USERNAME@$ENV:COMPUTERNAME - $env:userdomain"
 }
 else
 {
-	$host.UI.RawUI.WindowTitle = "$ENV:USERNAME@$ENV:COMPUTERNAME - $env:userdomain"
+    $host.UI.RawUI.WindowTitle = "$ENV:USERNAME@$ENV:COMPUTERNAME - $env:userdomain"
 }
 #>
 
@@ -59,11 +59,11 @@ Import-Module -Name PSReadline
 
 if(Get-Module -name PSReadline)
 {
-	# Set Shortcuts for History Search
-	#  Start typing, for example "Get-" then press up and down arrow, it'll show all
-	#  commands in my story that started by "Get-"
-	Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
-	Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
+    # Set Shortcuts for History Search
+    #  Start typing, for example "Get-" then press up and down arrow, it'll show all
+    #  commands in my story that started by "Get-"
+    Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
+    Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 }
 
 
@@ -83,21 +83,21 @@ if (Test-Path $env:USERPROFILE\OneDrive){$OneDriveRoot = "$env:USERPROFILE\OneDr
 # This will change the prompt
 function prompt
 {
-	#Get-location
-	Write-output "PS [LazyWinAdmin.com]> "
+    #Get-location
+    Write-output "PS [LazyWinAdmin.com]> "
 }
 
 # Get the current script directory
 function Get-ScriptDirectory
 {
-	if ($hostinvocation -ne $null)
-	{
-		Split-Path $hostinvocation.MyCommand.path
-	}
-	else
-	{
-		Split-Path $script:MyInvocation.MyCommand.Path
-	}
+    if ($hostinvocation -ne $null)
+    {
+        Split-Path $hostinvocation.MyCommand.path
+    }
+    else
+    {
+        Split-Path $script:MyInvocation.MyCommand.Path
+    }
 }
 
 $MyInvocation.MyCommand

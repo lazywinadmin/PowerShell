@@ -1,12 +1,12 @@
 ﻿Function Find-Apartment
 {
-	<#
-	.SYNOPSIS
-		Allow you search Appartement in craigslist
-	.DESCRIPTION
-	.NOTES
-		#http://masterrex.com/?p=64
-	#>
+    <#
+    .SYNOPSIS
+        Allow you search Appartement in craigslist
+    .DESCRIPTION
+    .NOTES
+        #http://masterrex.com/?p=64
+    #>
     param (
         [Parameter(Mandatory=$False)]$MinPrice="0",
         [Parameter(Mandatory=$False)]$MaxPrice="9999",
