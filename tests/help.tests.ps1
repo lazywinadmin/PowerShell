@@ -30,7 +30,9 @@ Describe -Tag 'Help' 'Help' {
                 # Dot Source script
                 . $($script.FullName)
 
-                $functionHelp = Get-Help $name -Full
+                $functionHelp = Get-Help -Name $name -Full
+                $functionContent = Get-Content -Path $script.FullName
+                $functionAST = [System.Management.Automation.Language.Parser]::ParseInput($functionContent, [ref]$null, [ref]$null)
 
                 It 'Contains Description' {
                     $functionHelp.Description | Should Not BeNullOrEmpty
@@ -44,8 +46,11 @@ Describe -Tag 'Help' 'Help' {
                     $functionHelp.Examples | Should Not BeNullOrEmpty
                 }
 
-                It 'Contains Parameters' {
-                    $functionHelp.Parameters | Should Not BeNullOrEmpty
+                if($functionAST.ParamBlock)
+                {
+                    It 'Contains Parameters' {
+                        $functionHelp.Parameters | Should Not BeNullOrEmpty
+                    }
                 }
             } else {
                 It "[$($script.BaseName)] is not a function" {
