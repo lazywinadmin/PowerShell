@@ -1,7 +1,7 @@
 ﻿function Set-SCCMClientCacheLocation
 {
     <#
-        .SYNOPSYS
+        .SYNOPSIS
             Function to set the cache location on a SCCM Client
         .DESCRIPTION
             Function to set the cache location on a SCCM Client
@@ -28,6 +28,7 @@
         [Switch]$ServiceRestart,
 
         [Alias('RunAs')]
+        [pscredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
@@ -70,8 +71,7 @@
         }
         CATCH
         {
-            Write-Warning -message "[PROCESS] Something Wrong happened with $Computer"
-            $Error[0].execption.message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
 }
