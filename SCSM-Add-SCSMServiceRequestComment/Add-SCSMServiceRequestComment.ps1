@@ -1,5 +1,24 @@
 ﻿Function Add-SCSMServiceRequestComment
 {
+    <#
+    .SYNOPSIS
+        Function to add a comment to a Service Request
+    .DESCRIPTION
+        Function to add a comment to a Service Request
+    .PARAMETER SRObject
+        Specify the Service Request Object
+    .PARAMETER Comment
+        Specify the comment text to add
+    .PARAMETER EnteredBy
+        Specify the Author of the comment
+    .PARAMETER AnalystComment
+        Use if the comment is made by an Analyst
+    .PARAMETER IsPrivate
+        Use if the comment is private
+    .EXAMPLE
+        Add-SCSMServiceRequestComment -SRObject $SR -Comment "This is a Comment" -EnteredBy 'FX'
+    #>
+    [CmdletBinding()]
     param (
         [parameter(Mandatory = $True, Position = 0)]
         $SRObject,
