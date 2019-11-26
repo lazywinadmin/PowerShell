@@ -1,7 +1,7 @@
 ﻿function Set-SCCMClientCacheSize
 {
     <#
-        .SYNOPSYS
+        .SYNOPSIS
             Function to set the cache size on a SCCM Client
         .DESCRIPTION
             Function to set the cache size on a SCCM Client
@@ -28,6 +28,7 @@
         [Switch]$ServiceRestart,
 
         [Alias('RunAs')]
+        [PSCredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
