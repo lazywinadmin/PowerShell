@@ -4,6 +4,9 @@
     .SYNOPSIS
         Function to create a SCCM Task Sequence Application Variable during the OSD
 
+    .DESCRIPTION
+        Function to create a SCCM Task Sequence Application Variable during the OSD
+
     .PARAMETER BaseVariableName
         Specifies the "Base Variable Name" present in the task "Install Application" of the Task Sequence.
         (In the 'Install application according to dynamic variable list' section)
@@ -24,8 +27,8 @@
         @lazywinadmin
     #>
 
-    PARAM ([String]$BaseVariableName,
-
+    PARAM (
+        [String]$BaseVariableName,
         [String[]]$ApplicationList
     )
 
@@ -41,7 +44,7 @@
         $Counter = 1
 
         # Foreach Application we create an incremented variable
-        $ApplicationList | ForEach-Object {
+        $ApplicationList | ForEach-Object -Process {
 
             # Define the Variable Name
             $Variable = "$BaseVariableName{0:00}" -f $Counter
