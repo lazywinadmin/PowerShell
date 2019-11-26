@@ -1,5 +1,9 @@
-$scripts = Get-ChildItem -Path $PSScriptRoot -Recurse -Filter *.ps1 | 
-                Where-Object FullName -NotMatch '.Tests.'
+$scripts = Get-ChildItem -Path (Split-Path $PSScriptRoot -parent) -Recurse -Filter *.ps1 |
+    Where-Object -FilterScript {
+        $_.FullName -NotMatch '.Tests.' -and
+        $_.Fullname -notmatch [regex]::Escape('_Profiles') -and
+        $_.Fullname -notmatch [regex]::Escape('_Template')
+    } | Sort-Object
 
 [regex]$regex = "(^[A-Z\-]+-)"
 
@@ -15,14 +19,14 @@ Describe -Tag 'Help' 'Help' {
             } elseif ($script.Name -match 'O365-') {
                 $name = $script.BaseName.Replace($Matches[0], '')
             } elseif ($script.Name -match 'Function_Template.ps1') {
-                $name = 'Get-Something' 
+                $name = 'Get-Something'
             } else {
                 $name = $script.BaseName
             }
 
             # Only process functions and not scripts
             if ((Get-Content -Path $script.FullName -TotalCount 1) -match 'function') {
-                
+
                 # Dot Source script
                 . $($script.FullName)
 
@@ -31,7 +35,7 @@ Describe -Tag 'Help' 'Help' {
                 It 'Contains Description' {
                     $functionHelp.Description | Should Not BeNullOrEmpty
                 }
-                
+
                 It 'Contains Synopsis' {
                     $functionHelp.Synopsis | Should Not BeNullOrEmpty
                 }
@@ -44,7 +48,7 @@ Describe -Tag 'Help' 'Help' {
                     $functionHelp.Parameters | Should Not BeNullOrEmpty
                 }
             } else {
-                It "[$($script.BaseName)] is not a function and skipped" {
+                It "[$($script.BaseName)] is not a function" {
                 } -Skip
             }
         }
