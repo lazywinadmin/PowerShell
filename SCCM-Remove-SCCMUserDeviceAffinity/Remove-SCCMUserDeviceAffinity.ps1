@@ -22,6 +22,15 @@
     .PARAMETER Credential
         Specifies alternative credentials to use
 
+    .EXAMPLE
+        $Params = @{
+            SiteCode    = 'FXC'
+            SiteServer  = 'SCCMServer1'
+            DeviceID    = 'FXC00045'
+            Credential  = (Get-Credential 'FX/SccmGuru')
+        }
+        Remove-SCCMUserDeviceAffinity @Params
+
     .NOTES
         Francois-Xavier Cat
         lazywinadmin.com
