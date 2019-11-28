@@ -1,7 +1,9 @@
-function Remove-StringSpecialCharacter {
-    <#
+function Remove-StringSpecialCharacter
+{
+<#
 .SYNOPSIS
     This function will remove the special character from a string.
+
 .DESCRIPTION
     This function will remove the special character from a string.
     I'm using Unicode Regular Expressions with the following categories
@@ -14,18 +16,19 @@ function Remove-StringSpecialCharacter {
 .PARAMETER String
     Specifies the String on which the special character will be removed
 
-.SpecialCharacterToKeep
+.PARAMETER SpecialCharacterToKeep
     Specifies the special character to keep in the output
 
 .EXAMPLE
-    PS C:\> Remove-StringSpecialCharacter -String "^&*@wow*(&(*&@"
+    Remove-StringSpecialCharacter -String "^&*@wow*(&(*&@"
     wow
+
 .EXAMPLE
-    PS C:\> Remove-StringSpecialCharacter -String "wow#@!`~)(\|?/}{-_=+*"
+    Remove-StringSpecialCharacter -String "wow#@!`~)(\|?/}{-_=+*"
 
     wow
 .EXAMPLE
-    PS C:\> Remove-StringSpecialCharacter -String "wow#@!`~)(\|?/}{-_=+*" -SpecialCharacterToKeep "*","_","-"
+    Remove-StringSpecialCharacter -String "wow#@!`~)(\|?/}{-_=+*" -SpecialCharacterToKeep "*","_","-"
     wow-_*
 
 .NOTES
