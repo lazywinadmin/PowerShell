@@ -1,3 +1,5 @@
+# Script is now maintained on the following repository: https://github.com/lazywinadmin/Monitor-ADGroupMembership
+
 <#
 .SYNOPSIS
     This script is monitoring group(s) in Active Directory and send an email when someone is changing the membership.
