@@ -69,8 +69,7 @@
         }#TRY
         CATCH
         {
-            Write-Warning -Message "[PROCESS] Something Wrong Happened"
-            Write-Warning -Message $Error[0]
+            $PSCmdlet.ThrowTerminatingError($_)
         }#CATCH
     }#PROCESS
     END
