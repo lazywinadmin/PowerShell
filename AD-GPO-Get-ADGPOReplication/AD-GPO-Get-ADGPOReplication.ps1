@@ -44,7 +44,7 @@
             Write-Warning -Message "[BEGIN] Something wrong happened"
             IF ($ErrorBeginIpmoAD) { Write-Warning -Message "[BEGIN] Error while Importing the module Active Directory" }
             IF ($ErrorBeginIpmoGP) { Write-Warning -Message "[BEGIN] Error while Importing the module Group Policy" }
-            Write-Warning -Message "[BEGIN] $($Error[0].exception.message)"
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
     PROCESS
@@ -92,7 +92,7 @@
                 IF ($ErrorProcessGetDC) { Write-Warning -Message "[PROCESS] Error while running retrieving Domain Controllers with Get-ADDomainController" }
                 IF ($ErrorProcessGetGPO) { Write-Warning -Message "[PROCESS] Error while running Get-GPO" }
                 IF ($ErrorProcessGetGPOAll) { Write-Warning -Message "[PROCESS] Error while running Get-GPO -All" }
-                Write-Warning -Message "[PROCESS] $($Error[0].exception.message)"
+                $PSCmdlet.ThrowTerminatingError($_)
             }
         }#FOREACH
     }#PROCESS
