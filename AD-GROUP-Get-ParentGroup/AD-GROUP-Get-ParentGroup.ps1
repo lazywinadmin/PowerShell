@@ -35,8 +35,7 @@
         }
         CATCH
         {
-            Write-Warning -Message "[BEGIN] An Error occured"
-            Write-Warning -Message $error[0].exception.message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
     PROCESS
@@ -74,8 +73,8 @@
             }#FOREACH ($Obj in $Object)
         }#TRY
         CATCH{
-            Write-Warning -Message "[PROCESS] An Error occured"
-            Write-Warning -Message $error[0].exception.message }
+            $PSCmdlet.ThrowTerminatingError($_)
+        }
     }#PROCESS
     END
     {
