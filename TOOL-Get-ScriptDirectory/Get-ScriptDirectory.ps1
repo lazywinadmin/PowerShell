@@ -5,13 +5,15 @@ function Get-ScriptDirectory
    This function retrieve the current folder path
 .DESCRIPTION
    This function retrieve the current folder path
+.EXAMPLE
+    Get-ScriptDirectory
 #>
-    if($hostinvocation -ne $null)
+    if($null -eq $hostinvocation)
     {
-        Split-Path $hostinvocation.MyCommand.path
+        Split-Path -Path $hostinvocation.MyCommand.path
     }
     else
     {
-        Split-Path $script:MyInvocation.MyCommand.Path
+        Split-Path -Path $script:MyInvocation.MyCommand.Path
     }
 }
