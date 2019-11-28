@@ -101,8 +101,7 @@
                 Write-Verbose -Message "$subnet - Subnet added."
             }#TRY
             CATCH{
-                Write-Warning -Message "An error happened while creating the subnet: $subnet"
-                $error[0].Exception
+                $PSCmdlet.ThrowTerminatingError($_)
             }#CATCH
     }#PROCESS Block
     END{
