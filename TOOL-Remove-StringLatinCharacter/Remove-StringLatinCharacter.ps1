@@ -3,8 +3,10 @@
 <#
 .SYNOPSIS
     Function to remove diacritics from a string
+.DESCRIPTION
+    Function to remove diacritics from a string
 .PARAMETER String
-	Specifies the String that will be processed
+    Specifies the String that will be processed
 .EXAMPLE
     Remove-StringLatinCharacter -String "L'été de Raphaël"
 
@@ -40,12 +42,12 @@
             Add Error Handling
 #>
     [CmdletBinding()]
-	PARAM (
-		[Parameter(ValueFromPipeline=$true)]
-		[System.String[]]$String
-		)
-	PROCESS
-	{
+    PARAM (
+        [Parameter(ValueFromPipeline=$true)]
+        [System.String[]]$String
+        )
+    PROCESS
+    {
         FOREACH ($StringValue in $String)
         {
             Write-Verbose -Message "$StringValue"
@@ -54,10 +56,10 @@
             {
                 [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($StringValue))
             }
-		    CATCH
+            CATCH
             {
                 Write-Error -Message $Error[0].exception.message
             }
         }
-	}
+    }
 }
