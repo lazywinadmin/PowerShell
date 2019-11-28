@@ -1,56 +1,56 @@
-﻿Function Add-SRComment
-{
-<#
-    .SYNOPSIS
-        Function to add a comment inside a Service Request
+Function Add-SCSMSRComment {
+    <#
+.SYNOPSIS
+    Function to add a comment inside a Service Request
 
-    .DESCRIPTION
-        Function to add a comment inside a Service Request
-        You need to have SMlets installed and permission to write inside
-        the service request.
+.DESCRIPTION
+    Function to add a comment inside a Service Request
+    You need to have SMlets installed and permission to write inside
+    the service request.
 
-    .PARAMETER ServiceRequestObject
-        Specifies the ServiceRequest where the comment will be added
+.PARAMETER ServiceRequestObject
+    Specifies the ServiceRequest where the comment will be added
 
-    .PARAMETER Comment
-        Specifies the comment to add.
+.PARAMETER Comment
+    Specifies the comment to add.
 
-    .PARAMETER CommentType
-        Specifies the comment type.
-        You need to specify 'User' or 'Analyst'.
+.PARAMETER CommentType
+    Specifies the comment type.
+    You need to specify 'User' or 'Analyst'.
 
-    .PARAMETER EnteredBy
-        Specifies your name.
+.PARAMETER EnteredBy
+    Specifies your name.
 
-    .PARAMETER IsPrivate
-        Specifies if the switch is private
+.PARAMETER IsPrivate
+    Specifies if the switch is private
 
-    .EXAMPLE
-        PS C:\> Add-SRComment -ServiceRequestObject $SR -Comment "Task Completed" -CommentType Analyst -EnteredBy 'Francois-Xavier Cat'
+.EXAMPLE
+    Add-SCSMSRComment -ServiceRequestObject $SR -Comment "Task Completed" -CommentType Analyst -EnteredBy 'Francois-Xavier Cat'
 
-    .EXAMPLE
-        PS C:\> Add-SRComment -ServiceRequestObject $SR -Comment "Task Completed" -CommentType Analyst -EnteredBy 'Francois-Xavier Cat' -IsPrivate
+.EXAMPLE
+    Add-SCSMSRComment -ServiceRequestObject $SR -Comment "Task Completed" -CommentType Analyst -EnteredBy 'Francois-Xavier Cat' -IsPrivate
 
-    .NOTES
-        Francois-Xavier Cat
-        lazywinadmin.com
-        @lazywinadmin
+.NOTES
+    Francois-Xavier Cat
+    lazywinadmin.com
+    @lazywinadmin
 
-        Script inspired from http://www.scsm.se/?p=1423 by Anders Asp
+    Script inspired from http://www.scsm.se/?p=1423 by Anders Asp
 #>
     [CmdletBinding()]
     PARAM (
 
         [Alias("SRObject")]
         [parameter(Mandatory = $true)]
-        [System.WorkItem.ServiceRequest]$ServiceRequestObject,
+        #[System.WorkItem.ServiceRequest]
+        $ServiceRequestObject,
 
         [parameter(Mandatory = $True)]
         [String]$Comment,
 
         [ValidateSet("User", "Analyst")]
         [parameter(Mandatory = $True)]
-        [System.WorkItem.TroubleTicket]
+        #[System.WorkItem.TroubleTicket]
         [String]$CommentType,
 
         [parameter(Mandatory = $True)]
@@ -58,8 +58,7 @@
 
         [Switch]$IsPrivate
     )
-    BEGIN
-    {
+    BEGIN{
         TRY
         {
             if (-not (Get-Module -Name Smlets))
@@ -69,25 +68,24 @@
         }
         CATCH
         {
-            $Error[0]
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
-    PROCESS
-    {
+    PROCESS{
         TRY
         {
             # Make sure that the SR Object it passed to the function
-            If ($ServiceRequestObject.Id -ne $NULL)
+            If ($null -eq $ServiceRequestObject.Id)
             {
                 Switch ($CommentType)
                 {
                     "Analyst" {
                         $CommentClass = "System.WorkItem.TroubleTicket.AnalystCommentLog"
-                        $CommentClassName = "AnalystCommentLog"
+                        #$CommentClassName = "AnalystCommentLog"
                     }
                     "User" {
                         $CommentClass = "System.WorkItem.TroubleTicket.UserCommentLog"
-                        $CommentClassName = "EndUserCommentLog"
+                        #$CommentClassName = "EndUserCommentLog"
                     }
                 }
                 # Generate a new GUID for the comment
@@ -120,7 +118,7 @@
         }
         CATCH
         {
-            $Error[0]
+            $PSCmdlet.ThrowTerminatingError($_)
         } #CATCH
     } #PROCESS
-} # Function
+}
