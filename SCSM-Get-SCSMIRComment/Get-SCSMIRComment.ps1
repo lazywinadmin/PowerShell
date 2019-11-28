@@ -20,7 +20,8 @@
     [CmdletBinding()]
     PARAM
     (
-        [System.WorkItem.Incident[]]$Incident
+        #[System.WorkItem.Incident[]]
+        [object[]]$Incident
     )
     PROCESS {
         FOREACH ($IR in $Incident) {
