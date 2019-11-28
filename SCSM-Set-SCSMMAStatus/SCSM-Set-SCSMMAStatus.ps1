@@ -1,5 +1,27 @@
 ﻿Function Set-SCSMMAStatus
 {
+    <#
+    .SYNOPSIS
+        Set the status of a Manual Activity
+    .DESCRIPTION
+        Set the status of a Manual Activity
+    .PARAMETER ManualActivityID
+        Specify the ID of the Manual Activity
+    .PARAMETER Status
+        Specify the status of the Manual activity
+
+        Status possible:
+        In Progress
+        Cancelled
+        Completed
+        Failed
+        On Hold
+        Pending
+        Rerun
+        Skipped
+    .EXAMPLE
+        Set-SCSMMAStatus -ManualActivityID MA123456 -Status 'Cancelled'
+    #>
     [CmdletBinding()]
     PARAM(
         $ManualActivityID,
