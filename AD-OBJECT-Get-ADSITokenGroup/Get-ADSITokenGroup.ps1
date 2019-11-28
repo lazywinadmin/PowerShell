@@ -117,8 +117,7 @@
         }#TRY
         CATCH
         {
-            Write-Warning -Message "[PROCESS] Something wrong happened!"
-            Write-Warning -Message $error[0].Exception.Message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }#PROCESS
     END { Write-Verbose -Message "[END] Function Get-ADSITokenGroup End." }
