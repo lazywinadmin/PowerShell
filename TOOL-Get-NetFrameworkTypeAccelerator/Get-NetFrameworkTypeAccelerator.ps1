@@ -3,6 +3,9 @@
 <#
 .SYNOPSIS
     Function to retrieve the list of Type Accelerator available
+.DESCRIPTION
+    Function to retrieve the list of Type Accelerator available
+
 .EXAMPLE
     Get-NetFrameworkTypeAccelerator
 
