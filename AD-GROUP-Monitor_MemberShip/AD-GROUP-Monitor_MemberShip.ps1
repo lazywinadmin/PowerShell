@@ -239,7 +239,7 @@ PARAM (
     [String]$GroupType,
 
     [Parameter(ParameterSetName = "File", Mandatory = $true)]
-    [ValidateScript({ Test-Path -Path $_ })]
+    [ValidateScript( { Test-Path -Path $_ })]
     [String[]]$File,
 
     [Parameter()]
@@ -259,27 +259,22 @@ PARAM (
 
     [Parameter()]
     [ValidateSet("ASCII", "UTF8", "UTF7", "UTF32", "Unicode", "BigEndianUnicode", "Default")]
-    [String]$EmailEncoding="ASCII",
+    [String]$EmailEncoding = "ASCII",
 
     [Parameter()]
     [Switch]$HTMLLog
 )
-BEGIN
-{
-    TRY
-    {
-
+BEGIN {
+    TRY {
         # Set the Paths Variables and create the folders if not present
         $ScriptPath = (Split-Path -Path ((Get-Variable -Name MyInvocation).Value).MyCommand.Path)
         $ScriptPathOutput = $ScriptPath + "\Output"
-        IF (!(Test-Path -Path $ScriptPathOutput))
-        {
+        IF (!(Test-Path -Path $ScriptPathOutput)) {
             Write-Verbose -Message "[BEGIN] Creating the Output Folder : $ScriptPathOutput"
             New-Item -Path $ScriptPathOutput -ItemType Directory | Out-Null
         }
         $ScriptPathChangeHistory = $ScriptPath + "\ChangeHistory"
-        IF (!(Test-Path -Path $ScriptPathChangeHistory))
-        {
+        IF (!(Test-Path -Path $ScriptPathChangeHistory)) {
             Write-Verbose -Message "[BEGIN] Creating the ChangeHistory Folder : $ScriptPathChangeHistory"
             New-Item -Path $ScriptPathChangeHistory -ItemType Directory | Out-Null
         }
@@ -288,38 +283,31 @@ BEGIN
         $DateFormat = Get-Date -Format "yyyyMMdd_HHmmss"
         $ReportDateFormat = Get-Date -Format "yyyy\MM\dd HH:mm:ss"
 
-
         # Active Directory Module
-        IF (Get-Module -Name ActiveDirectory -ListAvailable) #verify ad module is installed
-        {
+        IF (Get-Module -Name ActiveDirectory -ListAvailable) { #verify ad module is installed
             Write-Verbose -Message "[BEGIN] Active Directory Module"
             # Verify Ad module is loaded
-            IF (-not (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -ErrorVariable ErrorBEGINGetADModule))
-            {
+            IF (-not (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -ErrorVariable ErrorBEGINGetADModule)) {
                 Write-Verbose -Message "[BEGIN] Active Directory Module - Loading"
                 Import-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -ErrorVariable ErrorBEGINAddADModule
                 Write-Verbose -Message "[BEGIN] Active Directory Module - Loaded"
                 $global:ADModule = $true
             }
-            ELSE
-            {
+            ELSE {
                 Write-Verbose -Message "[BEGIN] Active Directory module seems loaded"
                 $global:ADModule = $true
             }
         }
-        ELSE # Else we try to load Quest Ad Cmdlets
-        {
+        ELSE { # Else we try to load Quest Ad Cmdlets
             Write-Verbose -Message "[BEGIN] Quest AD Snapin"
             # Verify Quest Active Directory Snapin is loaded
-            IF (-not (Get-PSSnapin -Name Quest.ActiveRoles.ADManagement -ErrorAction Stop -ErrorVariable ErrorBEGINGetQuestAD))
-            {
+            IF (-not (Get-PSSnapin -Name Quest.ActiveRoles.ADManagement -ErrorAction Stop -ErrorVariable ErrorBEGINGetQuestAD)) {
                 Write-Verbose -Message "[BEGIN] Quest Active Directory - Loading"
                 Add-PSSnapin -Name Quest.ActiveRoles.ADManagement -ErrorAction Stop -ErrorVariable ErrorBEGINAddQuestAd
                 Write-Verbose -Message "[BEGIN] Quest Active Directory - Loaded"
                 $global:QuestADSnappin = $true
             }
-            ELSE
-            {
+            ELSE {
                 Write-Verbose -Message "[BEGIN] Quest AD Snapin seems loaded"
             }
         }
@@ -346,8 +334,7 @@ BEGIN
 
 
     }#TRY
-    CATCH
-    {
+    CATCH {
         Write-Warning -Message "[BEGIN] Something went wrong"
 
         #Show last error
@@ -363,35 +350,28 @@ BEGIN
         if ($ErrorBEGINAddADmodule) { Write-Warning -Message "[BEGIN] Can't load the Active Directory module" }
     }#CATCH
 }#BEGIN
-
-PROCESS
-{
-    TRY
-    {
+PROCESS {
+    TRY {
 
         # # # # # # # # # # # # # # # # #
         # SEARCHROOT parameter specified#
         # # # # # # # # # # # # # # # # #
 
-        IF ($PSBoundParameters['SearchRoot'])
-        {
+        IF ($PSBoundParameters['SearchRoot']) {
             Write-Verbose -Message "[PROCESS] SearchRoot specified"
-            FOREACH ($item in $SearchRoot)
-            {
+            FOREACH ($item in $SearchRoot) {
                 # ADGroup Splatting
                 $ADGroupParams = @{ }
 
 
                 # ActiveDirectory Module
-                IF ($ADModule)
-                {
+                IF ($ADModule) {
                     $ADGroupParams.SearchBase = $item
 
                     # Server Specified
-                    IF ($PSBoundParameters['Server']) { $ADGroupParams.Server = $Server}
+                    IF ($PSBoundParameters['Server']) { $ADGroupParams.Server = $Server }
                 }
-                IF ($QuestADSnappin)
-                {
+                IF ($QuestADSnappin) {
                     $ADGroupParams.SearchRoot = $item
 
                     # Server Specified
@@ -402,8 +382,7 @@ PROCESS
                 # # # # # # # # # # # # # # # # # #
                 # SEARCHSCOPE Parameter specified #
                 # # # # # # # # # # # # # # # # # #
-                IF ($PSBoundParameters['SearchScope'])
-                {
+                IF ($PSBoundParameters['SearchScope']) {
                     Write-Verbose -Message "[PROCESS] SearchScope specified"
                     $ADGroupParams.SearchScope = $SearchScope
                 }
@@ -412,8 +391,7 @@ PROCESS
                 # # # # # # # # # # # # # # # # #
                 # GROUPSCOPE Parameter specified#
                 # # # # # # # # # # # # # # # # #
-                IF ($PSBoundParameters['GroupScope'])
-                {
+                IF ($PSBoundParameters['GroupScope']) {
                     Write-Verbose -Message "[PROCESS] GroupScope specified"
                     # ActiveDirectory Module Parameter
                     IF ($ADModule) { $ADGroupParams.Filter = "GroupScope -eq `'$GroupScope`'" }
@@ -425,52 +403,45 @@ PROCESS
                 # # # # # # # # # # # # # # # # #
                 # GROUPTYPE Parameter specified #
                 # # # # # # # # # # # # # # # # #
-                IF ($PSBoundParameters['GroupType'])
-                {
+                IF ($PSBoundParameters['GroupType']) {
                     Write-Verbose -Message "[PROCESS] GroupType specified"
                     # ActiveDirectory Module
-                    IF ($ADModule)
-                    {
+                    IF ($ADModule) {
                         # ActiveDirectory Module Parameter
-                        IF ($ADGroupParams.Filter)
-                        {
+                        IF ($ADGroupParams.Filter) {
                             $ADGroupParams.Filter = "$($ADGroupParams.Filter) -and GroupCategory -eq `'$GroupType`'"
                         }
-                        ELSE
-                        {
+                        ELSE {
                             $ADGroupParams.Filter = "GroupCategory -eq '$GroupType'"
                         }
                     }
                     # Quest ActiveDirectory Snapin
-                    ELSE
-                    {
+                    ELSE {
                         $ADGroupParams.GroupType = $GroupType
                     }
                 }#IF ($PSBoundParameters['GroupType'])
 
 
 
-                IF ($ADModule)
-                {
-                    IF (-not($ADGroupParams.filter)){$ADGroupParams.Filter = "*"}
+                IF ($ADModule) {
+                    IF (-not($ADGroupParams.filter)) { $ADGroupParams.Filter = "*" }
 
                     Write-Verbose -Message "[PROCESS] AD Module - Querying..."
 
                     # Add the groups to the variable $Group
                     $GroupSearch = Get-ADGroup @ADGroupParams
 
-                    if ($GroupSearch){
+                    if ($GroupSearch) {
                         $group += $GroupSearch.Distinguishedname
                         Write-Verbose -Message "[PROCESS] OU: $item"
                     }
                 }
 
-                IF ($QuestADSnappin)
-                {
+                IF ($QuestADSnappin) {
                     Write-Verbose -Message "[PROCESS] Quest AD Snapin - Querying..."
                     # Add the groups to the variable $Group
                     $GroupSearchQuest = Get-QADGroup @ADGroupParams
-                    if ($GroupSearchQuest){
+                    if ($GroupSearchQuest) {
                         $group += $GroupSearchQuest.DN
                         Write-Verbose -Message "[PROCESS] OU: $item"
                     }
@@ -486,17 +457,14 @@ PROCESS
         # FILE parameter specified  #
         # # # # # # # # # # # # # # #
 
-        IF ($PSBoundParameters['File'])
-        {
+        IF ($PSBoundParameters['File']) {
             Write-Verbose -Message "[PROCESS] File"
-            FOREACH ($item in $File)
-            {
+            FOREACH ($item in $File) {
                 Write-Verbose -Message "[PROCESS] Loading File: $item"
 
                 $FileContent = Get-Content -Path $File
 
-                if ($FileContent)
-                {
+                if ($FileContent) {
                     # Add the groups to the variable $Group
                     $Group += Get-Content -Path $File
                 }
@@ -513,10 +481,8 @@ PROCESS
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
         # This will run for any parameter set name ParameterSetName = OU, Group or File
-        FOREACH ($item in $Group)
-        {
-            TRY
-            {
+        FOREACH ($item in $Group) {
+            TRY {
 
                 Write-Verbose -Message "[PROCESS] GROUP: $item... "
 
@@ -525,8 +491,7 @@ PROCESS
                 $GroupSplatting.Identity = $item
 
                 # Group Information
-                if ($ADModule)
-                {
+                if ($ADModule) {
                     Write-Verbose -Message "[PROCESS] ActiveDirectory module"
 
                     # Add the Server if specified
@@ -537,8 +502,7 @@ PROCESS
                     $DomainName = ($GroupName.canonicalname -split '/')[0]
                     $RealGroupName = $GroupName.name
                 }
-                if ($QuestADSnappin)
-                {
+                if ($QuestADSnappin) {
                     Write-Verbose -Message "[PROCESS] Quest ActiveDirectory Snapin"
 
                     # Add the Server if specified
@@ -551,8 +515,7 @@ PROCESS
                 }
 
                 # GroupName Found
-                IF ($GroupName)
-                {
+                IF ($GroupName) {
 
                     # Splatting for the AD Group Members Request
                     $GroupMemberSplatting = @{ }
@@ -560,18 +523,16 @@ PROCESS
 
 
                     # Get GroupName Membership
-                    if ($ADModule)
-                    {
+                    if ($ADModule) {
                         Write-Verbose -Message "[PROCESS] GROUP: $item - Querying Membership (AD Module)"
 
                         # Add the Server if specified
                         IF ($PSBoundParameters['Server']) { $GroupMemberSplatting.Server = $Server }
 
                         # Look for Members
-                        $Members = Get-ADGroupMember @GroupMemberSplatting -Recursive -ErrorAction Stop -ErrorVariable ErrorProcessGetADGroupMember | Select-Object -Property *,@{ Name = 'DN'; Expression = { $_.DistinguishedName } }
+                        $Members = Get-ADGroupMember @GroupMemberSplatting -Recursive -ErrorAction Stop -ErrorVariable ErrorProcessGetADGroupMember | Select-Object -Property *, @{ Name = 'DN'; Expression = { $_.DistinguishedName } }
                     }
-                    if ($QuestADSnappin)
-                    {
+                    if ($QuestADSnappin) {
                         Write-Verbose -Message "[PROCESS] GROUP: $item - Querying Membership (Quest AD Snapin)"
 
                         # Add the Server if specified
@@ -581,11 +542,10 @@ PROCESS
                     }
                     # NO MEMBERS, Add some info in $members to avoid the $null
                     # If the value is $null the compare-object won't work
-                    IF (-not ($Members))
-                    {
+                    IF (-not ($Members)) {
                         Write-Verbose -Message "[PROCESS] GROUP: $item is empty"
                         $Members = New-Object -TypeName PSObject -Property @{
-                            Name = "No User or Group"
+                            Name           = "No User or Group"
                             SamAccountName = "No User or Group"
                         }
                     }
@@ -594,14 +554,12 @@ PROCESS
                     # GroupName Membership File
                     # If the file doesn't exist, assume we don't have a record to refer to
                     $StateFile = "$($DomainName)_$($RealGroupName)-membership.csv"
-                    IF (!(Test-Path -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile)))
-                    {
+                    IF (!(Test-Path -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile))) {
                         Write-Verbose -Message "[PROCESS] $item - The following file did not exist: $StateFile"
                         Write-Verbose -Message "[PROCESS] $item - Exporting the current membership information into the file: $StateFile"
                         $Members | Export-csv -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile) -NoTypeInformation
                     }
-                    ELSE
-                    {
+                    ELSE {
                         Write-Verbose -Message "[PROCESS] $item - The following file Exists: $StateFile"
                     }
 
@@ -629,8 +587,7 @@ PROCESS
                     #>
 
                     # CHANGES FOUND !
-                    If ($Changes)
-                    {
+                    If ($Changes) {
                         Write-Verbose -Message "[PROCESS] $item - Some changes found"
                         $changes | Select-Object -Property DateTime, State, Name, SamAccountName, DN
 
@@ -641,17 +598,14 @@ PROCESS
                         Write-Verbose -Message "[PROCESS] $item - Change history files: $(($ChangesHistoryFiles|Measure-Object).Count)"
 
                         # Process each history changes
-                        IF ($ChangesHistoryFiles)
-                        {
+                        IF ($ChangesHistoryFiles) {
                             $infoChangeHistory = @()
-                            FOREACH ($file in $ChangesHistoryFiles.FullName)
-                            {
+                            FOREACH ($file in $ChangesHistoryFiles.FullName) {
                                 Write-Verbose -Message "[PROCESS] $item - Change history files - Loading $file"
                                 # Import the file and show the $file creation time and its content
                                 $ImportedFile = Import-Csv -Path $file -ErrorAction Stop -ErrorVariable ErrorProcessImportCSVChangeHistory
-                                FOREACH ($obj in $ImportedFile)
-                                {
-                                    $Output = "" | Select-Object -Property DateTime, State, DisplayName,Name, SamAccountName, DN
+                                FOREACH ($obj in $ImportedFile) {
+                                    $Output = "" | Select-Object -Property DateTime, State, DisplayName, Name, SamAccountName, DN
                                     #$Output.DateTime = $file.CreationTime.GetDateTimeFormats("u") | Out-String
                                     $Output.DateTime = $obj.DateTime
                                     $Output.State = $obj.State
@@ -668,12 +622,10 @@ PROCESS
                         # CHANGE(S) EXPORT TO CSV
                         Write-Verbose -Message "[PROCESS] $item - Save changes to a ChangesHistory file"
 
-                        IF (-not (Test-Path -path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$($DomainName)_$($RealGroupName)-ChangeHistory.csv")))
-                        {
+                        IF (-not (Test-Path -path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$($DomainName)_$($RealGroupName)-ChangeHistory.csv"))) {
                             $Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$($DomainName)_$($RealGroupName)-ChangeHistory.csv") -NoTypeInformation
                         }
-                        ELSE
-                        {
+                        ELSE {
                             #$Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$DomainName_$RealGroupName-ChangeHistory-$DateFormat.csv") -NoTypeInformation
                             $Changes | Export-Csv -Path (Join-Path -Path $ScriptPathChangeHistory -ChildPath "$($DomainName)_$($RealGroupName)-ChangeHistory.csv") -NoTypeInformation -Append
                         }
@@ -699,12 +651,11 @@ PROCESS
                         $body += "<i>The membership of this group changed. See the following Added or Removed members.</i>"
 
                         # Removing the old DisplayName Property
-                        $Changes = $changes | Select-Object -Property DateTime, State,Name, SamAccountName, DN
+                        $Changes = $changes | Select-Object -Property DateTime, State, Name, SamAccountName, DN
 
                         $body += $changes | ConvertTo-Html -head $head | Out-String
                         $body += "<br><br><br>"
-                        IF ($ChangesHistoryFiles)
-                        {
+                        IF ($ChangesHistoryFiles) {
                             # Removing the old DisplayName Property
                             $infoChangeHistory = $infoChangeHistory | Select-Object -Property DateTime, State, Name, SamAccountName, DN
 
@@ -743,12 +694,10 @@ PROCESS
                         $Members | Export-csv -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile) -NoTypeInformation -Encoding Unicode
 
                         # Export HTML File
-                        IF ($PSBoundParameters['HTMLLog'])
-                        {
+                        IF ($PSBoundParameters['HTMLLog']) {
                             # Create HTML Directory if it does not exist
                             $ScriptPathHTML = $ScriptPath + "\HTML"
-                            IF (!(Test-Path -Path $ScriptPathHTML))
-                            {
+                            IF (!(Test-Path -Path $ScriptPathHTML)) {
                                 Write-Verbose -Message "[PROCESS] Creating the HTML Folder : $ScriptPathHTML"
                                 New-Item -Path $ScriptPathHTML -ItemType Directory | Out-Null
                             }
@@ -765,8 +714,7 @@ PROCESS
                     ELSE { Write-Verbose -Message "[PROCESS] $item - No Change" }
 
                 }#IF ($GroupName)
-                ELSE
-                {
+                ELSE {
                     Write-Verbose -message "[PROCESS] $item - Group can't be found"
                     #IF (Get-ChildItem (Join-Path $ScriptPathOutput "*$item*-membership.csv" -ErrorAction Continue) -or (Get-ChildItem (Join-Path $ScriptPathChangeHistory "*$item*.csv" -ErrorAction Continue)))
                     #{
@@ -775,8 +723,7 @@ PROCESS
 
                 }#ELSE $GroupName
             }#TRY
-            CATCH
-            {
+            CATCH {
                 Write-Warning -Message "[PROCESS] Something went wrong"
                 #Write-Warning -Message $_.Exception.Message
                 Write-Warning -Message $Error[0]
@@ -798,15 +745,13 @@ PROCESS
             }#CATCH
         }#FOREACH
     }#TRY
-    CATCH
-    {
+    CATCH {
         Write-Warning -Message "[PROCESS] Something wrong happened"
         #Write-Warning -Message $error[0].exception.message
         Write-Warning -Message $error[0]
     }
 
 }#PROCESS
-END
-{
+END {
     Write-Verbose -message "[END] Script Completed"
 }
