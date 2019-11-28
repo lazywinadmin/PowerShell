@@ -3,6 +3,8 @@ Function Expand-GZipFile
 <#
 .Synopsis
     Unzip a gz file
+.Description
+    Unzip a gz file
 .Notes
     Change History
     1.0 | 2019/03/22 | francois-xavier cat (@lazywinadmin)
