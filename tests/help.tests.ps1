@@ -64,8 +64,11 @@ Describe 'Comment based help' -Tag @('Help') {
 }
 Describe 'func' -Tag @('func') {
     foreach ($myscript in $scripts) {
-        it "[$($myscript.BaseName)] `$Error[*]" {
+        it "[$($myscript.BaseName)] `$Error[*] Variable should not be present" {
             "$($myscript.FullName)" | Should -Not -FileContentMatch ([regex]::Escape('$error['))
+        }
+        it "[$($myscript.BaseName)] Error Handling should be present" {
+            "$($myscript.FullName)" | Should -FileContentMatch 'try|try\s+{'
         }
     }
 }
