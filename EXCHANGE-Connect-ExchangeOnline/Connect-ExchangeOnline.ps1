@@ -51,7 +51,7 @@
             Import-PSSession -Session (New-pssession @Splatting -ErrorAction Stop) -ErrorAction Stop
         }
         CATCH {
-            $Error[0]
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
 }
