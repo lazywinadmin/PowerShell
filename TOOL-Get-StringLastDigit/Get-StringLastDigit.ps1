@@ -26,10 +26,13 @@
 #>
     [CmdletBinding()]
     PARAM($String)
-    #Check if finish by Digit
-    if ($String -match "^.*\d$") {
-        # Output the last digit
-        $String.Substring(($String.ToCharArray().count) - 1)
+    try {
+        #Check if finish by Digit
+        if ($String -match "^.*\d$") {
+            # Output the last digit
+            $String.Substring(($String.ToCharArray().count) - 1)
+        }
+        else { Write-Verbose -Message "The following string does not finish by a digit: $String" }
     }
-    else { Write-Verbose -Message "The following string does not finish by a digit: $String" }
+    catch { $PSCmdlet.ThrowTerminatingError($_) }
 }
