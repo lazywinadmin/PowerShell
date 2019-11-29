@@ -83,7 +83,7 @@ PROCESS {
                         }#$Prop
 
                         # Output Current Object
-                        New-Object PSobject -Property $Prop
+                        New-Object -TypeName PSobject -Property $Prop
                     }#FOREACH
                 }#TRY
                 CATCH {
@@ -114,11 +114,11 @@ PROCESS {
                         }#$Prop
 
                         # Output Current Object
-                        New-Object PSobject -Property $Prop
+                        New-Object -TypeName PSobject -Property $Prop
                     }#FOREACH
                 }#TRY
                 CATCH {
-                    $PSCmdlet.ThrowTerminatingError($_)
+                    Throw $_
                 }
             }
         }
@@ -145,11 +145,11 @@ PROCESS {
                         }#$Prop
 
                         # Output Current Object
-                        New-Object PSobject -Property $Prop
+                        New-Object -TypeName PSobject -Property $Prop
                     }#FOREACH
                 }#TRY
                 CATCH {
-                    $PSCmdlet.ThrowTerminatingError($_)
+                    Throw $_
                 }
             }
         }
