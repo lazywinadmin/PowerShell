@@ -1,6 +1,5 @@
-function Remove-StringSpecialCharacter
-{
-<#
+function Remove-StringSpecialCharacter {
+    <#
 .SYNOPSIS
     This function will remove the special character from a string.
 
@@ -50,7 +49,7 @@ function Remove-StringSpecialCharacter
         [String[]]$SpecialCharacterToKeep
     )
     PROCESS {
-        try{
+        try {
             IF ($PSBoundParameters["SpecialCharacterToKeep"]) {
                 $Regex = "[^\p{L}\p{Nd}"
                 Foreach ($Character in $SpecialCharacterToKeep) {
@@ -71,7 +70,8 @@ function Remove-StringSpecialCharacter
                 Write-Verbose -Message "Original String: $Str"
                 $Str -replace $regex, ""
             }
-        }catch{
+        }
+        catch {
             $PSCmdlet.ThrowTerminatingError($_)
         }
     } #PROCESS
