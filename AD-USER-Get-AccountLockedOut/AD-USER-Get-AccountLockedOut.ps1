@@ -98,7 +98,7 @@ Function Get-AccountLockedOut {
             } | Select-Object -Property TimeCreated, UserName, ClientName
         }#TRY
         CATCH {
-
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }#PROCESS
 }
