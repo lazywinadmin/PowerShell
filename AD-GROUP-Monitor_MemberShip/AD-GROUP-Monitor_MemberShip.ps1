@@ -341,7 +341,7 @@ BEGIN {
 
         #Show last error
         #Write-Warning -Message $_.Exception.Message
-        Write-Warning -Message $Error[0]
+        Throw $_
 
         # Quest AD Cmdlets Errors
         if ($ErrorBEGINGetQuestAD) { Write-Warning -Message "[BEGIN] Can't Find the Quest Active Directory Snappin" }
@@ -728,7 +728,7 @@ PROCESS {
             CATCH {
                 Write-Warning -Message "[PROCESS] Something went wrong"
                 #Write-Warning -Message $_.Exception.Message
-                Write-Warning -Message $Error[0]
+                Throw $_
 
                 #Quest Snappin Errors
                 if ($ErrorProcessGetQADGroup) { Write-warning -Message "[PROCESS] QUEST AD - Error When querying the group $item in Active Directory" }
@@ -743,14 +743,13 @@ PROCESS {
                 if ($ErrorProcessCompareObject) { Write-warning -Message "[PROCESS] Error when comparing" }
                 if ($ErrorProcessImportCSVChangeHistory) { Write-warning -Message "[PROCESS] Error Importing $file" }
 
-                Write-Warning -Message $error[0].exception.Message
+                throw $_
             }#CATCH
         }#FOREACH
     }#TRY
     CATCH {
         Write-Warning -Message "[PROCESS] Something wrong happened"
-        #Write-Warning -Message $error[0].exception.message
-        Write-Warning -Message $error[0]
+        Throw $_
     }
 
 }#PROCESS
