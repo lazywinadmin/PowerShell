@@ -30,6 +30,7 @@ Function Get-AccountLockedOut
         [ValidateNotNullorEmpty()]
         [string]$UserName = '*',
         [datetime]$StartTime = (Get-Date).AddDays(-1),
+        [PSCredential]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
     BEGIN
