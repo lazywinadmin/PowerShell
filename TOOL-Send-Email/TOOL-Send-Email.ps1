@@ -302,8 +302,7 @@
 
         }#TRY
         CATCH {
-            Write-Warning -message "[PROCESS] Something wrong happened"
-            Write-Warning -Message $Error[0].Exception.Message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }#Process
     END {
