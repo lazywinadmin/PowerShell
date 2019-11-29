@@ -87,8 +87,7 @@ PROCESS {
                     }#FOREACH
                 }#TRY
                 CATCH {
-                    Write-Warning -Message "Something wrong happened with $($CurrentVMhost.name)"
-                    Write-Warning -Message $Error[0].Exception.Message
+                    Throw $_
                 }
             }
         }
