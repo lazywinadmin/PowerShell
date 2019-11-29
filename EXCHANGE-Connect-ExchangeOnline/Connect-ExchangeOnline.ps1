@@ -1,6 +1,5 @@
-﻿function Connect-ExchangeOnline
-{
-<#
+﻿function Connect-ExchangeOnline {
+    <#
     .SYNOPSIS
         Function to Connect to an Exchange Online
 
@@ -32,30 +31,26 @@
         [Parameter(Mandatory)]
         $Credential
     )
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
             # Make sure the credential username is something like admin@domain.com
-            if ($Credential.username -notlike '*@*')
-            {
+            if ($Credential.username -notlike '*@*') {
                 Write-Error 'Must be email format'
                 break
             }
 
             $Splatting = @{
-                ConnectionUri = $ConnectionUri
+                ConnectionUri     = $ConnectionUri
                 ConfigurationName = 'microsoft.exchange'
-                Authentication = 'Basic'
-                AllowRedirection = $true
+                Authentication    = 'Basic'
+                AllowRedirection  = $true
             }
             IF ($PSBoundParameters['Credential']) { $Splatting.Credential = $Credential }
 
             # Load Exchange cmdlets (Implicit remoting)
             Import-PSSession -Session (New-pssession @Splatting -ErrorAction Stop) -ErrorAction Stop
         }
-        CATCH
-        {
+        CATCH {
             $Error[0]
         }
     }
