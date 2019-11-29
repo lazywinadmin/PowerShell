@@ -199,8 +199,7 @@ table.gridtable td {
     }#TRY
     CATCH
     {
-        Write-Warning -Message "BEGIN BLOCK - Something went wrong"
-        Write-Warning -Message $Error[0].Exception.Message
+        Throw $_
     }#CATCH
 }#BEGIN
 
@@ -354,8 +353,7 @@ PROCESS
     }#TRY
     CATCH
     {
-        Write-Warning -Message "[PROCESS] Something wrong happened"
-        Write-Warning -Message $Error[0].Exception.Message
+        Throw $_
     }#CATCH
     FINALLY
     {
