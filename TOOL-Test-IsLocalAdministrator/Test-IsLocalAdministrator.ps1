@@ -1,5 +1,5 @@
 ﻿function Test-IsLocalAdministrator {
-<#
+    <#
 .SYNOPSIS
     Function to verify if the current user is a local Administrator on the current system
 .DESCRIPTION
@@ -14,5 +14,12 @@
     lazywinadmin.com
     github.com/lazywinadmin
 #>
-    ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+    [CmdletBinding()]
+    PARAM()
+    try {
+        ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+    }
+    catch {
+        $PSCmdlet.ThrowTerminatingError($_)
+    }
 }
