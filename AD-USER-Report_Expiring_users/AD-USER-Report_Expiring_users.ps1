@@ -107,11 +107,13 @@ BEGIN {
 
             [String]$Attachment,
 
-            [Parameter(ParameterSetName = "Credential", Mandatory = $true)]
-            [String]$Username,
+            #[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
+            #[String]$Username,
 
-            [Parameter(ParameterSetName = "Credential", Mandatory = $true)]
-            [String]$Password,
+            #[Parameter(ParameterSetName = "Credential", Mandatory = $true)]
+            #[String]$Password,
+
+            [pscredential]$Credential,
 
             [Parameter(Mandatory = $true)]
             [ValidateScript( {
@@ -157,14 +159,15 @@ BEGIN {
                 }
 
                 # Credential Paramenter
-                IF (($PSBoundParameters['Username']) -and ($PSBoundParameters['Password'])) {
+                #IF (($PSBoundParameters['Username']) -and ($PSBoundParameters['Password'])) {
+                IF ($PSBoundParameters['Credential']){
                     # Create Credential Object
-                    $Credentials = New-Object -TypeName System.Net.NetworkCredential
-                    $Credentials.UserName = $username.Split("@")[0]
-                    $Credentials.Password = $Password
+                    #$Credential = New-Object -TypeName System.Net.NetworkCredential
+                    #$Credential.UserName = $username.Split("@")[0]
+                    #$Credential.Password = $Password
 
                     # Add the credentials object to the SMTPClient obj
-                    $SMTPClient.Credentials = $Credentials
+                    $SMTPClient.Credentials = $Credential
                 }
 
                 # Send the Email
