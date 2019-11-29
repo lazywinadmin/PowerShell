@@ -53,7 +53,7 @@
                 [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($StringValue))
             }
             CATCH {
-                Write-Error -Message $Error[0].exception.message
+                $PSCmdlet.ThrowTerminatingError($_)
             }
         }
     }
