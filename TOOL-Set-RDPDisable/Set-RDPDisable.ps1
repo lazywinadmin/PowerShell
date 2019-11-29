@@ -1,6 +1,5 @@
-﻿function Set-RDPDisable
-{
-<#
+﻿function Set-RDPDisable {
+    <#
     .SYNOPSIS
         The function Set-RDPDisable disable RDP remotely using the registry
 
@@ -28,14 +27,10 @@
     PARAM (
         [String[]]$ComputerName = $env:COMPUTERNAME
     )
-    PROCESS
-    {
-        FOREACH ($Computer in $ComputerName)
-        {
-            TRY
-            {
-                IF (Test-Connection -ComputerName $Computer -Count 1 -Quiet)
-                {
+    PROCESS {
+        FOREACH ($Computer in $ComputerName) {
+            TRY {
+                IF (Test-Connection -ComputerName $Computer -Count 1 -Quiet) {
                     $regKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]::LocalMachine, $Computer)
                     $regKey = $regKey.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Terminal Server", $True)
                     $regkey.SetValue("fDenyTSConnections", 1)
@@ -43,9 +38,8 @@
                     $regKey.Close()
                 } #IF Test-Connection
             } #Try
-            CATCH
-            {
-                $Error[0].Exception.Message
+            CATCH {
+                $PSCmdlet.ThrowTerminatingError($_)
             } #Catch
         } #FOREACH
     } #Process
