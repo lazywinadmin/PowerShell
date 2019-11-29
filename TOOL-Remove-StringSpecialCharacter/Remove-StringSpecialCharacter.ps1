@@ -50,25 +50,29 @@ function Remove-StringSpecialCharacter
         [String[]]$SpecialCharacterToKeep
     )
     PROCESS {
-        IF ($PSBoundParameters["SpecialCharacterToKeep"]) {
-            $Regex = "[^\p{L}\p{Nd}"
-            Foreach ($Character in $SpecialCharacterToKeep) {
-                IF ($Character -eq "-") {
-                    $Regex += "-"
+        try{
+            IF ($PSBoundParameters["SpecialCharacterToKeep"]) {
+                $Regex = "[^\p{L}\p{Nd}"
+                Foreach ($Character in $SpecialCharacterToKeep) {
+                    IF ($Character -eq "-") {
+                        $Regex += "-"
+                    }
+                    else {
+                        $Regex += [Regex]::Escape($Character)
+                    }
+                    #$Regex += "/$character"
                 }
-                else {
-                    $Regex += [Regex]::Escape($Character)
-                }
-                #$Regex += "/$character"
+
+                $Regex += "]+"
+            } #IF($PSBoundParameters["SpecialCharacterToKeep"])
+            ELSE { $Regex = "[^\p{L}\p{Nd}]+" }
+
+            FOREACH ($Str in $string) {
+                Write-Verbose -Message "Original String: $Str"
+                $Str -replace $regex, ""
             }
-
-            $Regex += "]+"
-        } #IF($PSBoundParameters["SpecialCharacterToKeep"])
-        ELSE { $Regex = "[^\p{L}\p{Nd}]+" }
-
-        FOREACH ($Str in $string) {
-            Write-Verbose -Message "Original String: $Str"
-            $Str -replace $regex, ""
+        }catch{
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     } #PROCESS
 }
