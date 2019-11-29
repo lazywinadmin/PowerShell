@@ -1,6 +1,5 @@
-﻿function Get-StringLastDigit
-{
-<#
+﻿function Get-StringLastDigit {
+    <#
     .SYNOPSIS
         Get the last digit of a string
     .DESCRIPTION
@@ -25,13 +24,12 @@
         @lazywinadmin
         lazywinadmin.com
 #>
-[CmdletBinding()]
-PARAM($String)
+    [CmdletBinding()]
+    PARAM($String)
     #Check if finish by Digit
-    if ($String -match "^.*\d$")
-    {
+    if ($String -match "^.*\d$") {
         # Output the last digit
-        $String.Substring(($String.ToCharArray().count)-1)
+        $String.Substring(($String.ToCharArray().count) - 1)
     }
-    else {Write-Verbose -Message "The following string does not finish by a digit: $String"}
+    else { Write-Verbose -Message "The following string does not finish by a digit: $String" }
 }
