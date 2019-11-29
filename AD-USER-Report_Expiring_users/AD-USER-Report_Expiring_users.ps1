@@ -175,8 +175,7 @@ BEGIN {
 
             }#TRY
             CATCH {
-                Write-Warning -message "[PROCESS] Something wrong happened"
-                Write-Warning -Message $Error[0].Exception.Message
+                $PSCmdlet.ThrowTerminatingError($_)
             }
         }#Process
         END {
@@ -241,8 +240,7 @@ td {
 
     }#TRY
     CATCH {
-        Write-Warning -Message "[PROCESS] Something happened"
-        Write-Warning -Message $Error[0].Exception.Message
+        Throw $_
     }
 }#PROCESS
 END {
