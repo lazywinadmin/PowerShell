@@ -29,6 +29,7 @@
     (
         [system.string]$ConnectionUri = 'https://ps.outlook.com/powershell/',
         [Parameter(Mandatory)]
+        [pscredential]
         $Credential
     )
     PROCESS {
