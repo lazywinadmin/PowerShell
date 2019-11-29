@@ -1,7 +1,6 @@
-Function Get-AccountLockedOut
-{
+Function Get-AccountLockedOut {
 
-<#
+    <#
 .SYNOPSIS
     This function will find the device where the account get lockedout
 .DESCRIPTION
@@ -33,18 +32,15 @@ Function Get-AccountLockedOut
         [PSCredential]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
-    BEGIN
-    {
-        TRY
-        {
+    BEGIN {
+        TRY {
             #Variables
             $TimeDifference = (Get-Date) - $StartTime
 
             Write-Verbose -Message "[BEGIN] Looking for PDC..."
 
-            function Get-PDCServer
-            {
-    <#
+            function Get-PDCServer {
+                <#
     .SYNOPSIS
         Retrieve the Domain Controller with the PDC Role in the domain
     #>
@@ -53,47 +49,40 @@ Function Get-AccountLockedOut
                     $Credential = [System.Management.Automation.PSCredential]::Empty
                 )
 
-                IF ($PSBoundParameters['Credential'])
-                {
+                IF ($PSBoundParameters['Credential']) {
 
                     [System.DirectoryServices.ActiveDirectory.Domain]::GetDomain(
-                    (New-Object -TypeName System.DirectoryServices.ActiveDirectory.DirectoryContext -ArgumentList 'Domain', $Domain, $($Credential.UserName), $($Credential.GetNetworkCredential().password))
+                        (New-Object -TypeName System.DirectoryServices.ActiveDirectory.DirectoryContext -ArgumentList 'Domain', $Domain, $($Credential.UserName), $($Credential.GetNetworkCredential().password))
                     ).PdcRoleOwner.name
                 }#Credentials
-                ELSE
-                {
+                ELSE {
                     [System.DirectoryServices.ActiveDirectory.Domain]::GetDomain(
-                    (New-Object -TypeName System.DirectoryServices.ActiveDirectory.DirectoryContext('Domain', $Domain))
+                        (New-Object -TypeName System.DirectoryServices.ActiveDirectory.DirectoryContext('Domain', $Domain))
                     ).PdcRoleOwner.name
                 }
             }#function Get-PDCServer
 
             Write-Verbose -Message "[BEGIN] PDC is $(Get-PDCServer)"
         }#TRY
-        CATCH
-        {
+        CATCH {
             Write-Warning -Message "[BEGIN] Something wrong happened"
             Write-Warning -Message $Error[0]
         }
 
     }#BEGIN
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
             # Define the parameters
             $Splatting = @{ }
 
             # Add the credential to the splatting if specified
-            IF ($PSBoundParameters['Credential'])
-            {
+            IF ($PSBoundParameters['Credential']) {
                 Write-Verbose -Message "[PROCESS] Credential Specified"
                 $Splatting.Credential = $Credential
                 $Splatting.ComputerName = $(Get-PDCServer -Domain $DomainName -Credential $Credential)
             }
-            ELSE
-            {
-                $Splatting.ComputerName =$(Get-PDCServer -Domain $DomainName)
+            ELSE {
+                $Splatting.ComputerName = $(Get-PDCServer -Domain $DomainName)
             }
 
             # Query the PDC
@@ -104,12 +93,11 @@ Function Get-AccountLockedOut
                 Get-WinEvent -FilterHashtable @{ LogName = 'Security'; Id = 4740; StartTime = $Using:StartTime } |
                 Where-Object { $_.Properties[0].Value -like "$Using:UserName" } |
                 Select-Object -Property TimeCreated,
-                              @{ Label = 'UserName'; Expression = { $_.Properties[0].Value } },
-                              @{ Label = 'ClientName'; Expression = { $_.Properties[1].Value } }
+                @{ Label = 'UserName'; Expression = { $_.Properties[0].Value } },
+                @{ Label = 'ClientName'; Expression = { $_.Properties[1].Value } }
             } | Select-Object -Property TimeCreated, UserName, ClientName
         }#TRY
-        CATCH
-        {
+        CATCH {
 
         }
     }#PROCESS
