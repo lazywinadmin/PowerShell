@@ -1,5 +1,4 @@
-function Get-HelpMessage
-{
+function Get-HelpMessage {
     <#
     .SYNOPSIS
     Function to explain why an error occurred and provides problem-solving information.
@@ -37,5 +36,10 @@ function Get-HelpMessage
     [CmdletBinding()]
     [Alias('HelpMsg')]
     PARAM($Id)
-    [ComponentModel.Win32Exception] $id
+    try {
+        [ComponentModel.Win32Exception] $id
+    }
+    catch {
+        $PSCmdlet.ThrowTerminatingError($_)
+    }
 }
