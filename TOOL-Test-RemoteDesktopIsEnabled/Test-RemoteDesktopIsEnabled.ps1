@@ -42,8 +42,7 @@
             }
         }
         CATCH {
-            Write-Warning -Message "Something wrong happened"
-            Write-Warning -MEssage $Error[0].Exception.Message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }#FOREACH
 
