@@ -1,6 +1,5 @@
-﻿function Set-PowerShellWindowTitle
-{
-<#
+﻿function Set-PowerShellWindowTitle {
+    <#
     .SYNOPSIS
         Function to set the title of the PowerShell Window
 
@@ -18,7 +17,13 @@
         lazywinadmin.com
         @lazywinadmin
 #>
+    [CmdletBinding()]
     PARAM($Title)
-    $Host.UI.RawUI.WindowTitle = $Title
+    try {
+        $Host.UI.RawUI.WindowTitle = $Title
+    }
+    catch {
+        $PSCmdlet.ThrowTerminatingError($_)
+    }
 }
 
