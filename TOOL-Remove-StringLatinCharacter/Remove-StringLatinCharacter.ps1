@@ -1,6 +1,5 @@
-﻿function Remove-StringLatinCharacter
-{
-<#
+﻿function Remove-StringLatinCharacter {
+    <#
 .SYNOPSIS
     Function to remove diacritics from a string
 .DESCRIPTION
@@ -43,21 +42,17 @@
 #>
     [CmdletBinding()]
     PARAM (
-        [Parameter(ValueFromPipeline=$true)]
+        [Parameter(ValueFromPipeline = $true)]
         [System.String[]]$String
-        )
-    PROCESS
-    {
-        FOREACH ($StringValue in $String)
-        {
+    )
+    PROCESS {
+        FOREACH ($StringValue in $String) {
             Write-Verbose -Message "$StringValue"
 
-            TRY
-            {
+            TRY {
                 [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($StringValue))
             }
-            CATCH
-            {
+            CATCH {
                 Write-Error -Message $Error[0].exception.message
             }
         }
