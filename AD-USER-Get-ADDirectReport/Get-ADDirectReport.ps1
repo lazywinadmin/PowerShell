@@ -58,8 +58,7 @@ test_userA1         test_userA1         test_userA1@lazy... test_managerA
             IF (-not (Get-Module -Name ActiveDirectory)) { Import-Module -Name ActiveDirectory -ErrorAction 'Stop' -Verbose:$false }
         }
         CATCH {
-            Write-Verbose -Message "[BEGIN] Something wrong happened"
-            Write-Verbose -Message $Error[0].Exception.Message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
     PROCESS {
@@ -86,8 +85,7 @@ test_userA1         test_userA1         test_userA1@lazy... test_managerA
                 }#IF (-not($PSBoundParameters['Recurse']))
             }#TRY
             CATCH {
-                Write-Verbose -Message "[PROCESS] Something wrong happened"
-                Write-Verbose -Message $Error[0].Exception.Message
+                $PSCmdlet.ThrowTerminatingError($_)
             }
         }
     }
