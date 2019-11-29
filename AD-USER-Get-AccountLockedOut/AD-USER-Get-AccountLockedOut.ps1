@@ -46,6 +46,7 @@ Function Get-AccountLockedOut {
     #>
                 PARAM (
                     $Domain = $env:USERDOMAIN,
+                    [pscredential]
                     $Credential = [System.Management.Automation.PSCredential]::Empty
                 )
 
