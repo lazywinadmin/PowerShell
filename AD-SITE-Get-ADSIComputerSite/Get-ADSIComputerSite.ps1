@@ -1,6 +1,5 @@
-function Get-ADSIComputerSite
-{
-<#
+function Get-ADSIComputerSite {
+    <#
 .SYNOPSIS
     Function to retrieve the AD Site of a Computer
 
@@ -41,8 +40,7 @@ function Get-ADSIComputerSite
         [String[]]$ComputerName = $env:computername
     )
 
-    begin
-    {
+    begin {
         $code = @"
 using System;
 using System.Collections.Generic;
@@ -70,12 +68,9 @@ public static class NetApi32 {
 
         Add-Type -TypeDefinition $code
     }
-    process
-    {
-        foreach ($Computer in $ComputerName)
-        {
-            try
-            {
+    process {
+        foreach ($Computer in $ComputerName) {
+            try {
                 $Properties = @{
                     ComputerName = $Computer
                     SiteName     = [NetApi32]::DsGetSiteName($Computer)
@@ -83,8 +78,7 @@ public static class NetApi32 {
 
                 New-Object -TypeName PSObject -property $Properties
             }
-            catch
-            {
+            catch {
                 $pscmdlet.ThrowTerminatingError($_)
             }
         }
