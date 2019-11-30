@@ -1,5 +1,4 @@
-﻿function Get-ADGPOReplication
-{
+function Get-ADGPOReplication {
     <#
     .SYNOPSIS
         This function retrieve one or all the GPO and report their DSVersions and SysVolVersions (Users and Computers)
@@ -32,62 +31,51 @@
         [parameter(Mandatory = $True, ParameterSetName = "All")]
         [Switch]$All
     )
-    BEGIN
-    {
-        TRY
-        {
+    BEGIN {
+        TRY {
             if (-not (Get-Module -Name ActiveDirectory)) { Import-Module -Name ActiveDirectory -ErrorAction Stop -ErrorVariable ErrorBeginIpmoAD }
             if (-not (Get-Module -Name GroupPolicy)) { Import-Module -Name GroupPolicy -ErrorAction Stop -ErrorVariable ErrorBeginIpmoGP }
         }
-        CATCH
-        {
+        CATCH {
             Write-Warning -Message "[BEGIN] Something wrong happened"
             IF ($ErrorBeginIpmoAD) { Write-Warning -Message "[BEGIN] Error while Importing the module Active Directory" }
             IF ($ErrorBeginIpmoGP) { Write-Warning -Message "[BEGIN] Error while Importing the module Group Policy" }
             $PSCmdlet.ThrowTerminatingError($_)
         }
     }
-    PROCESS
-    {
-        FOREACH ($DomainController in ((Get-ADDomainController -ErrorAction Stop -ErrorVariable ErrorProcessGetDC -filter *).hostname))
-        {
-            TRY
-            {
-                IF ($psBoundParameters['GPOName'])
-                {
-                    Foreach ($GPOItem in $GPOName)
-                    {
+    PROCESS {
+        FOREACH ($DomainController in ((Get-ADDomainController -ErrorAction Stop -ErrorVariable ErrorProcessGetDC -filter *).hostname)) {
+            TRY {
+                IF ($psBoundParameters['GPOName']) {
+                    Foreach ($GPOItem in $GPOName) {
                         $GPO = Get-GPO -Name $GPOItem -Server $DomainController -ErrorAction Stop -ErrorVariable ErrorProcessGetGPO
 
                         [pscustomobject][ordered] @{
-                            GroupPolicyName = $GPOItem
-                            DomainController = $DomainController
-                            UserVersion = $GPO.User.DSVersion
-                            UserSysVolVersion = $GPO.User.SysvolVersion
-                            ComputerVersion = $GPO.Computer.DSVersion
+                            GroupPolicyName       = $GPOItem
+                            DomainController      = $DomainController
+                            UserVersion           = $GPO.User.DSVersion
+                            UserSysVolVersion     = $GPO.User.SysvolVersion
+                            ComputerVersion       = $GPO.Computer.DSVersion
                             ComputerSysVolVersion = $GPO.Computer.SysvolVersion
                         }#PSObject
                     }#Foreach ($GPOItem in $GPOName)
                 }#IF ($psBoundParameters['GPOName'])
-                IF ($psBoundParameters['All'])
-                {
+                IF ($psBoundParameters['All']) {
                     $GPOList = Get-GPO -All -Server $DomainController -ErrorAction Stop -ErrorVariable ErrorProcessGetGPOAll
 
-                    foreach ($GPO in $GPOList)
-                    {
+                    foreach ($GPO in $GPOList) {
                         [pscustomobject][ordered] @{
-                            GroupPolicyName = $GPO.DisplayName
-                            DomainController = $DomainController
-                            UserVersion = $GPO.User.DSVersion
-                            UserSysVolVersion = $GPO.User.SysvolVersion
-                            ComputerVersion = $GPO.Computer.DSVersion
+                            GroupPolicyName       = $GPO.DisplayName
+                            DomainController      = $DomainController
+                            UserVersion           = $GPO.User.DSVersion
+                            UserSysVolVersion     = $GPO.User.SysvolVersion
+                            ComputerVersion       = $GPO.Computer.DSVersion
                             ComputerSysVolVersion = $GPO.Computer.SysvolVersion
                         }#PSObject
                     }
                 }#IF ($psBoundParameters['All'])
             }#TRY
-            CATCH
-            {
+            CATCH {
                 Write-Warning -Message "[PROCESS] Something wrong happened"
                 IF ($ErrorProcessGetDC) { Write-Warning -Message "[PROCESS] Error while running retrieving Domain Controllers with Get-ADDomainController" }
                 IF ($ErrorProcessGetGPO) { Write-Warning -Message "[PROCESS] Error while running Get-GPO" }
