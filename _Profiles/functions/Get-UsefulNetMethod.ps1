@@ -1,4 +1,4 @@
-﻿Write-Host "[Math]::Round(7.9)"
+Write-Host "[Math]::Round(7.9)"
 
 Write-Host "[Convert]::ToString(576255753217, 8)"
 
