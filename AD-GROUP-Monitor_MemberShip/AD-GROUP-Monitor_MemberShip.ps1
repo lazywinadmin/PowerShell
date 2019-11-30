@@ -286,7 +286,8 @@ BEGIN {
         $ReportDateFormat = Get-Date -Format "yyyy\MM\dd HH:mm:ss"
 
         # Active Directory Module
-        IF (Get-Module -Name ActiveDirectory -ListAvailable) { #verify ad module is installed
+        IF (Get-Module -Name ActiveDirectory -ListAvailable) {
+            #verify ad module is installed
             Write-Verbose -Message "[BEGIN] Active Directory Module"
             # Verify Ad module is loaded
             IF (-not (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -ErrorVariable ErrorBEGINGetADModule)) {
@@ -300,7 +301,8 @@ BEGIN {
                 $global:ADModule = $true
             }
         }
-        ELSE { # Else we try to load Quest Ad Cmdlets
+        ELSE {
+            # Else we try to load Quest Ad Cmdlets
             Write-Verbose -Message "[BEGIN] Quest AD Snapin"
             # Verify Quest Active Directory Snapin is loaded
             IF (-not (Get-PSSnapin -Name Quest.ActiveRoles.ADManagement -ErrorAction Stop -ErrorVariable ErrorBEGINGetQuestAD)) {
@@ -559,7 +561,7 @@ PROCESS {
                     IF (!(Test-Path -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile))) {
                         Write-Verbose -Message "[PROCESS] $item - The following file did not exist: $StateFile"
                         Write-Verbose -Message "[PROCESS] $item - Exporting the current membership information into the file: $StateFile"
-                        $Members | Export-csv -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile) -NoTypeInformation
+                        $Members | Export-Csv -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile) -NoTypeInformation
                     }
                     ELSE {
                         Write-Verbose -Message "[PROCESS] $item - The following file Exists: $StateFile"
@@ -570,12 +572,12 @@ PROCESS {
                     Write-Verbose -Message "[PROCESS] $item - Comparing Current and Before"
                     $ImportCSV = Import-Csv -Path (Join-Path -path $ScriptPathOutput -childpath $StateFile) -ErrorAction Stop -ErrorVariable ErrorProcessImportCSV
                     $Changes = Compare-Object -DifferenceObject $ImportCSV -ReferenceObject $Members -ErrorAction stop -ErrorVariable ErrorProcessCompareObject -Property Name, SamAccountName, DN |
-                    Select-Object @{ Name = "DateTime"; Expression = { Get-Date -Format "yyyyMMdd-hh:mm:ss" } }, @{
-                        n = 'State'; e = {
-                            IF ($_.SideIndicator -eq "=>") { "Removed" }
-                            ELSE { "Added" }
-                        }
-                    }, DisplayName, Name, SamAccountName, DN | Where-Object { $_.name -notlike "*no user or group*" }
+                        Select-Object @{ Name = "DateTime"; Expression = { Get-Date -Format "yyyyMMdd-hh:mm:ss" } }, @{
+                            n = 'State'; e = {
+                                IF ($_.SideIndicator -eq "=>") { "Removed" }
+                                ELSE { "Added" }
+                            }
+                        }, DisplayName, Name, SamAccountName, DN | Where-Object { $_.name -notlike "*no user or group*" }
                     Write-Verbose -Message "[PROCESS] $item - Compare Block Done !"
 
                     <# Troubleshooting
@@ -693,7 +695,7 @@ PROCESS {
 
                         # GroupName Membership export to CSV
                         Write-Verbose -Message "[PROCESS] $item - Exporting the current membership to $StateFile"
-                        $Members | Export-csv -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile) -NoTypeInformation -Encoding Unicode
+                        $Members | Export-Csv -Path (Join-Path -Path $ScriptPathOutput -ChildPath $StateFile) -NoTypeInformation -Encoding Unicode
 
                         # Export HTML File
                         IF ($PSBoundParameters['HTMLLog']) {
@@ -731,17 +733,17 @@ PROCESS {
                 Throw $_
 
                 #Quest Snappin Errors
-                if ($ErrorProcessGetQADGroup) { Write-warning -Message "[PROCESS] QUEST AD - Error When querying the group $item in Active Directory" }
-                if ($ErrorProcessGetQADGroupMember) { Write-warning -Message "[PROCESS] QUEST AD - Error When querying the group $item members in Active Directory" }
+                if ($ErrorProcessGetQADGroup) { Write-Warning -Message "[PROCESS] QUEST AD - Error When querying the group $item in Active Directory" }
+                if ($ErrorProcessGetQADGroupMember) { Write-Warning -Message "[PROCESS] QUEST AD - Error When querying the group $item members in Active Directory" }
 
                 #ActiveDirectory Module Errors
-                if ($ErrorProcessGetADGroup) { Write-warning -Message "[PROCESS] AD MODULE - Error When querying the group $item in Active Directory" }
-                if ($ErrorProcessGetADGroupMember) { Write-warning -Message "[PROCESS] AD MODULE - Error When querying the group $item members in Active Directory" }
+                if ($ErrorProcessGetADGroup) { Write-Warning -Message "[PROCESS] AD MODULE - Error When querying the group $item in Active Directory" }
+                if ($ErrorProcessGetADGroupMember) { Write-Warning -Message "[PROCESS] AD MODULE - Error When querying the group $item members in Active Directory" }
 
                 # Import CSV Errors
-                if ($ErrorProcessImportCSV) { Write-warning -Message "[PROCESS] Error Importing $StateFile" }
-                if ($ErrorProcessCompareObject) { Write-warning -Message "[PROCESS] Error when comparing" }
-                if ($ErrorProcessImportCSVChangeHistory) { Write-warning -Message "[PROCESS] Error Importing $file" }
+                if ($ErrorProcessImportCSV) { Write-Warning -Message "[PROCESS] Error Importing $StateFile" }
+                if ($ErrorProcessCompareObject) { Write-Warning -Message "[PROCESS] Error when comparing" }
+                if ($ErrorProcessImportCSVChangeHistory) { Write-Warning -Message "[PROCESS] Error Importing $file" }
 
                 throw $_
             }#CATCH
