@@ -1,5 +1,5 @@
-﻿Function Add-ADSubnet{
-<#
+Function Add-ADSubnet {
+    <#
     .SYNOPSIS
         This function allow you to add a subnet object in your active directory using ADSI
 
@@ -48,63 +48,63 @@
     [CmdletBinding()]
     PARAM(
         [Parameter(
-            Mandatory=$true,
-            Position=1,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true,
-            HelpMessage="Subnet name to create")]
+            Mandatory = $true,
+            Position = 1,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Subnet name to create")]
         [Alias("Name")]
         [String]$Subnet,
         [Parameter(
-            Mandatory=$true,
-            Position=2,
-            ValueFromPipelineByPropertyName=$true,
-            HelpMessage="Site to which the subnet will be applied")]
+            Mandatory = $true,
+            Position = 2,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Site to which the subnet will be applied")]
         [Alias("Site")]
         [String]$SiteName,
         [Parameter(
-            ValueFromPipelineByPropertyName=$true,
-            HelpMessage="Description of the Subnet")]
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Description of the Subnet")]
         [String]$Description,
         [Parameter(
-            ValueFromPipelineByPropertyName=$true,
-            HelpMessage="Location of the Subnet")]
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Location of the Subnet")]
         [String]$location
     )
-    PROCESS{
-            TRY{
-                $ErrorActionPreference = 'Stop'
+    PROCESS {
+        TRY {
+            $ErrorActionPreference = 'Stop'
 
-                # Distinguished Name of the Configuration Partition
-                $Configuration = ([ADSI]"LDAP://RootDSE").configurationNamingContext
+            # Distinguished Name of the Configuration Partition
+            $Configuration = ([ADSI]"LDAP://RootDSE").configurationNamingContext
 
-                # Get the Subnet Container
-                $SubnetsContainer = [ADSI]"LDAP://CN=Subnets,CN=Sites,$Configuration"
+            # Get the Subnet Container
+            $SubnetsContainer = [ADSI]"LDAP://CN=Subnets,CN=Sites,$Configuration"
 
-                # Create the Subnet object
-                Write-Verbose -Message "$subnet - Creating the subnet object..."
-                $SubnetObject = $SubnetsContainer.Create('subnet', "cn=$Subnet")
+            # Create the Subnet object
+            Write-Verbose -Message "$subnet - Creating the subnet object..."
+            $SubnetObject = $SubnetsContainer.Create('subnet', "cn=$Subnet")
 
-                # Assign the subnet to a site
-                $SubnetObject.put("siteObject","cn=$SiteName,CN=Sites,$Configuration")
+            # Assign the subnet to a site
+            $SubnetObject.put("siteObject", "cn=$SiteName,CN=Sites,$Configuration")
 
-                # Adding the Description information if specified by the user
-                IF ($PSBoundParameters['Description']){
-                    $SubnetObject.Put("description",$Description)
-                }
+            # Adding the Description information if specified by the user
+            IF ($PSBoundParameters['Description']) {
+                $SubnetObject.Put("description", $Description)
+            }
 
-                # Adding the Location information if specified by the user
-                IF ($PSBoundParameters['Location']){
-                    $SubnetObject.Put("location",$Location)
-                }
-                $SubnetObject.setinfo()
-                Write-Verbose -Message "$subnet - Subnet added."
-            }#TRY
-            CATCH{
-                $PSCmdlet.ThrowTerminatingError($_)
-            }#CATCH
+            # Adding the Location information if specified by the user
+            IF ($PSBoundParameters['Location']) {
+                $SubnetObject.Put("location", $Location)
+            }
+            $SubnetObject.setinfo()
+            Write-Verbose -Message "$subnet - Subnet added."
+        }#TRY
+        CATCH {
+            $PSCmdlet.ThrowTerminatingError($_)
+        }#CATCH
     }#PROCESS Block
-    END{
+    END {
         Write-Verbose -Message "Script Completed"
     }#END Block
 }#Function Add-ADSubnet
