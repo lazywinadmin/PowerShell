@@ -1,5 +1,5 @@
-﻿function Get-ADFSMORole {
-<#
+function Get-ADFSMORole {
+    <#
 .SYNOPSIS
     Retrieve the FSMO Role in the Forest/Domain.
 .DESCRIPTION
