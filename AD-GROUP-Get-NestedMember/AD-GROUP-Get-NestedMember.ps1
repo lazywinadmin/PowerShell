@@ -1,6 +1,5 @@
-﻿function Get-NestedMember
-{
-<#
+function Get-NestedMember {
+    <#
     .SYNOPSIS
         Find all Nested members of a group
     .DESCRIPTION
@@ -27,31 +26,28 @@
 #>
     [CmdletBinding()]
     PARAM(
-    [String[]]$GroupName,
-    [String]$RelationShipPath,
-    [Int]$MaxDepth
+        [String[]]$GroupName,
+        [String]$RelationShipPath,
+        [Int]$MaxDepth
     )
-    TRY{
+    TRY {
         $FunctionName = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).MyCommand
 
         Write-Verbose -Message "[$FunctionName] Check if ActiveDirectory Module is available"
-        if(-not(Get-Module Activedirectory -ErrorAction Stop))
-        {
+        if (-not(Get-Module Activedirectory -ErrorAction Stop)) {
             Write-Verbose -Message "[$FunctionName] Loading ActiveDirectory Module"
             Import-Module ActiveDirectory -ErrorAction Stop
         }
 
         # Set Depth Counter
         $DepthCount = 1
-        FOREACH ($Group in $GroupName)
-        {
+        FOREACH ($Group in $GroupName) {
             Write-Verbose -Message "[$FunctionName] Group '$Group'"
 
             # Get the Group Information
             $GroupObject = Get-ADGroup -Identity $Group -ErrorAction Stop
 
-            IF($GroupObject)
-            {
+            IF ($GroupObject) {
                 Write-Verbose -Message "[$FunctionName] Group '$Group' - Retrieving members"
 
                 # Get the Members of the group
@@ -62,33 +58,31 @@
 
 
                     # Avoid circular
-                    IF($RelationShipPath -notlike ".\ $($GroupObject.samaccountname) \*")
-                    {
-                        if($PSBoundParameters["RelationShipPath"]) {
+                    IF ($RelationShipPath -notlike ".\ $($GroupObject.samaccountname) \*") {
+                        if ($PSBoundParameters["RelationShipPath"]) {
 
                             $RelationShipPath = "$RelationShipPath \ $($GroupObject.samaccountname)"
 
                         }
-                        Else{$RelationShipPath = ".\ $($GroupObject.samaccountname)"}
+                        Else { $RelationShipPath = ".\ $($GroupObject.samaccountname)" }
 
                         Write-Verbose -Message "[$FunctionName] Group '$Group' - Name:$($_.name) | ObjectClass:$($_.ObjectClass)"
                         $CurrentObject = $_
-                        switch ($_.ObjectClass)
-                        {
+                        switch ($_.ObjectClass) {
                             "group" {
                                 # Output Object
-                                $CurrentObject | Select-Object Name,SamAccountName,ObjectClass,DistinguishedName,@{Label="ParentGroup";Expression={$ParentGroup}}, @{Label="RelationShipPath";Expression={$RelationShipPath}}
+                                $CurrentObject | Select-Object Name, SamAccountName, ObjectClass, DistinguishedName, @{Label = "ParentGroup"; Expression = { $ParentGroup } }, @{Label = "RelationShipPath"; Expression = { $RelationShipPath } }
 
-                                if (-not($DepthCount -lt $MaxDepth)){
+                                if (-not($DepthCount -lt $MaxDepth)) {
                                     # Find Child
                                     Get-NestedMember -GroupName $CurrentObject.Name -RelationShipPath $RelationShipPath
                                     $DepthCount++
                                 }
                             }#Group
-                            default { $CurrentObject | Select-Object Name,SamAccountName,ObjectClass,DistinguishedName, @{Label="ParentGroup";Expression={$ParentGroup}},@{Label="RelationShipPath";Expression={$RelationShipPath}}}
+                            default { $CurrentObject | Select-Object Name, SamAccountName, ObjectClass, DistinguishedName, @{Label = "ParentGroup"; Expression = { $ParentGroup } }, @{Label = "RelationShipPath"; Expression = { $RelationShipPath } } }
                         }#Switch
                     }#IF($RelationShipPath -notmatch $($GroupObject.samaccountname))
-                    ELSE {Write-Warning -Message "[$FunctionName] Circular group membership detected with $($GroupObject.samaccountname)"}
+                    ELSE { Write-Warning -Message "[$FunctionName] Circular group membership detected with $($GroupObject.samaccountname)" }
                 }#ForeachObject
             }#IF($GroupObject)
             ELSE {
@@ -96,7 +90,7 @@
             }#ELSE
         }#FOREACH ($Group in $GroupName)
     }#TRY
-    CATCH{
+    CATCH {
         $PSCmdlet.ThrowTerminatingError($_)
     }
 }
