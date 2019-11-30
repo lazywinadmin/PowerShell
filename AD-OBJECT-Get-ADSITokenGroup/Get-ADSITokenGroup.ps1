@@ -1,5 +1,4 @@
-﻿function Get-ADSITokenGroup
-{
+function Get-ADSITokenGroup {
     <#
     .SYNOPSIS
         Retrieve the list of group present in the tokengroups of a user or computer object.
@@ -54,14 +53,11 @@
         [Alias('ResultLimit', 'Limit')]
         [int]$SizeLimit = '100'
     )
-    BEGIN
-    {
+    BEGIN {
         $GroupList = ""
     }
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
             # Building the basic search object with some parameters
             $Search = New-Object -TypeName System.DirectoryServices.DirectorySearcher -ErrorAction 'Stop'
             $Search.SizeLimit = $SizeLimit
@@ -70,15 +66,13 @@
             $Search.Filter = "(&((objectclass=user)(samaccountname=$SamAccountName)))"
 
             # Credential
-            IF ($PSBoundParameters['Credential'])
-            {
+            IF ($PSBoundParameters['Credential']) {
                 $Cred = New-Object -TypeName System.DirectoryServices.DirectoryEntry -ArgumentList $DomainDistinguishedName, $($Credential.UserName), $($Credential.GetNetworkCredential().password)
                 $Search.SearchRoot = $Cred
             }
 
             # Different Domain
-            IF ($DomainDistinguishedName)
-            {
+            IF ($DomainDistinguishedName) {
                 IF ($DomainDistinguishedName -notlike "LDAP://*") { $DomainDistinguishedName = "LDAP://$DomainDistinguishedName" }#IF
                 Write-Verbose -Message "[PROCESS] Different Domain specified: $DomainDistinguishedName"
                 $Search.SearchRoot = $DomainDistinguishedName
@@ -93,32 +87,31 @@
 
 
                 $($AccountGetDirectory.Get("tokenGroups")) |
-                ForEach-Object -Process {
-                    # Create SecurityIdentifier to translate into group name
-                    $Principal = New-Object System.Security.Principal.SecurityIdentifier($_, 0)
+                    ForEach-Object -Process {
+                        # Create SecurityIdentifier to translate into group name
+                        $Principal = New-Object System.Security.Principal.SecurityIdentifier($_, 0)
 
-                    # Prepare Output
-                    $Properties = @{
-                        SamAccountName = $Account.properties.samaccountname -as [string]
-                        GroupName = $principal.Translate([System.Security.Principal.NTAccount])
+                        # Prepare Output
+                        $Properties = @{
+                            SamAccountName = $Account.properties.samaccountname -as [string]
+                            GroupName      = $principal.Translate([System.Security.Principal.NTAccount])
+                        }
+
+                        # Output Information
+                        New-Object -TypeName PSObject -Property $Properties
                     }
-
-                    # Output Information
-                    New-Object -TypeName PSObject -Property $Properties
-                }
             } | Group-Object -Property groupname |
             ForEach-Object {
                 New-Object -TypeName PSObject -Property @{
                     SamAccountName = $_.group.samaccountname | Select-Object -Unique
-                    GroupName = $_.Name
-                    Count = $_.Count
+                    GroupName      = $_.Name
+                    Count          = $_.Count
                 }#new-object
             }#Foreach
-        }#TRY
-        CATCH
-        {
-            $PSCmdlet.ThrowTerminatingError($_)
-        }
-    }#PROCESS
-    END { Write-Verbose -Message "[END] Function Get-ADSITokenGroup End." }
+    }#TRY
+    CATCH {
+        $PSCmdlet.ThrowTerminatingError($_)
+    }
+}#PROCESS
+END { Write-Verbose -Message "[END] Function Get-ADSITokenGroup End." }
 }#Function
