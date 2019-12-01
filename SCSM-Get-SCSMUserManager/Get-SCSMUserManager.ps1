@@ -1,5 +1,4 @@
-﻿Function Get-SCSMUserManager
-{
+Function Get-SCSMUserManager {
     <#
     .SYNOPSIS
         Function to retrieve the manager of a user
@@ -15,7 +14,7 @@
         [Alias('input_affectedUser_id')]
         [String]$UserID
     )
-    try{
+    try {
         ## Return Variables
         $managerOfAffectedUser_obj = $null
 
@@ -31,23 +30,20 @@
         ##  get-scsmrelationshipobject tends to keep track of relationship history. It returns old and new
         ##  relationships
 
-        If ($managerOfAffectedUser_relobjs -ne $null)
-        {
-            ForEach ($managerOfAffectedUser_relobj in $managerOfAffectedUser_relobjs)
-            {
-                If ($managerOfAffectedUser_relobj.IsDeleted -eq $True)
-                {
+        If ($managerOfAffectedUser_relobjs -ne $null) {
+            ForEach ($managerOfAffectedUser_relobj in $managerOfAffectedUser_relobjs) {
+                If ($managerOfAffectedUser_relobj.IsDeleted -eq $True) {
                     #The relationship no longer exists. Returning nothing
                     #  which will effectively keep the managerOfAffectedUser_obj the same as before.
                 }
-                Else
-                {
+                Else {
                     #The relationship exists, setting managerOfAffectedUser_relExists to true.
                     get-scsmobject -id ($managerofaffecteduser_relobj.SourceObject.Id.Guid)
                 }
             }
         }
-    }catch{
+    }
+    catch {
         $PSCmdlet.ThrowTerminatingError($_)
     }
 }
