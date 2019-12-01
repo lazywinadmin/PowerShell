@@ -1,4 +1,4 @@
-﻿function Connect-ExchangeOnline {
+function Connect-ExchangeOnline {
     <#
     .SYNOPSIS
         Function to Connect to an Exchange Online
@@ -49,7 +49,7 @@
             IF ($PSBoundParameters['Credential']) { $Splatting.Credential = $Credential }
 
             # Load Exchange cmdlets (Implicit remoting)
-            Import-PSSession -Session (New-pssession @Splatting -ErrorAction Stop) -ErrorAction Stop
+            Import-PSSession -Session (New-PSSession @Splatting -ErrorAction Stop) -ErrorAction Stop
         }
         CATCH {
             $PSCmdlet.ThrowTerminatingError($_)
