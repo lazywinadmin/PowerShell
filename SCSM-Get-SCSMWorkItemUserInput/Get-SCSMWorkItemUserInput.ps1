@@ -1,4 +1,4 @@
-﻿function Get-SCSMWorkItemUserInput {
+function Get-SCSMWorkItemUserInput {
     <#
     .SYNOPSIS
         Retrieve the input text provided by the user
