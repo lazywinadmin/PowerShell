@@ -1,6 +1,5 @@
-﻿function Get-SCCMUserCollectionDeployment
-{
-<#
+function Get-SCCMUserCollectionDeployment {
+    <#
     .SYNOPSIS
         Function to retrieve a User's collection deployment
 
@@ -64,8 +63,7 @@
         $Purpose
     )
 
-    BEGIN
-    {
+    BEGIN {
         # Verify if the username contains the domain name
         #  If it does... remove the domain name
         # Example: "FX\TestUser" will become "TestUser"
@@ -74,29 +72,25 @@
         # Define default properties
         $Splatting = @{
             ComputerName = $ComputerName
-            NameSpace = "root\SMS\Site_$SiteCode"
+            NameSpace    = "root\SMS\Site_$SiteCode"
         }
 
-        IF ($PSBoundParameters['Credential'])
-        {
+        IF ($PSBoundParameters['Credential']) {
             $Splatting.Credential = $Credential
         }
 
-        Switch ($Purpose)
-        {
+        Switch ($Purpose) {
             "Required" { $DeploymentIntent = 0 }
             "Available" { $DeploymentIntent = 2 }
             default { $DeploymentIntent = "NA" }
         }
 
-        Function Get-DeploymentIntentName
-        {
-                PARAM(
+        Function Get-DeploymentIntentName {
+            PARAM(
                 [Parameter(Mandatory)]
                 $DeploymentIntent
-                )
-                    PROCESS
-                    {
+            )
+            PROCESS {
                 if ($DeploymentIntent = 0) { Write-Output "Required" }
                 if ($DeploymentIntent = 2) { Write-Output "Available" }
                 if ($DeploymentIntent -ne 0 -and $DeploymentIntent -ne 2) { Write-Output "NA" }
@@ -105,54 +99,49 @@
 
 
     }
-    PROCESS
-    {
+    PROCESS {
         # Find the User in SCCM CMDB
         $User = Get-WMIObject @Splatting -Query "Select * From SMS_R_User WHERE UserName='$UserName'"
 
         # Find the collections where the user is member of
         Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($user.resourceid)'" |
-        ForEach-Object {
+            ForEach-Object {
 
-            # Retrieve the collection of the user
-            $Collections = Get-WmiObject @splatting -Query "Select * From SMS_Collection WHERE CollectionID='$($_.Collectionid)'"
+                # Retrieve the collection of the user
+                $Collections = Get-WmiObject @splatting -Query "Select * From SMS_Collection WHERE CollectionID='$($_.Collectionid)'"
 
 
-            # Retrieve the deployments (advertisement) of each collections
-            Foreach ($Collection in $collections)
-            {
-                IF ($DeploymentIntent -eq 'NA')
-                {
-                    # Find the Deployment on one collection
-                    $Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)'")
-                }
-                ELSE
-                {
-                    $Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND DeploymentIntent='$DeploymentIntent'")
-                }
-
-                Foreach ($Deploy in $Deployments)
-                {
-
-                    # Prepare Output
-                    $Properties = @{
-                        UserName = $UserName
-                        ComputerName = $ComputerName
-                        CollectionName = $Deploy.CollectionName
-                        CollectionID = $Deploy.CollectionID
-                        DeploymentID = $Deploy.DeploymentID
-                        DeploymentName = $Deploy.DeploymentName
-                        DeploymentIntent = $deploy.DeploymentIntent
-                        DeploymentIntentName = (Get-DeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
-                        TargetName = $Deploy.TargetName
-                        TargetSubName = $Deploy.TargetSubname
-
+                # Retrieve the deployments (advertisement) of each collections
+                Foreach ($Collection in $collections) {
+                    IF ($DeploymentIntent -eq 'NA') {
+                        # Find the Deployment on one collection
+                        $Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)'")
+                    }
+                    ELSE {
+                        $Deployments = (Get-WmiObject @splatting -Query "Select * From SMS_DeploymentInfo WHERE CollectionID='$($Collection.CollectionID)' AND DeploymentIntent='$DeploymentIntent'")
                     }
 
-                    # Output the current Object
-                    New-Object -TypeName PSObject -prop $Properties
+                    Foreach ($Deploy in $Deployments) {
+
+                        # Prepare Output
+                        $Properties = @{
+                            UserName             = $UserName
+                            ComputerName         = $ComputerName
+                            CollectionName       = $Deploy.CollectionName
+                            CollectionID         = $Deploy.CollectionID
+                            DeploymentID         = $Deploy.DeploymentID
+                            DeploymentName       = $Deploy.DeploymentName
+                            DeploymentIntent     = $deploy.DeploymentIntent
+                            DeploymentIntentName = (Get-DeploymentIntentName -DeploymentIntent $deploy.DeploymentIntent)
+                            TargetName           = $Deploy.TargetName
+                            TargetSubName        = $Deploy.TargetSubname
+
+                        }
+
+                        # Output the current Object
+                        New-Object -TypeName PSObject -prop $Properties
+                    }
                 }
             }
-        }
     }
 }
