@@ -1,4 +1,4 @@
-﻿function Get-SCSMIRComment {
+function Get-SCSMIRComment {
     <#
     .SYNOPSIS
         Function to retrieve all the comment of a Incident Request
