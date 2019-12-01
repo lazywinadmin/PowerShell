@@ -1,5 +1,4 @@
-﻿Function New-SCCMTSAppVariable
-{
+Function New-SCCMTSAppVariable {
     <#
     .SYNOPSIS
         Function to create a SCCM Task Sequence Application Variable during the OSD
@@ -32,13 +31,11 @@
         [String[]]$ApplicationList
     )
 
-    BEGIN
-    {
+    BEGIN {
         # Create an TaskSequence Environment Object
         $TaskSequenceEnvironment = New-Object -COMObject Microsoft.SMS.TSEnvironment
     }
-    PROCESS
-    {
+    PROCESS {
 
         # Create a Counter
         $Counter = 1
