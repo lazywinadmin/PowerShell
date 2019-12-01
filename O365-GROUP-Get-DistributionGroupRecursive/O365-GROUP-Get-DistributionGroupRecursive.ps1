@@ -1,4 +1,4 @@
-﻿
+
 function Get-DistributionGroupMemberRecursive {
     <#
 .SYNOPSIS
@@ -17,7 +17,7 @@ function Get-DistributionGroupMemberRecursive {
             # Retrieve Group information
             Write-Verbose -Message "[BEGIN] Retrieving members of $Group"
             $GroupMembers = Get-DistributionGroupMember -Identity $Group -ErrorAction Stop -ErrorVariable ErrorBeginGetDistribMembers |
-            Select-object -Property Name, PrimarySMTPAddress, @{ Label = "Group"; Expression = { $Group } }, RecipientType
+                Select-Object -Property Name, PrimarySMTPAddress, @{ Label = "Group"; Expression = { $Group } }, RecipientType
 
         }
         CATCH {
@@ -28,18 +28,18 @@ function Get-DistributionGroupMemberRecursive {
     PROCESS {
         FOREACH ($Member in $GroupMembers) {
             TRY {
-                Write-verbose "[PROCESS] Member: $($member.name)"
+                Write-Verbose "[PROCESS] Member: $($member.name)"
 
                 SWITCH ($Member.RecipientType) {
                     "MailUniversalDistributionGroup" {
                         # Member's type is Distribution Group, we need to find members of this object
                         Get-DistributionGroupMemberRecursive -Group $($Member.name) |
-                        Select-Object -Property Name, PrimarySMTPAddress, @{ Label = "Group"; Expression = { $($Member.name) } }, RecipientType
+                            Select-Object -Property Name, PrimarySMTPAddress, @{ Label = "Group"; Expression = { $($Member.name) } }, RecipientType
                         Write-Verbose -Message "[PROCESS] $($Member.name)"
                     }
                     "UserMailbox" {
                         # Member's type is User, let's just output the data
-                        $Member | Select-object -Property Name, PrimarySMTPAddress, @{ Label = "Group"; Expression = { $Group } }
+                        $Member | Select-Object -Property Name, PrimarySMTPAddress, @{ Label = "Group"; Expression = { $Group } }
                     }
                 }
             }
