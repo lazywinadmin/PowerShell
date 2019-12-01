@@ -68,28 +68,28 @@ test_userA1         test_userA1         test_userA1@lazy... test_managerA
                     # Get the DirectReports
                     Write-Verbose -Message "[PROCESS] Account: $Account (Recursive)"
                     Get-Aduser -identity $Account -Properties directreports |
-                    ForEach-Object -Process {
-                        $_.directreports | ForEach-Object -Process {
-                            # Output the current object with the properties Name, SamAccountName, Mail and Manager
-                            Get-ADUser -Identity $PSItem -Properties * | Select-Object -Property *, @{ Name = "ManagerAccount"; Expression = { (Get-Aduser -identity $psitem.manager).samaccountname } }
-                            # Gather DirectReports under the current object and so on...
-                            Get-ADDirectReports -Identity $PSItem -Recurse
+                        ForEach-Object -Process {
+                            $_.directreports | ForEach-Object -Process {
+                                # Output the current object with the properties Name, SamAccountName, Mail and Manager
+                                Get-ADUser -Identity $PSItem -Properties * | Select-Object -Property *, @{ Name = "ManagerAccount"; Expression = { (Get-Aduser -identity $psitem.manager).samaccountname } }
+                                # Gather DirectReports under the current object and so on...
+                                Get-ADDirectReports -Identity $PSItem -Recurse
+                            }
                         }
-                    }
                 }#IF($PSBoundParameters['Recurse'])
                 IF (-not ($PSBoundParameters['Recurse'])) {
                     Write-Verbose -Message "[PROCESS] Account: $Account"
                     # Get the DirectReports
                     Get-Aduser -identity $Account -Properties directreports | Select-Object -ExpandProperty directReports |
                     Get-ADUser -Properties * | Select-Object -Property *, @{ Name = "ManagerAccount"; Expression = { (Get-Aduser -identity $psitem.manager).samaccountname } }
-                }#IF (-not($PSBoundParameters['Recurse']))
-            }#TRY
-            CATCH {
-                $PSCmdlet.ThrowTerminatingError($_)
-            }
+            }#IF (-not($PSBoundParameters['Recurse']))
+        }#TRY
+        CATCH {
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
-    END {
-        Remove-Module -Name ActiveDirectory -ErrorAction 'SilentlyContinue' -Verbose:$false | Out-Null
-    }
+}
+END {
+    Remove-Module -Name ActiveDirectory -ErrorAction 'SilentlyContinue' -Verbose:$false | Out-Null
+}
 }
