@@ -1,5 +1,4 @@
-﻿function Set-SCCMClientCacheLocation
-{
+function Set-SCCMClientCacheLocation {
     <#
         .SYNOPSIS
             Function to set the cache location on a SCCM Client
@@ -20,7 +19,7 @@
             This will set the client cache location "C:\temp\ccmcache" on the computer Client01
     #>
     PARAM(
-        [string[]]$ComputerName=".",
+        [string[]]$ComputerName = ".",
 
         [parameter(Mandatory)]
         [int]$Location,
@@ -33,44 +32,38 @@
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
-    FOREACH ($Computer in $ComputerName)
-    {
+    FOREACH ($Computer in $ComputerName) {
         Write-Verbose -message "[PROCESS] ComputerName: $Computer"
 
         # Define Parameters
         $SplattingWMI = @{
             NameSpace = "ROOT\CCM\SoftMgmtAgent"
-            Class = "CacheConfig"
+            Class     = "CacheConfig"
         }
         $SplattingService = @{
             Name = 'ccmexec'
         }
 
-        IF ($PSBoundParameters['ComputerName'])
-        {
+        IF ($PSBoundParameters['ComputerName']) {
             $SplattingWMI.ComputerName = $Computer
             $SplattingService.ComputerName = $Computer
         }
-        IF ($PSBoundParameters['Credential'])
-        {
+        IF ($PSBoundParameters['Credential']) {
             $SplattingWMI.Credential = $Credential
         }
 
-        TRY
-        {
+        TRY {
             # Set the Cache Size
             $Cache = Get-WmiObject @SplattingWMI
             $Cache.location = $Location
             $Cache.Put()
 
             # Restart SCCM Client
-            IF($PSBoundParameters['ServiceRestart'])
-            {
+            IF ($PSBoundParameters['ServiceRestart']) {
                 Get-Service @SplattingService | Restart-Service
             }
         }
-        CATCH
-        {
+        CATCH {
             $PSCmdlet.ThrowTerminatingError($_)
         }
     }
