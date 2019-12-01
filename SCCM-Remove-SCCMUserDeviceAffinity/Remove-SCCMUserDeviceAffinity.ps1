@@ -1,6 +1,5 @@
-﻿function Remove-SCCMUserDeviceAffinity
-{
-<#
+function Remove-SCCMUserDeviceAffinity {
+    <#
     .SYNOPSIS
         Function to remove the primary user(s) or group(s) from a device in SCCM
 
@@ -45,7 +44,7 @@
         $SiteCode,
 
         [Parameter(ParameterSetName = 'ResourceName',
-                   Mandatory = $true)]
+            Mandatory = $true)]
         [Parameter(ParameterSetName = 'ResourceID')]
         $SiteServer,
 
@@ -70,8 +69,7 @@
 
 
     # Credential Specified
-    IF ($PSBoundParameters['Credential'])
-    {
+    IF ($PSBoundParameters['Credential']) {
         $CIMsessionSplatting.Credential = $Credential
     }
 
@@ -81,19 +79,17 @@
     # Splatting for CIM cmlets
     $CIMSplatting = @{
         CimSession = $CIMSession
-        NameSpace = "root\sms\site_$SiteCode"
-        ClassName = "SMS_UserMachineRelationship"
+        NameSpace  = "root\sms\site_$SiteCode"
+        ClassName  = "SMS_UserMachineRelationship"
     }
 
     # Device Name Specified
-    IF ($PSBoundParameters['DeviceName'])
-    {
+    IF ($PSBoundParameters['DeviceName']) {
         $CIMSplatting.Filter = "ResourceName='$DeviceName' AND isActive=1 AND TYPES NOT NULL"
     }
 
     # Device ID Specified
-    IF ($PSBoundParameters['DeviceID'])
-    {
+    IF ($PSBoundParameters['DeviceID']) {
         $CIMSplatting.Filter = "ResourceID='$DeviceID' AND isActive=1 AND TYPES NOT NULL"
     }
 
