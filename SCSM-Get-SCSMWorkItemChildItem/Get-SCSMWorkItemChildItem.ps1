@@ -1,4 +1,4 @@
-﻿Function Get-SCSMWorkItemChildItem {
+Function Get-SCSMWorkItemChildItem {
     <#
     .SYNOPSIS
         Retrieve item associated with a work item
@@ -16,7 +16,7 @@
         [Parameter(Mandatory = $True)]
         $WorkItemGUID
     )
-    try{
+    try {
         ### Variables to Return
         $childWIs_obj = @()
 
@@ -41,7 +41,8 @@
         }
         $childWIs_obj
 
-    }catch{
+    }
+    catch {
         $PSCmdlet.ThrowTerminatingError($_)
     }
 }
