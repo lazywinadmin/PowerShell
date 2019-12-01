@@ -1,5 +1,4 @@
-﻿Function Add-SCSMServiceRequestComment
-{
+Function Add-SCSMServiceRequestComment {
     <#
     .SYNOPSIS
         Function to add a comment to a Service Request
@@ -37,17 +36,14 @@
     )
 
     # Make sure that the SR Object it passed to the function
-    If ($SRObject.Id -ne $NULL)
-    {
+    If ($SRObject.Id -ne $NULL) {
 
 
-        If ($AnalystComment)
-        {
+        If ($AnalystComment) {
             $CommentClass = "System.WorkItem.TroubleTicket.AnalystCommentLog"
             $CommentClassName = "AnalystCommentLog"
         }
-        else
-        {
+        else {
             $CommentClass = "System.WorkItem.TroubleTicket.UserCommentLog"
             $CommentClassName = "EndUserCommentLog"
         }
@@ -57,17 +53,17 @@
 
         # Create the object projection with properties
         $Projection = @{
-            __CLASS = "System.WorkItem.ServiceRequest";
-            __SEED = $SRObject;
+            __CLASS           = "System.WorkItem.ServiceRequest";
+            __SEED            = $SRObject;
             EndUserCommentLog = @{
-                __CLASS = $CommentClass;
+                __CLASS  = $CommentClass;
                 __OBJECT = @{
-                    Id = $NewGUID;
+                    Id          = $NewGUID;
                     DisplayName = $NewGUID;
-                    Comment = $Comment;
-                    EnteredBy = $EnteredBy;
+                    Comment     = $Comment;
+                    EnteredBy   = $EnteredBy;
                     EnteredDate = (Get-Date).ToUniversalTime();
-                    IsPrivate = $IsPrivate.ToBool();
+                    IsPrivate   = $IsPrivate.ToBool();
                 }
             }
         }
@@ -75,8 +71,7 @@
         # Create the actual comment
         New-SCSMObjectProjection -Type "System.WorkItem.ServiceRequestProjection" -Projection $Projection
     }
-    else
-    {
+    else {
         Throw "Invalid Service Request Object!"
     }
 }
