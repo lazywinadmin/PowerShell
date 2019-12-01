@@ -1,6 +1,5 @@
-function Update-O365UserUPNSuffix
-{
-<#
+function Update-O365UserUPNSuffix {
+    <#
     .SYNOPSIS
         Function to correct the UPN of a user in Office365 (O365) and Active Directory (AD)
 
@@ -78,22 +77,18 @@ function Update-O365UserUPNSuffix
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
-    BEGIN
-    {
-        TRY
-        {
+    BEGIN {
+        TRY {
             $CurrentUPN = $("$UserAlias@$CurrentUPNSuffix")
             $TemporaryUPN = $("$UserAlias@$TenantUPNSuffix")
             $NewUPN = $("$UserAlias@$NewUPNSuffix")
 
             # Exchange Online - Validate we find the user
             Write-Verbose -Message "[BEGIN] Current Information"
-            if (Get-MsolDomain)
-            {
+            if (Get-MsolDomain) {
                 $MSOLUserBefore = Get-MsolUser -UserPrincipalName $CurrentUPN -ErrorAction Stop
             }
-            else
-            {
+            else {
                 Write-Error "[BEGIN] Does not seem connected to Office365"
                 break
             }
@@ -105,22 +100,19 @@ function Update-O365UserUPNSuffix
             { Write-Error -Message "[BEGIN] Can't find this user in AD" }
 
             [pscustomobject]@{
-                State = 'BEFORE'
-                UserAlias = $UserAlias
-                SID = $ADUserBefore.SID
-                UPN_in_AD = $ADUserBefore.UserPrincipalName
+                State       = 'BEFORE'
+                UserAlias   = $UserAlias
+                SID         = $ADUserBefore.SID
+                UPN_in_AD   = $ADUserBefore.UserPrincipalName
                 UPN_in_O365 = $MSOLUserBefore.UserPrincipalName
             }
         }
-        CATCH
-        {
+        CATCH {
             $Error[0].Exception.Message
         }
     }
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
             Write-Verbose -Message "[PROCESS] Processing changes"
             $Splatting = @{ }
 
@@ -133,7 +125,7 @@ function Update-O365UserUPNSuffix
 
             # Set UPN on the Active Directory User
             Get-ADUser  @splatting -LDAPFilter "(UserPrincipalName=$CurrentUPN)" -Server $DomainController |
-            Set-ADUser @splatting -UserPrincipalName $NewUPN -server $DomainController -ErrorAction Stop
+                Set-ADUser @splatting -UserPrincipalName $NewUPN -server $DomainController -ErrorAction Stop
 
 
             # Post Change
@@ -141,20 +133,18 @@ function Update-O365UserUPNSuffix
             $MSOLUserAfter = Get-MsolUser -UserPrincipalName $NewUPN
             $ADUserAfter = Get-ADUser @splatting -LDAPFilter "(UserPrincipalName=$NewUPN)" -Server $DomainController
             [pscustomobject]@{
-                State = 'AFTER'
-                UserAlias = $UserAlias
-                SID = $ADUserAfter.SID
-                UPN_in_AD = $ADUserAfter.UserPrincipalName
+                State       = 'AFTER'
+                UserAlias   = $UserAlias
+                SID         = $ADUserAfter.SID
+                UPN_in_AD   = $ADUserAfter.UserPrincipalName
                 UPN_in_O365 = $MSOLUserAfter.UserPrincipalName
             }
         }
-        CATCH
-        {
+        CATCH {
             $Error[0].Exception.Message
         }
     }
-    END
-    {
+    END {
         Write-Warning -Message "[END] You might want to initiate the DirSync between AD and O365 or wait for next sync"
     }
 }
