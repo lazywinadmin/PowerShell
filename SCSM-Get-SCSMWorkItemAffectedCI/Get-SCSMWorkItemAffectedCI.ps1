@@ -1,6 +1,5 @@
-﻿function Get-SCSMWorkItemAffectedCI
-{
-<#
+function Get-SCSMWorkItemAffectedCI {
+    <#
 	.SYNOPSIS
 		Function to retrieve the affected configuration item of a System Center Service Manager Work Item
 
@@ -18,18 +17,17 @@
 		@lazywinadmin
 		lazywinadmin.com
 #>
-	PARAM (
-		[parameter()]
-		[Alias()]
-		$GUID
-	)
-	PROCESS
-	{
-		# Find the Ticket Object
-		$WorkItemObject = Get-SCSMObject -id $GUID
+    PARAM (
+        [parameter()]
+        [Alias()]
+        $GUID
+    )
+    PROCESS {
+        # Find the Ticket Object
+        $WorkItemObject = Get-SCSMObject -id $GUID
 
-		# Find the Affected Configuration Items
-		Get-SCSMRelationshipObject -BySource $WorkItemObject |
-		Where-Object { $_.relationshipid -eq 'b73a6094-c64c-b0ff-9706-1822df5c2e82' }
-	}
+        # Find the Affected Configuration Items
+        Get-SCSMRelationshipObject -BySource $WorkItemObject |
+            Where-Object { $_.relationshipid -eq 'b73a6094-c64c-b0ff-9706-1822df5c2e82' }
+    }
 }
