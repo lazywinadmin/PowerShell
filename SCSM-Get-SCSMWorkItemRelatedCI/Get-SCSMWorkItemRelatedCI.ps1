@@ -1,6 +1,5 @@
-﻿function Get-SCSMWorkItemRelatedCI
-{
-<#
+function Get-SCSMWorkItemRelatedCI {
+    <#
 	.SYNOPSIS
 		Function to retrieve the related configuration item of a System Center Service Manager Work Item
 
@@ -18,18 +17,17 @@
 		@lazywinadmin
 		lazywinadmin.com
 #>
-	PARAM (
-		[parameter()]
-		[Alias()]
-		$GUID
-	)
-	PROCESS
-	{
-		# Find the Ticket Object
-		$WorkItemObject = Get-SCSMObject -id $GUID
+    PARAM (
+        [parameter()]
+        [Alias()]
+        $GUID
+    )
+    PROCESS {
+        # Find the Ticket Object
+        $WorkItemObject = Get-SCSMObject -id $GUID
 
-		# Find the Related Configuration Items
-		Get-SCSMRelationshipObject -BySource $WorkItemObject |
-		Where-Object { $_.relationshipid -eq 'd96c8b59-8554-6e77-0aa7-f51448868b43' }
-	}
+        # Find the Related Configuration Items
+        Get-SCSMRelationshipObject -BySource $WorkItemObject |
+            Where-Object { $_.relationshipid -eq 'd96c8b59-8554-6e77-0aa7-f51448868b43' }
+    }
 }
