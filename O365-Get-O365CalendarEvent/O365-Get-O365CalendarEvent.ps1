@@ -1,6 +1,5 @@
-﻿function Get-O365CalendarEvent
-{
-<#
+function Get-O365CalendarEvent {
+    <#
 .SYNOPSIS
     Function to gather Calendar Events between two specific dates
 
@@ -170,28 +169,24 @@
         [System.String]$Timezone
     )
 
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
             $FunctionName = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).MyCommand
 
             Write-Verbose -Message "[$FunctionName] Create splatting"
             $Splatting = @{
                 Credential = $Credential
-                Uri = "https://outlook.office365.com/api/v1.0/users/$EmailAddress/calendarview?startDateTime=$StartDateTime&endDateTime=$($EndDateTime)&`$top=$PageResult"
+                Uri        = "https://outlook.office365.com/api/v1.0/users/$EmailAddress/calendarview?startDateTime=$StartDateTime&endDateTime=$($EndDateTime)&`$top=$PageResult"
             }
 
 
-            if ($TimeZone)
-            {
+            if ($TimeZone) {
                 Write-Verbose -Message "[$FunctionName] Add TimeZone"
                 $headers = New-Object -TypeName 'System.Collections.Generic.Dictionary[[String],[String]]'
                 $headers.Add('Prefer', "outlook.timezone=`"$TimeZone`"")
                 $Splatting.Add('Headers', $headers)
             }
-            if (-not $PSBoundParameters['EmailAddress'])
-            {
+            if (-not $PSBoundParameters['EmailAddress']) {
                 Write-Verbose -Message "[$FunctionName] EmailAddress not specified, updating URI"
                 #Query the current User
                 $Splatting.Uri = "https://outlook.office365.com/api/v1.0/me/calendarview?startDateTime=$StartDateTime&endDateTime=$($EndDateTime)&`$top=$PageResult"
@@ -199,8 +194,7 @@
             Write-Verbose -Message "[$FunctionName] URI: $($Splatting.Uri)"
             Invoke-RestMethod @Splatting -ErrorAction Stop | Select-Object -ExpandProperty Value
         }
-        CATCH
-        {
+        CATCH {
             $PSCmdlet.ThrowTerminatingError($_)
         }
     }
