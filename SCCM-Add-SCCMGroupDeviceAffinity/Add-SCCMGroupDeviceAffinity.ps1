@@ -1,6 +1,5 @@
-﻿Function Add-SCCMGroupDeviceAffinity
-{
-<#
+Function Add-SCCMGroupDeviceAffinity {
+    <#
     .SYNOPSIS
         Function to add a group as primary user on a device
 
@@ -59,24 +58,21 @@
     )
 
     $Splatting = @{
-        NameSpace = "root\sms\site_$SiteCode"
+        NameSpace    = "root\sms\site_$SiteCode"
         ComputerName = $SiteServer
     }
 
-    IF ($PSBoundParameters['Credential'])
-    {
+    IF ($PSBoundParameters['Credential']) {
         $Splatting.Credential = $Credential
     }
 
 
     $AffinityType = 2 # Administrator defined
 
-    IF ($PSBoundParameters['DeviceName'])
-    {
+    IF ($PSBoundParameters['DeviceName']) {
         $ResourceID = (Get-WmiObject @Splatting -Class "SMS_CombinedDeviceResources" -Filter "Name='$DeviceName'" -ErrorAction STOP).resourceID
     }
-    IF ($PSBoundParameters['DeviceID'])
-    {
+    IF ($PSBoundParameters['DeviceID']) {
         $ResourceID = $DeviceID
     }
 
