@@ -1,5 +1,4 @@
-﻿function ConvertFrom-Base64
-{
+function ConvertFrom-Base64 {
     <#
     .SYNOPSIS
         Converts the specified string, which encodes binary data as base-64 digits, to an equivalent 8-bit unsigned integer array.
@@ -24,15 +23,13 @@
         [parameter(Mandatory = $true, ValueFromPipeline)]
         [String]$String
     )
-    TRY
-    {
+    TRY {
         Write-Verbose -Message "[ConvertFrom-Base64] Converting String"
         [System.Text.Encoding]::Default.GetString(
-        [System.Convert]::FromBase64String($String)
+            [System.Convert]::FromBase64String($String)
         )
     }
-    CATCH
-    {
+    CATCH {
         Write-Error -Message "[ConvertFrom-Base64] Something wrong happened"
         $Error[0].Exception.Message
     }
