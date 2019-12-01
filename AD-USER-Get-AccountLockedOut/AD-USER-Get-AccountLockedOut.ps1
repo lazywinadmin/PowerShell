@@ -92,10 +92,10 @@ Function Get-AccountLockedOut {
 
                 # Query Security Logs
                 Get-WinEvent -FilterHashtable @{ LogName = 'Security'; Id = 4740; StartTime = $Using:StartTime } |
-                Where-Object { $_.Properties[0].Value -like "$Using:UserName" } |
-                Select-Object -Property TimeCreated,
-                @{ Label = 'UserName'; Expression = { $_.Properties[0].Value } },
-                @{ Label = 'ClientName'; Expression = { $_.Properties[1].Value } }
+                    Where-Object { $_.Properties[0].Value -like "$Using:UserName" } |
+                    Select-Object -Property TimeCreated,
+                    @{ Label = 'UserName'; Expression = { $_.Properties[0].Value } },
+                    @{ Label = 'ClientName'; Expression = { $_.Properties[1].Value } }
             } | Select-Object -Property TimeCreated, UserName, ClientName
         }#TRY
         CATCH {
