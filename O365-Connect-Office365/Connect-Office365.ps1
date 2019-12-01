@@ -1,6 +1,5 @@
-function Connect-Office365
-{
-<#
+function Connect-Office365 {
+    <#
 .SYNOPSIS
     This function will prompt for credentials, load module MSOLservice,
     load implicit modules for Office 365 Services (AD, Lync, Exchange) using PSSession.
@@ -25,42 +24,33 @@ function Connect-Office365
     PARAM (
 
     )
-    BEGIN
-    {
-        TRY
-        {
+    BEGIN {
+        TRY {
             #Modules
-            IF (-not (Get-Module -Name MSOnline -ListAvailable))
-            {
+            IF (-not (Get-Module -Name MSOnline -ListAvailable)) {
                 Write-Verbose -Message "BEGIN - Import module Azure Active Directory"
                 Import-Module -Name MSOnline -ErrorAction Stop -ErrorVariable ErrorBeginIpmoMSOnline
             }
 
-            IF (-not (Get-Module -Name LyncOnlineConnector -ListAvailable))
-            {
+            IF (-not (Get-Module -Name LyncOnlineConnector -ListAvailable)) {
                 Write-Verbose -Message "BEGIN - Import module Lync Online"
                 Import-Module -Name LyncOnlineConnector -ErrorAction Stop -ErrorVariable ErrorBeginIpmoLyncOnline
             }
         }
-        CATCH
-        {
+        CATCH {
             Write-Warning -Message "BEGIN - Something went wrong!"
-            IF ($ErrorBeginIpmoMSOnline)
-            {
+            IF ($ErrorBeginIpmoMSOnline) {
                 Write-Warning -Message "BEGIN - Error while importing MSOnline module"
             }
-            IF ($ErrorBeginIpmoLyncOnline)
-            {
+            IF ($ErrorBeginIpmoLyncOnline) {
                 Write-Warning -Message "BEGIN - Error while importing LyncOnlineConnector module"
             }
 
             Write-Warning -Message $error[0].exception.message
         }
     }
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
 
             # CREDENTIAL
             Write-Verbose -Message "PROCESS - Ask for Office365 Credential"
@@ -87,23 +77,18 @@ function Connect-Office365
             # SHAREPOINT ONLINE (Implicit Remoting module)
             #Connect-SPOService -Url https://contoso-admin.sharepoint.com –credential $O365cred
         }
-        CATCH
-        {
+        CATCH {
             Write-Warning -Message "PROCESS - Something went wrong!"
-            IF ($ErrorCredential)
-            {
+            IF ($ErrorCredential) {
                 Write-Warning -Message "PROCESS - Error while gathering credential"
             }
-            IF ($ErrorConnectMSOL)
-            {
+            IF ($ErrorConnectMSOL) {
                 Write-Warning -Message "PROCESS - Error while connecting to Azure AD"
             }
-            IF ($ErrorConnectExchange)
-            {
+            IF ($ErrorConnectExchange) {
                 Write-Warning -Message "PROCESS - Error while connecting to Exchange Online"
             }
-            IF ($ErrorConnectLync)
-            {
+            IF ($ErrorConnectLync) {
                 Write-Warning -Message "PROCESS - Error while connecting to Lync Online"
             }
 
