@@ -1,5 +1,4 @@
-﻿function Get-SCSMReviewActivityReviewer
-{
+function Get-SCSMReviewActivityReviewer {
     <#
     .SYNOPSIS
     Function to retrieve the reviewers of a Review Activity
@@ -35,40 +34,35 @@
     param
     (
         [Parameter(ParameterSetName = 'Object',
-                   Mandatory = $true,
-                   ValueFromPipeline = $true)]
+            Mandatory = $true,
+            ValueFromPipeline = $true)]
         $ActivityObject,
 
         [Parameter(ParameterSetName = 'Name',
-                   Mandatory = $true)]
+            Mandatory = $true)]
         $ActivityName,
 
         [Parameter(ParameterSetName = 'GUID',
-                   Mandatory = $true)]
+            Mandatory = $true)]
         $ActivityGUID
     )
 
     BEGIN { Import-Module -Name SMLets -ErrorAction Stop }
-    PROCESS
-    {
-        IF ($PSBoundParameters['ActivityGUID'])
-        {
+    PROCESS {
+        IF ($PSBoundParameters['ActivityGUID']) {
             $RA = Get-SCSMObject -Id $ActivityGUID
         }
-        IF ($PSBoundParameters['ActivityName'])
-        {
+        IF ($PSBoundParameters['ActivityName']) {
             $RA = Get-SCSMObject (Get-SCSMClass System.WorkItem.Activity.ReviewActivity$) -Filter Id -eq $ActivityName
         }
-        IF ($PSBoundParameters['ActivityObject'])
-        {
+        IF ($PSBoundParameters['ActivityObject']) {
             $RA = $ActivityObject
         }
 
 
         $RelationshipClassHasReviewer = Get-SCSMRelationshipClass System.ReviewActivityHasReviewer$
         $RelationshipClassReviewerIsUser = Get-SCSMRelationshipClass System.ReviewerIsUser$
-        foreach ($Reviewer in (Get-SCSMRelatedObject -SMObject $RA -Relationship $RelationshipClassHasReviewer))
-        {
+        foreach ($Reviewer in (Get-SCSMRelatedObject -SMObject $RA -Relationship $RelationshipClassHasReviewer)) {
             Get-SCSMRelatedObject -SMObject $Reviewer -Relationship $RelationshipClassReviewerIsUser
         }
     }
