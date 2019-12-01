@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Script to report expiring user account
 .DESCRIPTION
@@ -160,7 +160,7 @@ BEGIN {
 
                 # Credential Paramenter
                 #IF (($PSBoundParameters['Username']) -and ($PSBoundParameters['Password'])) {
-                IF ($PSBoundParameters['Credential']){
+                IF ($PSBoundParameters['Credential']) {
                     # Create Credential Object
                     #$Credential = New-Object -TypeName System.Net.NetworkCredential
                     #$Credential.UserName = $username.Split("@")[0]
@@ -189,7 +189,7 @@ BEGIN {
 PROCESS {
     TRY {
         $Accounts = Search-ADAccount -AccountExpiring -SearchBase $SearchBase -TimeSpan "$($days).00:00:00" |
-        Select-Object -Property AccountExpirationDate, Name, Samaccountname, @{ Label = "Manager"; E = { (Get-Aduser(Get-aduser $_ -property manager).manager).Name } }, DistinguishedName
+            Select-Object -Property AccountExpirationDate, Name, Samaccountname, @{ Label = "Manager"; E = { (Get-Aduser(Get-aduser $_ -property manager).manager).Name } }, DistinguishedName
 
         $Css = @"
 <style>
@@ -231,7 +231,7 @@ td {
         }
         ELSE {
             $body = $Accounts |
-            ConvertTo-Html -head $Css -PostContent $PostContent -PreContent $PreContent
+                ConvertTo-Html -head $Css -PostContent $PostContent -PreContent $PreContent
         }
 
         # Sending email
