@@ -1,6 +1,5 @@
-﻿function Add-SCSMReviewActivityReviewer
-{
-<#
+function Add-SCSMReviewActivityReviewer {
+    <#
     .SYNOPSIS
         Function to add a reviewer to a Review Activity item
 
@@ -42,16 +41,14 @@
     )
 
     BEGIN { Import-Module -Name SMLets -ErrorAction Stop }
-    PROCESS
-    {
+    PROCESS {
         # Retrieve the Active Directory User Class
         $ADUserClassID = '10a7f898-e672-ccf3-8881-360bfb6a8f9a'
         $ADUserClassObject = Get-ScsmClass -Id $ADUserClassID
 
         $ScsmUser = Get-ScsmObject -class $ADUserClassObject -filter "Username -eq $UserName"
 
-        if ($ScsmUser)
-        {
+        if ($ScsmUser) {
             # Direct Reviewer add SCSM user by guid
             $RelationShipClass_HasReviewer = Get-SCSMRelationshipClass -name "System.ReviewActivityHasReviewer"
             $RelationShipClass_ReviewerIsUser = Get-SCSMRelationshipClass -name "System.ReviewerIsUser"
