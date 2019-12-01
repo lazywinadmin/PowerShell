@@ -1,5 +1,4 @@
-function New-SCCMDeviceVariable
-{
+function New-SCCMDeviceVariable {
     <#
     .SYNOPSIS
         function to create a new SCCM Device Variable
@@ -89,18 +88,15 @@ function New-SCCMDeviceVariable
 
         [System.Boolean]$IsMasked = $false
     )
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
             Write-Verbose -Message "$ResourceID - Create splatting"
             $SCCM_Splatting = @{
                 ComputerName = $ComputerName
-                NameSpace = "root\sms\site_$SiteCode"
+                NameSpace    = "root\sms\site_$SiteCode"
             }
 
-            IF ($PSBoundParameters['Credential'])
-            {
+            IF ($PSBoundParameters['Credential']) {
                 $SCCM_Splatting.Credential = $Credential
             }
 
@@ -109,8 +105,7 @@ function New-SCCMDeviceVariable
             $MachineSettingsClass = Get-WmiObject @SCCM_Splatting -Query "SELECT ResourceID FROM SMS_MachineSettings WHERE ResourceID = '$ResourceID'"
 
             # If a Machine Settings is found
-            if ($MachineSettingsClass)
-            {
+            if ($MachineSettingsClass) {
                 Write-Verbose -Message "$ResourceID - Machine Settings Exists"
 
                 # Create a new MachineVariable class instance
@@ -135,8 +130,7 @@ function New-SCCMDeviceVariable
                 Write-Verbose -Message "$ResourceID - Save Change"
                 $MachineSettingsClass.Put()
             }
-            else
-            {
+            else {
                 Write-Verbose -Message "$ResourceID - Machine Settings does NOT Exists"
 
                 # Create a new machine setting
@@ -167,8 +161,7 @@ function New-SCCMDeviceVariable
                 $NewMachineSettingsClassInstance.Put()
             }
         }
-        CATCH
-        {
+        CATCH {
             Write-Warning -Message "$ResourceID - Issue while processing the Device"
             $Error[0]
         }
