@@ -1,6 +1,5 @@
-﻿Function Get-Something
-{
-<#
+Function Get-Something {
+    <#
 .SYNOPSIS
     A brief description of the Get-Something function.
 
@@ -25,6 +24,7 @@
     1.0 | 2016/00/00 | Francois-Xavier Cat
         Initial Version
 #>
+    [CmdletBinding()]
     PARAM (
         [Alias("CN", "__SERVER", "PSComputerName")]
         [String[]]$ComputerName = $env:COMPUTERNAME,
@@ -34,8 +34,7 @@
         [pscredential]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )#PARAM
-    TRY
-    {
+    TRY {
         $FunctionName = $MyInvocation.MyCommand.Name
 
 
@@ -43,8 +42,7 @@
             ComputerName = $ComputerName
         }
 
-        IF ($PSBoundParameters['Credential'])
-        {
+        IF ($PSBoundParameters['Credential']) {
             Write-Verbose -Message "[$FunctionName] Appending Credential"
             $Splatting.Credential = $Credential
         }
@@ -53,12 +51,10 @@
         Write-Verbose -Message "[$FunctionName] Connect to..."
 
     }
-    CATCH
-    {
+    CATCH {
         $PSCmdlet.ThrowTerminatingError($_)
     }#CATCH
-    FINALLY
-    {
+    FINALLY {
         #Some Cleanup tasks
     }#FINALLY
 }#Function
