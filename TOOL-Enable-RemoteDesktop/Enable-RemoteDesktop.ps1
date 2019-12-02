@@ -1,6 +1,5 @@
-function Enable-RemoteDesktop
-{
-<#
+function Enable-RemoteDesktop {
+    <#
     .SYNOPSIS
         The function Enable-RemoteDesktop will enable RemoteDesktop on a local or remote machine.
 
@@ -36,12 +35,12 @@ function Enable-RemoteDesktop
 #>
     #Requires -RunAsAdministrator
     [CmdletBinding(DefaultParameterSetName = 'CimSession',
-                   SupportsShouldProcess = $true)]
+        SupportsShouldProcess = $true)]
     param
     (
         [Parameter(ParameterSetName = 'Main',
-                   ValueFromPipeline = $true,
-                   ValueFromPipelineByPropertyName = $true)]
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
         [Alias('CN', '__SERVER', 'PSComputerName')]
         [String[]]$ComputerName,
 
@@ -54,12 +53,10 @@ function Enable-RemoteDesktop
         [Microsoft.Management.Infrastructure.CimSession[]]$CimSession
     )
 
-    BEGIN
-    {
+    BEGIN {
         # Helper Function
-        function Get-DefaultMessage
-        {
-<#
+        function Get-DefaultMessage {
+            <#
 .SYNOPSIS
     Helper Function to show default message used in VERBOSE/DEBUG/WARNING
 .DESCRIPTION
@@ -80,82 +77,69 @@ function Enable-RemoteDesktop
             Write-Output "[$DateFormat][$FunctionName] $Message"
         } #Get-DefaultMessage
     }
-    PROCESS
-    {
-        IF ($PSBoundParameters['CimSession'])
-        {
-            FOREACH ($Cim in $CimSession)
-            {
+    PROCESS {
+        IF ($PSBoundParameters['CimSession']) {
+            FOREACH ($Cim in $CimSession) {
                 $CIMComputer = $($Cim.ComputerName).ToUpper()
 
-                IF ($PSCmdlet.ShouldProcess($CIMComputer, "Enable Remote Desktop via Win32_TerminalServiceSetting"))
-                {
+                IF ($PSCmdlet.ShouldProcess($CIMComputer, "Enable Remote Desktop via Win32_TerminalServiceSetting")) {
 
-                    TRY
-                    {
+                    TRY {
                         # Parameters for Get-CimInstance
                         $CIMSplatting = @{
-                            Class = "Win32_TerminalServiceSetting"
-                            NameSpace = "root\cimv2\terminalservices"
-                            CimSession = $Cim
+                            Class          = "Win32_TerminalServiceSetting"
+                            NameSpace      = "root\cimv2\terminalservices"
+                            CimSession     = $Cim
                             Authentication = 'PacketPrivacy'
-                            ErrorAction = 'Stop'
-                            ErrorVariable = "ErrorProcessGetCimInstance"
+                            ErrorAction    = 'Stop'
+                            ErrorVariable  = "ErrorProcessGetCimInstance"
                         }
 
                         # Parameters for Invoke-CimMethod
                         $CIMInvokeSplatting = @{
-                            MethodName = "SetAllowTSConnections"
-                            Arguments = @{
-                                AllowTSConnections = 1
+                            MethodName    = "SetAllowTSConnections"
+                            Arguments     = @{
+                                AllowTSConnections      = 1
                                 ModifyFirewallException = 1
                             }
-                            ErrorAction = 'Stop'
+                            ErrorAction   = 'Stop'
                             ErrorVariable = "ErrorProcessInvokeCim"
                         }
 
                         Write-Verbose -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - Enable Remote Desktop (and Modify Firewall Exception")
                         Get-CimInstance @CIMSplatting | Invoke-CimMethod @CIMInvokeSplatting
                     }
-                    CATCH
-                    {
+                    CATCH {
                         Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - CIMSession - Something wrong happened")
                         IF ($ErrorProcessGetCimInstance) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Get-CimInstance") }
                         IF ($ErrorProcessInvokeCim) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Invoke-CimMethod") }
                         Write-Warning -Message $Error[0].Exception.Message
                     } #CATCH
-                    FINALLY
-                    {
+                    FINALLY {
                         $CIMSplatting.Clear()
                         $CIMInvokeSplatting.Clear()
                     } #FINALLY
                 } #$PSCmdlet.ShouldProcess
             } #FOREACH ($Cim in $CimSessions)
         } #IF ($PSBoundParameters['CimSession'])
-        ELSE
-        {
-            FOREACH ($Computer in $ComputerName)
-            {
+        ELSE {
+            FOREACH ($Computer in $ComputerName) {
                 $Computer = $Computer.ToUpper()
 
-                IF ($PSCmdlet.ShouldProcess($Computer, "Enable Remote Desktop via Win32_TerminalServiceSetting"))
-                {
-                    TRY
-                    {
+                IF ($PSCmdlet.ShouldProcess($Computer, "Enable Remote Desktop via Win32_TerminalServiceSetting")) {
+                    TRY {
                         Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
-                        IF (Test-Connection -Computer $Computer -count 1 -quiet)
-                        {
+                        IF (Test-Connection -Computer $Computer -count 1 -quiet) {
                             $Splatting = @{
-                                Class = "Win32_TerminalServiceSetting"
-                                NameSpace = "root\cimv2\terminalservices"
-                                ComputerName = $Computer
+                                Class          = "Win32_TerminalServiceSetting"
+                                NameSpace      = "root\cimv2\terminalservices"
+                                ComputerName   = $Computer
                                 Authentication = 'PacketPrivacy'
-                                ErrorAction = 'Stop'
-                                ErrorVariable = 'ErrorProcessGetWmi'
+                                ErrorAction    = 'Stop'
+                                ErrorVariable  = 'ErrorProcessGetWmi'
                             }
 
-                            IF ($PSBoundParameters['Credential'])
-                            {
+                            IF ($PSBoundParameters['Credential']) {
                                 $Splatting.credential = $Credential
                             }
 
@@ -167,14 +151,12 @@ function Enable-RemoteDesktop
                             #(Get-WmiObject -Class Win32_TSGeneralSetting @Splatting -Filter TerminalName='RDP-tcp').SetUserAuthenticationRequired(0)  Out-Null
                         }
                     } #TRY
-                    CATCH
-                    {
+                    CATCH {
                         Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Something wrong happened")
                         IF ($ErrorProcessGetWmi) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Issue with Get-WmiObject") }
                         Write-Warning -MEssage $Error[0].Exception.Message
                     } #CATCH
-                    FINALLY
-                    {
+                    FINALLY {
                         $Splatting.Clear()
                     } #FINALLY
                 } #$PSCmdlet.ShouldProcess

@@ -1,6 +1,5 @@
-﻿function Expand-ScriptAlias
-{
-<#
+function Expand-ScriptAlias {
+    <#
 	.SYNOPSIS
 		Function to replace Aliases used in a script by their fullname
 
@@ -37,69 +36,62 @@
 		lazywinadmin.com
 		@lazywinadmin
 #>
-	[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
-	PARAM (
-		[Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName)]
-		[ValidateScript({ Test-Path -Path $_ })]
-		[Alias('FullName')]
-		[System.String]$Path
-	)
-	PROCESS
-	{
-		FOREACH ($File in $Path)
-		{
-			Write-Verbose -Message '[PROCESS] $File'
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
+    PARAM (
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [ValidateScript( { Test-Path -Path $_ })]
+        [Alias('FullName')]
+        [System.String]$Path
+    )
+    PROCESS {
+        FOREACH ($File in $Path) {
+            Write-Verbose -Message '[PROCESS] $File'
 
-			TRY
-			{
-				# Retrieve file content
-				$ScriptContent = (Get-Content $File -Delimiter $([char]0))
+            TRY {
+                # Retrieve file content
+                $ScriptContent = (Get-Content $File -Delimiter $([char]0))
 
-				# AST Parsing
-				$AbstractSyntaxTree = [System.Management.Automation.Language.Parser]::
-				ParseInput($ScriptContent, [ref]$null, [ref]$null)
+                # AST Parsing
+                $AbstractSyntaxTree = [System.Management.Automation.Language.Parser]::
+                ParseInput($ScriptContent, [ref]$null, [ref]$null)
 
-				# Find Aliases
-				$Aliases = $AbstractSyntaxTree.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true) |
-				ForEach-Object -Process {
-					$Command = $_.CommandElements[0]
-					if ($Alias = Get-Alias | Where-Object { $_.Name -eq $Command })
-					{
+                # Find Aliases
+                $Aliases = $AbstractSyntaxTree.FindAll( { $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true) |
+                    ForEach-Object -Process {
+                        $Command = $_.CommandElements[0]
+                        if ($Alias = Get-Alias | Where-Object { $_.Name -eq $Command }) {
 
-						# Output information
-						[PSCustomObject]@{
-							File = $File
-							Alias = $Alias.Name
-							Definition = $Alias.Definition
-							StartLineNumber = $Command.Extent.StartLineNumber
-							EndLineNumber = $Command.Extent.EndLineNumber
-							StartColumnNumber = $Command.Extent.StartColumnNumber
-							EndColumnNumber = $Command.Extent.EndColumnNumber
-							StartOffset = $Command.Extent.StartOffset
-							EndOffset = $Command.Extent.EndOffset
+                            # Output information
+                            [PSCustomObject]@{
+                                File              = $File
+                                Alias             = $Alias.Name
+                                Definition        = $Alias.Definition
+                                StartLineNumber   = $Command.Extent.StartLineNumber
+                                EndLineNumber     = $Command.Extent.EndLineNumber
+                                StartColumnNumber = $Command.Extent.StartColumnNumber
+                                EndColumnNumber   = $Command.Extent.EndColumnNumber
+                                StartOffset       = $Command.Extent.StartOffset
+                                EndOffset         = $Command.Extent.EndOffset
 
-						}#[PSCustomObject]
-					}#if ($Alias)
-				} | Sort-Object -Property EndOffset -Descending
+                            }#[PSCustomObject]
+                        }#if ($Alias)
+                    } | Sort-Object -Property EndOffset -Descending
 
-				# The sort-object is important, we change the values from the end first to not lose the positions of every aliases.
-				Foreach ($Alias in $Aliases)
-				{
-					# whatif and confirm support
-					if ($psCmdlet.ShouldProcess($file, "Expand Alias: $($Alias.alias) to $($Alias.definition) (startoffset: $($alias.StartOffset))"))
-					{
-						# Remove alias and insert full cmldet name
-						$ScriptContent = $ScriptContent.Remove($Alias.StartOffset, ($Alias.EndOffset - $Alias.StartOffset)).Insert($Alias.StartOffset, $Alias.Definition)
-						# Apply to the file
-						Set-Content -Path $File -Value $ScriptContent -Confirm:$false
-					}
-				}#ForEach Alias in Aliases
+                # The sort-object is important, we change the values from the end first to not lose the positions of every aliases.
+                Foreach ($Alias in $Aliases) {
+                    # whatif and confirm support
+                    if ($psCmdlet.ShouldProcess($file, "Expand Alias: $($Alias.alias) to $($Alias.definition) (startoffset: $($alias.StartOffset))")) {
+                        # Remove alias and insert full cmldet name
+                        $ScriptContent = $ScriptContent.Remove($Alias.StartOffset, ($Alias.EndOffset - $Alias.StartOffset)).Insert($Alias.StartOffset, $Alias.Definition)
+                        # Apply to the file
+                        Set-Content -Path $File -Value $ScriptContent -Confirm:$false
+                    }
+                }#ForEach Alias in Aliases
 
-			}#TRY
-			CATCH
-			{
-				Write-Error -Message $($Error[0].Exception.Message)
-			}
-		}#FOREACH File in Path
-	}#PROCESS
+            }#TRY
+            CATCH {
+                Write-Error -Message $($Error[0].Exception.Message)
+            }
+        }#FOREACH File in Path
+    }#PROCESS
 }#Expand-ScriptAlias
