@@ -1,9 +1,9 @@
 $scripts = Get-ChildItem -Path (Split-Path $PSScriptRoot -parent) -Recurse -Filter *.ps1 |
-Where-Object -FilterScript {
-    $_.FullName -NotMatch '.Tests.' -and
-    $_.Fullname -notmatch [regex]::Escape('_Profiles') -and
-    $_.Fullname -notmatch [regex]::Escape('_Template')
-} | Sort-Object
+    Where-Object -FilterScript {
+        $_.FullName -NotMatch '.Tests.' -and
+        $_.Fullname -notmatch [regex]::Escape('_Profiles') -and
+        $_.Fullname -notmatch [regex]::Escape('_Template')
+    } | Sort-Object
 
 [regex]$regex = "(^[A-Z\-]+-)"
 
@@ -64,10 +64,10 @@ Describe 'Comment based help' -Tag @('Help') {
 }
 Describe 'func' -Tag @('func') {
     foreach ($myscript in $scripts) {
-        it "[$($myscript.BaseName)] `$Error[*] Variable should not be present" {
+        It "[$($myscript.BaseName)] `$Error[*] Variable should not be present" {
             "$($myscript.FullName)" | Should -Not -FileContentMatch ([regex]::Escape('$error['))
         }
-        it "[$($myscript.BaseName)] Error Handling should be present" {
+        It "[$($myscript.BaseName)] Error Handling should be present" {
             "$($myscript.FullName)" | Should -FileContentMatch 'try|try\s+{'
         }
     }
