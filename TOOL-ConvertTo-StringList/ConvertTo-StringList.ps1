@@ -1,6 +1,5 @@
-﻿function ConvertTo-StringList
-{
-<#
+function ConvertTo-StringList {
+    <#
     .SYNOPSIS
         Function to convert an array into a string list with a delimiter.
 
@@ -48,29 +47,24 @@
     param
     (
         [Parameter(Mandatory = $true,
-                   ValueFromPipeline = $true)]
+            ValueFromPipeline = $true)]
         [System.Array]$Array,
 
         [system.string]$Delimiter = ","
     )
 
     BEGIN { $StringList = "" }
-    PROCESS
-    {
+    PROCESS {
         Write-Verbose -Message "Array: $Array"
-        foreach ($item in $Array)
-        {
+        foreach ($item in $Array) {
             # Adding the current object to the list
             $StringList += "$item$Delimiter"
         }
         Write-Verbose "StringList: $StringList"
     }
-    END
-    {
-        TRY
-        {
-            IF ($StringList)
-            {
+    END {
+        TRY {
+            IF ($StringList) {
                 $lenght = $StringList.Length
                 Write-Verbose -Message "StringList Lenght: $lenght"
 
@@ -78,13 +72,11 @@
                 $StringList.Substring(0, ($lenght - $($Delimiter.length)))
             }
         }# TRY
-        CATCH
-        {
+        CATCH {
             Write-Warning -Message "[END] Something wrong happening when output the result"
             $Error[0].Exception.Message
         }
-        FINALLY
-        {
+        FINALLY {
             # Reset Variable
             $StringList = ""
         }
