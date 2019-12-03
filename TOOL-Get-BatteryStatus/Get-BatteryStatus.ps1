@@ -16,7 +16,8 @@ function Get-BatteryStatus {
     try {
         Add-Type -Assembly System.Windows.Forms
         [System.Windows.Forms.SystemInformation]::PowerStatus
-    } catch {
+    }
+    catch {
         $PSCmdlet.ThrowTerminatingError($_)
     }
 }
