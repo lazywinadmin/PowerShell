@@ -1,7 +1,6 @@
-﻿function Get-LocalGroup
-{
+function Get-LocalGroup {
 
-<#
+    <#
     .SYNOPSIS
         This script can be list all of local group account.
 
@@ -38,23 +37,20 @@
     )
 
     $Splatting = @{
-        Class = "Win32_Group"
+        Class     = "Win32_Group"
         Namespace = "root\cimv2"
-        Filter = "LocalAccount='$True'"
+        Filter    = "LocalAccount='$True'"
     }
 
     #Credentials
     If ($PSBoundParameters['Credential']) { $Splatting.Credential = $Credential }
 
-    Foreach ($Computer in $ComputerName)
-    {
-        TRY
-        {
+    Foreach ($Computer in $ComputerName) {
+        TRY {
             Write-Verbose -Message "[PROCESS] ComputerName: $Computer"
             Get-WmiObject @Splatting -ComputerName $Computer | Select-Object -Property Name, Caption, Status, SID, SIDType, Domain, Description
         }
-        CATCH
-        {
+        CATCH {
             Write-Warning -Message "[PROCESS] Issue connecting to $Computer"
         }
     }

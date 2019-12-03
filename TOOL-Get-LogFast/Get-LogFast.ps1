@@ -1,6 +1,5 @@
-﻿function Get-LogFast
-{
-<#
+function Get-LogFast {
+    <#
     .DESCRIPTION
 		Function to read a log file very fast
 	.SYNOPSIS
@@ -24,46 +23,40 @@
 		github.com/lazywinadmin
 
 #>
-	[CmdletBinding()]
-	PARAM (
-		$Path = "c:\Biglog.log",
+    [CmdletBinding()]
+    PARAM (
+        $Path = "c:\Biglog.log",
 
-		$Match
-	)
-	BEGIN
-	{
-		# Create a StreamReader object
-		#  Fortunately this .NET Framework called System.IO.StreamReader allows you to read text files a line at a time which is important when you’ re dealing with huge log files :-)
-		$StreamReader = New-object -TypeName System.IO.StreamReader -ArgumentList (Resolve-Path -Path $Path -ErrorAction Stop).Path
-	}
-	PROCESS
-	{
-		# .Peek() Method: An integer representing the next character to be read, or -1 if no more characters are available or the stream does not support seeking.
-		while ($StreamReader.Peek() -gt -1)
-		{
-			# Read the next line
-			#  .ReadLine() method: Reads a line of characters from the current stream and returns the data as a string.
-			$Line = $StreamReader.ReadLine()
+        $Match
+    )
+    BEGIN {
+        # Create a StreamReader object
+        #  Fortunately this .NET Framework called System.IO.StreamReader allows you to read text files a line at a time which is important when you’ re dealing with huge log files :-)
+        $StreamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList (Resolve-Path -Path $Path -ErrorAction Stop).Path
+    }
+    PROCESS {
+        # .Peek() Method: An integer representing the next character to be read, or -1 if no more characters are available or the stream does not support seeking.
+        while ($StreamReader.Peek() -gt -1) {
+            # Read the next line
+            #  .ReadLine() method: Reads a line of characters from the current stream and returns the data as a string.
+            $Line = $StreamReader.ReadLine()
 
-			#  Ignore empty line and line starting with a #
-			if ($Line.length -eq 0 -or $Line -match "^#")
-			{
-				continue
-			}
+            #  Ignore empty line and line starting with a #
+            if ($Line.length -eq 0 -or $Line -match "^#") {
+                continue
+            }
 
-			IF ($PSBoundParameters['Match'])
-			{
-				If ($Line -match $Match)
-				{
-					Write-Verbose -Message "[PROCESS] Match found"
+            IF ($PSBoundParameters['Match']) {
+                If ($Line -match $Match) {
+                    Write-Verbose -Message "[PROCESS] Match found"
 
-					# Split the line on $Delimiter
-					#$result = ($Line -split $Delimiter)
+                    # Split the line on $Delimiter
+                    #$result = ($Line -split $Delimiter)
 
-					Write-Output $Line
-				}
-			}
-			ELSE { Write-Output $Line }
-		}
-	} #PROCESS
+                    Write-Output $Line
+                }
+            }
+            ELSE { Write-Output $Line }
+        }
+    } #PROCESS
 }

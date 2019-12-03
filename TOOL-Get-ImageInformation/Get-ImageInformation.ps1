@@ -1,6 +1,5 @@
-﻿function Get-ImageInformation
-{
-<#
+function Get-ImageInformation {
+    <#
 .SYNOPSIS
 	function to retrieve Image file information
 
@@ -19,15 +18,14 @@
 	@lazywinadmin
 	github.com/lazywinadmin
 #>
-	PARAM (
-		[System.String[]]$FilePath
-	)
-	Foreach ($Image in $FilePath)
-	{
-		# Load Assembly
-		Add-type -AssemblyName System.Drawing
+    PARAM (
+        [System.String[]]$FilePath
+    )
+    Foreach ($Image in $FilePath) {
+        # Load Assembly
+        Add-Type -AssemblyName System.Drawing
 
-		# Retrieve information
-		New-Object -TypeName System.Drawing.Bitmap -ArgumentList $Image
-	}
+        # Retrieve information
+        New-Object -TypeName System.Drawing.Bitmap -ArgumentList $Image
+    }
 }

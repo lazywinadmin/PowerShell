@@ -1,6 +1,5 @@
-﻿function Get-ComputerOS
-{
-<#
+function Get-ComputerOS {
+    <#
     .SYNOPSIS
         function to retrieve the Operating System of a machine
 
@@ -25,10 +24,10 @@
     [CmdletBinding()]
     PARAM (
         [Parameter(ParameterSetName = "Main")]
-        [Alias("CN","__SERVER","PSComputerName")]
+        [Alias("CN", "__SERVER", "PSComputerName")]
         [String[]]$ComputerName = $env:ComputerName,
 
-        [Parameter(ParameterSetName="Main")]
+        [Parameter(ParameterSetName = "Main")]
         [Alias("RunAs")]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty,
@@ -36,12 +35,10 @@
         [Parameter(ParameterSetName = "CimSession")]
         [Microsoft.Management.Infrastructure.CimSession]$CimSession
     )
-    BEGIN
-    {
+    BEGIN {
         # Default Verbose/Debug message
-        function Get-DefaultMessage
-        {
-    <#
+        function Get-DefaultMessage {
+            <#
     .SYNOPSIS
         Helper Function to show default message used in VERBOSE/DEBUG/WARNING
     .DESCRIPTION
@@ -52,32 +49,25 @@
             Write-Output "[$(Get-Date -Format 'yyyy/MM/dd-HH:mm:ss:ff')][$((Get-Variable -Scope 1 -Name MyInvocation -ValueOnly).MyCommand.Name)] $Message"
         }#Get-DefaultMessage
     }
-    PROCESS
-    {
-        FOREACH ($Computer in $ComputerName)
-        {
-            TRY
-            {
+    PROCESS {
+        FOREACH ($Computer in $ComputerName) {
+            TRY {
                 Write-Verbose -Message (Get-DefaultMessage -Message $Computer)
-                IF (Test-Connection -ComputerName $Computer -Count 1 -Quiet)
-                {
+                IF (Test-Connection -ComputerName $Computer -Count 1 -Quiet) {
                     # Define Hashtable to hold our properties
                     $Splatting = @{
-                        class = "Win32_OperatingSystem"
+                        class       = "Win32_OperatingSystem"
                         ErrorAction = Stop
                     }
 
-                    IF ($PSBoundParameters['CimSession'])
-                    {
+                    IF ($PSBoundParameters['CimSession']) {
                         Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - CimSession")
                         # Using cim session already opened
                         $Query = Get-CIMInstance @Splatting -CimSession $CimSession
                     }
-                    ELSE
-                    {
+                    ELSE {
                         # Credential specified
-                        IF ($PSBoundParameters['Credential'])
-                        {
+                        IF ($PSBoundParameters['Credential']) {
                             Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Credential specified $($Credential.username)")
                             $Splatting.Credential = $Credential
                         }
@@ -90,7 +80,7 @@
 
                     # Prepare output
                     $Properties = @{
-                        ComputerName = $Computer
+                        ComputerName    = $Computer
                         OperatingSystem = $Query.Caption
                     }
 
@@ -98,19 +88,16 @@
                     New-Object -TypeName PSObject -Property $Properties
                 }
             }
-            CATCH
-            {
+            CATCH {
                 Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Issue to connect")
                 Write-Verbose -Message $Error[0].Exception.Message
             }#CATCH
-            FINALLY
-            {
+            FINALLY {
                 $Splatting.Clear()
             }
         }#FOREACH
     }#PROCESS
-    END
-    {
+    END {
         Write-Warning -Message (Get-DefaultMessage -Message "Script completed")
     }
 }#Function

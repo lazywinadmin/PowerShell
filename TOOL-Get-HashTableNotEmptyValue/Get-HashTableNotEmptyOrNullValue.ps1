@@ -1,6 +1,5 @@
-﻿Function Get-HashTableNotEmptyOrNullValue
-{
-<#
+Function Get-HashTableNotEmptyOrNullValue {
+    <#
 .SYNOPSIS
     This function will get the values that are not empty or Null in a hashtable object
 .DESCRIPTION
@@ -18,8 +17,7 @@
 
     $HashTable.GetEnumerator().name |
         ForEach-Object -Process {
-            if($HashTable[$_] -ne "")
-            {
+            if ($HashTable[$_] -ne "") {
                 Write-Output $_
             }
         }
