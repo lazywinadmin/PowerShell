@@ -1,4 +1,4 @@
-﻿function Remove-StringLatinCharacter {
+function Remove-StringLatinCharacter {
     <#
 .SYNOPSIS
     Function to remove diacritics from a string
