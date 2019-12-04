@@ -1,4 +1,4 @@
-﻿function Set-RDPEnable {
+function Set-RDPEnable {
     <#
     .SYNOPSIS
         The function Set-RDPEnable enable RDP remotely using the registry
