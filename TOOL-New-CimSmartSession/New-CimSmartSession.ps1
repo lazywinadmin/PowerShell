@@ -1,6 +1,5 @@
-﻿function New-CimSmartSession
-{
-<#
+function New-CimSmartSession {
+    <#
 .SYNOPSIS
     Function to create a CimSession to remote computer using either WSMAN or DCOM protocol.
 
@@ -36,12 +35,10 @@
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
-    BEGIN
-    {
+    BEGIN {
         # Default Verbose/Debug message
-        function Get-DefaultMessage
-        {
-    <#
+        function Get-DefaultMessage {
+            <#
     .SYNOPSIS
         Helper Function to show default message used in VERBOSE/DEBUG/WARNING
     .DESCRIPTION
@@ -59,52 +56,42 @@
         IF ($PSBoundParameters['Credential']) { $CIMSessionSplatting.Credential = $Credential }
 
         # CIMSession Option for DCOM (Default is WSMAN)
-        $CIMSessionOption =    New-CimSessionOption -Protocol Dcom
+        $CIMSessionOption = New-CimSessionOption -Protocol Dcom
     }
 
-    PROCESS
-    {
-        FOREACH ($Computer in $ComputerName)
-        {
+    PROCESS {
+        FOREACH ($Computer in $ComputerName) {
             Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
-            IF (Test-Connection -ComputerName $Computer -Count 1 -Quiet)
-            {
+            IF (Test-Connection -ComputerName $Computer -Count 1 -Quiet) {
                 $CIMSessionSplatting.ComputerName = $Computer
 
 
                 # WSMAN Protocol
-                IF ((Test-WSMan -ComputerName $Computer -ErrorAction SilentlyContinue).productversion -match 'Stack: ([3-9]|[1-9][0-9]+)\.[0-9]+')
-                {
-                    TRY
-                    {
+                IF ((Test-WSMan -ComputerName $Computer -ErrorAction SilentlyContinue).productversion -match 'Stack: ([3-9]|[1-9][0-9]+)\.[0-9]+') {
+                    TRY {
                         #WSMAN (Default when using New-CimSession)
                         Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Connecting using WSMAN protocol (Default, requires at least PowerShell v3.0)")
                         New-CimSession @CIMSessionSplatting -errorVariable ErrorProcessNewCimSessionWSMAN
                     }
-                    CATCH
-                    {
+                    CATCH {
                         IF ($ErrorProcessNewCimSessionWSMAN) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Can't Connect using WSMAN protocol") }
                         Write-Warning -Message (Get-DefaultMessage -Message $Error.Exception.Message)
                     }
                 }
 
-                ELSE
-                {
+                ELSE {
                     # DCOM Protocol
                     $CIMSessionSplatting.SessionOption = $CIMSessionOption
 
-                    TRY
-                    {
+                    TRY {
                         Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Connecting using DCOM protocol")
                         New-CimSession @SessionParams -errorVariable ErrorProcessNewCimSessionDCOM
                     }
-                    CATCH
-                    {
+                    CATCH {
                         IF ($ErrorProcessNewCimSessionDCOM) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Can't connect using DCOM protocol either") }
                         Write-Warning -Message (Get-DefaultMessage -Message $Error.Exception.Message)
                     }
-                    FINALLY
-                    {
+                    FINALLY {
                         # Remove the CimSessionOption for the DCOM protocol for the next computer
                         $CIMSessionSplatting.Remove('CIMSessionOption')
                     }
