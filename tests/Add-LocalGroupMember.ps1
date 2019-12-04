@@ -1,5 +1,4 @@
-﻿Function Add-LocalGroupMember
-{
+Function Add-LocalGroupMember {
     <#
     .SYNOPSIS
     .DESCRIPTION
@@ -24,30 +23,25 @@
         [Parameter(Mandatory = $True)]
         [string]$Account
     )
-    BEGIN
-    {
+    BEGIN {
         #Check in AD for SamAccountName
         $ADCheck = ([adsisearcher]"(samaccountname=$Account)").findone().properties['samaccountname']
-        if ($SamAccountName -notmatch '\\')
-        {
+        if ($SamAccountName -notmatch '\\') {
             $ADResolved = (Resolve-SamAccount -SamAccount $SamAccountName -Exit:$true)
             $SamAccountName = 'WinNT://', "$env:userdomain", '/', $ADResolved -join ''
         }
-        else
-        {
+        else {
             $ADResolved = ($SamAccountName -split '\\')[1]
             $DomainResolved = ($SamAccountName -split '\\')[0]
             $SamAccountName = 'WinNT://', $DomainResolved, '/', $ADResolved -join ''
         }
 
     }
-    PROCESS
-    {
+    PROCESS {
         $de = [ADSI]"WinNT://$computer/$Group,group"
         $de.psbase.Invoke("Add", ([ADSI]"WinNT://$domain/$user").path)
     }
-    END
-    {
+    END {
 
     }
 }
