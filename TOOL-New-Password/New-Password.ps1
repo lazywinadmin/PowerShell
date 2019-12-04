@@ -1,6 +1,5 @@
-﻿function New-Password
-{
-<#
+function New-Password {
+    <#
 	.SYNOPSIS
 		Function to Generate a new password.
 
@@ -36,61 +35,55 @@
 		See ASCII Table http://www.asciitable.com/
 		Code based on a blog post of https://mjolinor.wordpress.com/2014/01/31/random-password-generator/
 #>
-	[CmdletBinding()]
-	PARAM
-	(
-		[ValidateNotNull()]
-		[int]$Length = 12,
-        [ValidateRange(1,256)]
+    [CmdletBinding()]
+    PARAM
+    (
+        [ValidateNotNull()]
+        [int]$Length = 12,
+        [ValidateRange(1, 256)]
         [Int]$Count = 1
-	)#PARAM
+    )#PARAM
 
-	BEGIN
-	{
-		# Create ScriptBlock with the ASCII Char Codes
-		$PasswordCharCodes = { 33..126 }.invoke()
+    BEGIN {
+        # Create ScriptBlock with the ASCII Char Codes
+        $PasswordCharCodes = { 33..126 }.invoke()
 
 
         # Exclude some ASCII Char Codes from the ScriptBlock
         #  Excluded characters are ",',.,/,1,<,>,`,O,0,l,|
-		#  See http://www.asciitable.com/ for mapping
-		34, 39, 46, 47, 49, 60, 62, 96, 48, 79, 108, 124 | ForEach-Object { [void]$PasswordCharCodes.Remove($_) }
-		$PasswordChars = [char[]]$PasswordCharCodes
-	}#BEGIN
+        #  See http://www.asciitable.com/ for mapping
+        34, 39, 46, 47, 49, 60, 62, 96, 48, 79, 108, 124 | ForEach-Object { [void]$PasswordCharCodes.Remove($_) }
+        $PasswordChars = [char[]]$PasswordCharCodes
+    }#BEGIN
 
-	PROCESS
-	{
+    PROCESS {
         1..$count | ForEach-Object {
             # Password of 4 characters or longer
-		    IF ($Length -gt 4)
-		    {
+            IF ($Length -gt 4) {
 
-			    DO
-			    {
-				    # Generate a Password of the length requested
-				    $NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
-			    }#Do
-			    UNTIL (
-			    # Make sure it contains an Upercase and Lowercase letter, a number and another special character
-			    ($NewPassword -cmatch '[A-Z]') -and
-			    ($NewPassWord -cmatch '[a-z]') -and
-			    ($NewPassWord -imatch '[0-9]') -and
-			    ($NewPassWord -imatch '[^A-Z0-9]')
-			    )#Until
-		    }#IF
+                DO {
+                    # Generate a Password of the length requested
+                    $NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
+                }#Do
+                UNTIL (
+                    # Make sure it contains an Upercase and Lowercase letter, a number and another special character
+                    ($NewPassword -cmatch '[A-Z]') -and
+                    ($NewPassWord -cmatch '[a-z]') -and
+                    ($NewPassWord -imatch '[0-9]') -and
+                    ($NewPassWord -imatch '[^A-Z0-9]')
+                )#Until
+            }#IF
             # Password Smaller than 4 characters
-		    ELSE
-		    {
-			    $NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
-		    }#ELSE
+            ELSE {
+                $NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
+            }#ELSE
 
-		    # Output a new password
-		    Write-Output $NewPassword
+            # Output a new password
+            Write-Output $NewPassword
         }
-	} #PROCESS
-	END
-	{
+    } #PROCESS
+    END {
         # Cleanup
-		Remove-Variable -Name NewPassWord -ErrorAction 'SilentlyContinue'
-	} #END
+        Remove-Variable -Name NewPassWord -ErrorAction 'SilentlyContinue'
+    } #END
 } #Function
