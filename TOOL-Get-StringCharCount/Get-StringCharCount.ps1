@@ -1,6 +1,5 @@
-﻿Function Get-StringCharCount
-{
-	<#
+Function Get-StringCharCount {
+    <#
 	.SYNOPSIS
 		This function will count the number of characters in a string
 	.DESCRIPTION
@@ -14,6 +13,6 @@
 		@lazywinadmin
 		lazywinadmin.com
 	#>
-	PARAM ([String]$String)
-	($String -as [Char[]]).count
+    PARAM ([String]$String)
+    ($String -as [Char[]]).count
 }
