@@ -1,22 +1,22 @@
-﻿$UserSam = "TestAccount"
+$UserSam = "TestAccount"
 
 $Search = New-Object -TypeName System.DirectoryServices.DirectorySearcher -ErrorAction 'Stop'
 $Search.Filter = "(&((objectclass=user)(samaccountname=$UserSam)))"
 $Search.FindAll() | ForEach-Object -Process {
-                $Account = $_
-                $AccountGetDirectory = $Account.GetDirectoryEntry();
+    $Account = $_
+    $AccountGetDirectory = $Account.GetDirectoryEntry();
 
-                # Add the properties tokenGroups
-                $AccountGetDirectory.GetInfoEx(@("tokenGroups"), 0)
+    # Add the properties tokenGroups
+    $AccountGetDirectory.GetInfoEx(@("tokenGroups"), 0)
 
 
-                $($AccountGetDirectory.Get("tokenGroups"))|
-                ForEach-Object -Process {
-                        # Create SecurityIdentifier to translate into group name
-                        $Principal = New-Object System.Security.Principal.SecurityIdentifier($_, 0)
-                        $domainName = [adsi]"LDAP://$($Principal.AccountDomainSid)"
+    $($AccountGetDirectory.Get("tokenGroups")) |
+        ForEach-Object -Process {
+            # Create SecurityIdentifier to translate into group name
+            $Principal = New-Object System.Security.Principal.SecurityIdentifier($_, 0)
+            $domainName = [adsi]"LDAP://$($Principal.AccountDomainSid)"
 
-                        <#
+            <#
                            TypeName: System.Security.Principal.SecurityIdentifier
 
                         Name              MemberType Definition
@@ -36,12 +36,12 @@ $Search.FindAll() | ForEach-Object -Process {
                         BinaryLength      Property   int BinaryLength {get;}
                         Value             Property   string Value {get;}
                         #>
-                        # Prepare Output
-                        $Properties = @{
-                            SamAccountName = $Account.properties.samaccountname -as [string]
-                            GroupName = $principal.Translate([System.Security.Principal.NTAccount])
-                        }
-                        # Output Information
-                        New-Object -TypeName PSObject -Property $Properties
-                    }
+            # Prepare Output
+            $Properties = @{
+                SamAccountName = $Account.properties.samaccountname -as [string]
+                GroupName      = $principal.Translate([System.Security.Principal.NTAccount])
+            }
+            # Output Information
+            New-Object -TypeName PSObject -Property $Properties
+        }
 }
