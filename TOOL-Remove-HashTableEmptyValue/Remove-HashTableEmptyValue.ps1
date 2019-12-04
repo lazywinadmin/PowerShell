@@ -1,6 +1,5 @@
-﻿Function Remove-HashTableEmptyValue
-{
-<#
+Function Remove-HashTableEmptyValue {
+    <#
 .SYNOPSIS
     This function will remove the empty or Null entry of a hashtable object
 .DESCRIPTION
@@ -20,8 +19,7 @@
 
     $HashTable.GetEnumerator().name |
         ForEach-Object -Process {
-            if($HashTable[$_] -eq "" -or $HashTable[$_] -eq $null)
-            {
+            if ($HashTable[$_] -eq "" -or $HashTable[$_] -eq $null) {
                 Write-Verbose -Message "[Remove-HashTableEmptyValue][PROCESS] - Property: $_ removing..."
                 [void]$HashTable.Remove($_)
                 Write-Verbose -Message "[Remove-HashTableEmptyValue][PROCESS] - Property: $_ removed"
