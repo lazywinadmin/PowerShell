@@ -1,4 +1,4 @@
-﻿function Set-RDPDisable {
+function Set-RDPDisable {
     <#
     .SYNOPSIS
         The function Set-RDPDisable disable RDP remotely using the registry
