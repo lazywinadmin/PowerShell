@@ -1,6 +1,5 @@
-function Resolve-ShortURL
-{
-<#
+function Resolve-ShortURL {
+    <#
 .SYNOPSIS
     Function to resolve a short URL to the absolute URI
 
@@ -30,15 +29,12 @@ function Resolve-ShortURL
         [String[]]$ShortUrl
     )
 
-    FOREACH ($URL in $ShortUrl)
-    {
-        TRY
-        {
+    FOREACH ($URL in $ShortUrl) {
+        TRY {
             Write-Verbose -Message "$URL - Querying..."
             (Invoke-WebRequest -Uri $URL -MaximumRedirection 0 -ErrorAction Ignore).Headers.Location
         }
-        CATCH
-        {
+        CATCH {
             Write-Error -Message $Error[0].Exception.Message
         }
     }
