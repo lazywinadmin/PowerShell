@@ -1,4 +1,4 @@
-﻿function Get-StringLastDigit {
+function Get-StringLastDigit {
     <#
     .SYNOPSIS
         Get the last digit of a string
