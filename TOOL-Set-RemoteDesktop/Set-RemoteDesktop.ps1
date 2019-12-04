@@ -1,4 +1,4 @@
-﻿function Set-RemoteDesktop {
+function Set-RemoteDesktop {
     <#
     .SYNOPSIS
         The function Set-RemoteDesktop allows you to enable or disable RDP remotely using the registry
