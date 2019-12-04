@@ -1,4 +1,4 @@
-﻿function Test-IsLocalAdministrator {
+function Test-IsLocalAdministrator {
     <#
 .SYNOPSIS
     Function to verify if the current user is a local Administrator on the current system
