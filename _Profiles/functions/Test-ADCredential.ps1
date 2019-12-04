@@ -5,6 +5,6 @@ Function Test-ADCredential {
     $pc = New-Object System.DirectoryServices.AccountManagement.PrincipalContext($ct, $domain)
     New-Object PSObject -Property @{
         UserName = $username;
-        IsValid = $pc.ValidateCredentials($username, $password).ToString()
+        IsValid  = $pc.ValidateCredentials($username, $password).ToString()
     }
 }
