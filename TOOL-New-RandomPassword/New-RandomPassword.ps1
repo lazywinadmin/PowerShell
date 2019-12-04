@@ -1,6 +1,5 @@
-﻿function New-RandomPassword
-{
-<#
+function New-RandomPassword {
+    <#
 .SYNOPSIS
     Function to generate a complex and random password
 .DESCRIPTION
@@ -49,13 +48,11 @@
         [Int32]$Count = 1
     )
 
-    BEGIN
-    {
+    BEGIN {
         Add-Type -AssemblyName System.web;
     }
 
-    PROCESS
-    {
+    PROCESS {
         1..$Count | ForEach-Object {
             [System.Web.Security.Membership]::GeneratePassword($Length, $NumberOfNonAlphanumericCharacters)
         }
