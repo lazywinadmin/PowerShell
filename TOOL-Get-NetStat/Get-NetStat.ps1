@@ -1,6 +1,5 @@
-﻿function Get-NetStat
-{
-<#
+function Get-NetStat {
+    <#
 .SYNOPSIS
     This function will get the output of netstat -n and parse the output
 .DESCRIPTION
@@ -14,8 +13,7 @@
     lazywinadmin.com
     @lazywinadmin
 #>
-    PROCESS
-    {
+    PROCESS {
         # Get the output of netstat
         $data = netstat -n
 
@@ -23,8 +21,7 @@
         $data = $data[4..$data.count]
 
         # Each line need to be splitted and get rid of unnecessary spaces
-        foreach ($line in $data)
-        {
+        foreach ($line in $data) {
             # Get rid of the first whitespaces, at the beginning of the line
             $line = $line -replace '^\s+', ''
 
@@ -33,12 +30,12 @@
 
             # Define the properties
             $properties = @{
-                Protocole = $line[0]
-                LocalAddressIP = ($line[1] -split ":")[0]
-                LocalAddressPort = ($line[1] -split ":")[1]
-                ForeignAddressIP = ($line[2] -split ":")[0]
+                Protocole          = $line[0]
+                LocalAddressIP     = ($line[1] -split ":")[0]
+                LocalAddressPort   = ($line[1] -split ":")[1]
+                ForeignAddressIP   = ($line[2] -split ":")[0]
                 ForeignAddressPort = ($line[2] -split ":")[1]
-                State = $line[3]
+                State              = $line[3]
             }
 
             # Output the current line
