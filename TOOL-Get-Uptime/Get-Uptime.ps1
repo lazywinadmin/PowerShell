@@ -1,6 +1,5 @@
-﻿function Get-Uptime
-{
-<#
+function Get-Uptime {
+    <#
     .SYNOPSIS
         The function Get-Uptime will get uptime of a local or remote machine.
 
@@ -37,11 +36,11 @@
     [CmdletBinding()]
     PARAM (
         [Parameter(
-                   ParameterSetName = "Main",
-                   ValueFromPipeline = $True,
-                   ValueFromPipelineByPropertyName = $True)]
+            ParameterSetName = "Main",
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True)]
         [Alias("CN", "__SERVER", "PSComputerName")]
-        [String[]]$ComputerName=$env:COMPUTERNAME,
+        [String[]]$ComputerName = $env:COMPUTERNAME,
 
         [Parameter(ParameterSetName = "Main")]
         [Alias("RunAs")]
@@ -51,12 +50,10 @@
         [Parameter(ParameterSetName = "CimSession")]
         [Microsoft.Management.Infrastructure.CimSession[]]$CimSession
     )
-    BEGIN
-    {
+    BEGIN {
         # Helper Function
-        function Get-DefaultMessage
-        {
-<#
+        function Get-DefaultMessage {
+            <#
 .SYNOPSIS
     Helper Function to show default message used in VERBOSE/DEBUG/WARNING
 .DESCRIPTION
@@ -77,21 +74,17 @@
             Write-Output "[$DateFormat][$FunctionName] $Message"
         }#Get-DefaultMessage
     }
-    PROCESS
-    {
-        IF ($PSBoundParameters['CimSession'])
-        {
-            FOREACH ($Cim in $CimSession)
-            {
+    PROCESS {
+        IF ($PSBoundParameters['CimSession']) {
+            FOREACH ($Cim in $CimSession) {
                 $CIMComputer = $($Cim.ComputerName).ToUpper()
 
-                TRY
-                {
+                TRY {
                     # Parameters for Get-CimInstance
                     $CIMSplatting = @{
-                        Class = "Win32_OperatingSystem"
-                        CimSession = $Cim
-                        ErrorAction = 'Stop'
+                        Class         = "Win32_OperatingSystem"
+                        CimSession    = $Cim
+                        ErrorAction   = 'Stop'
                         ErrorVariable = "ErrorProcessGetCimInstance"
                     }
 
@@ -100,14 +93,14 @@
                     $CimResult = Get-CimInstance @CIMSplatting
 
                     # Prepare output
-                    $Uptime = New-TimeSpan -Start $($CimResult.lastbootuptime) -End (get-date)
+                    $Uptime = New-TimeSpan -Start $($CimResult.lastbootuptime) -End (Get-Date)
 
                     $Properties = @{
-                        ComputerName = $CIMComputer
-                        Days = $Uptime.days
-                        Hours = $Uptime.hours
-                        Minutes = $Uptime.minutes
-                        Seconds = $Uptime.seconds
+                        ComputerName   = $CIMComputer
+                        Days           = $Uptime.days
+                        Hours          = $Uptime.hours
+                        Minutes        = $Uptime.minutes
+                        Seconds        = $Uptime.seconds
                         LastBootUpTime = $CimResult.lastbootuptime
                     }
 
@@ -115,38 +108,31 @@
                     New-Object -TypeName PSObject -Property $Properties
 
                 }
-                CATCH
-                {
+                CATCH {
                     Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Something wrong happened")
                     IF ($ErrorProcessGetCimInstance) { Write-Warning -Message (Get-DefaultMessage -Message "$CIMComputer - Issue with Get-CimInstance") }
                     Write-Warning -Message $Error[0].Exception.Message
                 } #CATCH
-                FINALLY
-                {
+                FINALLY {
                     $CIMSplatting.Clear() | Out-Null
                 }
             } #FOREACH ($Cim in $CimSessions)
         } #IF ($PSBoundParameters['CimSession'])
-        ELSE
-        {
-            FOREACH ($Computer in $ComputerName)
-            {
+        ELSE {
+            FOREACH ($Computer in $ComputerName) {
                 $Computer = $Computer.ToUpper()
 
-                TRY
-                {
+                TRY {
                     Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Test-Connection")
-                    IF (Test-Connection -Computer $Computer -count 1 -quiet)
-                    {
+                    IF (Test-Connection -Computer $Computer -count 1 -quiet) {
                         $Splatting = @{
-                            Class = "Win32_OperatingSystem"
-                            ComputerName = $Computer
-                            ErrorAction = 'Stop'
+                            Class         = "Win32_OperatingSystem"
+                            ComputerName  = $Computer
+                            ErrorAction   = 'Stop'
                             ErrorVariable = 'ErrorProcessGetWmi'
                         }
 
-                        IF ($PSBoundParameters['Credential'])
-                        {
+                        IF ($PSBoundParameters['Credential']) {
                             $Splatting.credential = $Credential
                         }
 
@@ -156,28 +142,26 @@
 
                         # Prepare output
                         $HumanTimeFormat = $Result.ConvertToDateTime($Result.Lastbootuptime)
-                        $Uptime = New-TimeSpan -Start $HumanTimeFormat -End $(get-date)
+                        $Uptime = New-TimeSpan -Start $HumanTimeFormat -End $(Get-Date)
 
                         $Properties = @{
-                            ComputerName = $Computer
-                            Days = $Uptime.days
-                            Hours = $Uptime.hours
-                            Minutes = $Uptime.minutes
-                            Seconds = $Uptime.seconds
+                            ComputerName   = $Computer
+                            Days           = $Uptime.days
+                            Hours          = $Uptime.hours
+                            Minutes        = $Uptime.minutes
+                            Seconds        = $Uptime.seconds
                             LastBootUpTime = $CimResult.lastbootuptime
                         }
                         # Output the information
                         New-Object -TypeName PSObject -Property $Properties
                     }
                 }
-                CATCH
-                {
+                CATCH {
                     Write-Warning -Message (Get-DefaultMessage -Message "$$Computer - Something wrong happened")
                     IF ($ErrorProcessGetWmi) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Issue with Get-WmiObject") }
                     Write-Warning -MEssage $Error[0].Exception.Message
                 }
-                FINALLY
-                {
+                FINALLY {
                     $Splatting.Clear()
                 }
             }#FOREACH
