@@ -1,6 +1,5 @@
-﻿function Get-NetFramework
-{
-<#
+function Get-NetFramework {
+    <#
 .SYNOPSIS
     This function will retrieve the list of Framework Installed on the computer.
 .DESCRIPTION
@@ -48,15 +47,15 @@
 
         # Get the Net Framework Installed
         $netFramework = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse |
-        Get-ItemProperty -name Version -EA 0 |
-        Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } |
-        Select-Object -Property PSChildName, Version
+            Get-ItemProperty -name Version -EA 0 |
+            Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } |
+            Select-Object -Property PSChildName, Version
 
         # Prepare output
         $Properties = @{
-            ComputerName = "$($env:Computername)$($env:USERDNSDOMAIN)"
+            ComputerName      = "$($env:Computername)$($env:USERDNSDOMAIN)"
             PowerShellVersion = $psversiontable.PSVersion.Major
-            NetFramework = $netFramework
+            NetFramework      = $netFramework
         }
         New-Object -TypeName PSObject -Property $Properties
     }
