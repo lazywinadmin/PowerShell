@@ -1,6 +1,5 @@
-Function Lock-Computer
-{
-<#
+Function Lock-Computer {
+    <#
 .DESCRIPTION
     Function to Lock your computer
 .SYNOPSIS
@@ -12,7 +11,7 @@ Function Lock-Computer
     This will lock the current computer
 #>
 
-$signature = @"
+    $signature = @"
 [DllImport("user32.dll", SetLastError = true)]
 public static extern bool LockWorkStation();
 "@
