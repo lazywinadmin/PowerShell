@@ -1,6 +1,5 @@
-﻿function New-ScriptMessage
-{
-<#
+function New-ScriptMessage {
+    <#
 	.SYNOPSIS
 		Helper Function to show default message used in VERBOSE/DEBUG/WARNING
 
@@ -55,33 +54,29 @@
 		github.com/lazywinadmin
 #>
 
-	[CmdletBinding()]
-	[OutputType([string])]
-	param
-	(
-		[String]$Message,
-		[String]$Block,
-		[String]$DateFormat = 'yyyy\/MM\/dd HH:mm:ss:ff',
-		$FunctionScope = "1"
-	)
+    [CmdletBinding()]
+    [OutputType([string])]
+    param
+    (
+        [String]$Message,
+        [String]$Block,
+        [String]$DateFormat = 'yyyy\/MM\/dd HH:mm:ss:ff',
+        $FunctionScope = "1"
+    )
 
-	PROCESS
-	{
-		$DateFormat = Get-Date -Format $DateFormat
-		$MyCommand = (Get-Variable -Scope $FunctionScope -Name MyInvocation -ValueOnly).MyCommand.Name
-		IF ($MyCommand)
-		{
-			$String = "[$DateFormat][$MyCommand]"
-		} #IF
-		ELSE
-		{
-			$String = "[$DateFormat]"
-		} #Else
+    PROCESS {
+        $DateFormat = Get-Date -Format $DateFormat
+        $MyCommand = (Get-Variable -Scope $FunctionScope -Name MyInvocation -ValueOnly).MyCommand.Name
+        IF ($MyCommand) {
+            $String = "[$DateFormat][$MyCommand]"
+        } #IF
+        ELSE {
+            $String = "[$DateFormat]"
+        } #Else
 
-		IF ($PSBoundParameters['Block'])
-		{
-			$String += "[$Block]"
-		}
-		Write-Output "$String $Message"
-	} #Process
+        IF ($PSBoundParameters['Block']) {
+            $String += "[$Block]"
+        }
+        Write-Output "$String $Message"
+    } #Process
 }
