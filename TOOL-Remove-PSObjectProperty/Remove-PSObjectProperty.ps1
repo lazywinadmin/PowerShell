@@ -1,6 +1,5 @@
-﻿function Remove-PSObjectProperty
-{
-<#
+function Remove-PSObjectProperty {
+    <#
 	.SYNOPSIS
 		Function to Remove a specifid property from a PowerShell object
 
@@ -21,15 +20,13 @@
 		lazywinadmin.com
 		@lazywinadmin
 #>
-	PARAM (
-		$PSObject,
+    PARAM (
+        $PSObject,
 
-		[String[]]$Property)
-	PROCESS
-	{
-		Foreach ($item in $Property)
-		{
-			$PSObject.psobject.Properties.Remove("$item")
-		}
-	}
+        [String[]]$Property)
+    PROCESS {
+        Foreach ($item in $Property) {
+            $PSObject.psobject.Properties.Remove("$item")
+        }
+    }
 }
