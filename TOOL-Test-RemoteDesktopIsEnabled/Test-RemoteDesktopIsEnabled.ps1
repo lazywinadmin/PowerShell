@@ -1,4 +1,4 @@
-﻿function Test-RemoteDesktopIsEnabled {
+function Test-RemoteDesktopIsEnabled {
     <#
 .SYNOPSIS
   Function to check if RDP is enabled
