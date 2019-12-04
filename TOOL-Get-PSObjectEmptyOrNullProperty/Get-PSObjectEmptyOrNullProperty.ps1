@@ -1,6 +1,5 @@
-function Get-PSObjectEmptyOrNullProperty
-{
-<#
+function Get-PSObjectEmptyOrNullProperty {
+    <#
 .SYNOPSIS
 	Function to Get all the empty or null properties with empty value in a PowerShell Object
 
@@ -47,11 +46,10 @@ function Get-PSObjectEmptyOrNullProperty
 	lazywinadmin.com
 	@lazywinadmin
 #>
-	PARAM (
-		$PSObject)
-	PROCESS
-	{
-		$PsObject.psobject.Properties |
-		Where-Object { -not $_.value }
-	}
+    PARAM (
+        $PSObject)
+    PROCESS {
+        $PsObject.psobject.Properties |
+            Where-Object { -not $_.value }
+    }
 }
