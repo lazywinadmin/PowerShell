@@ -1,6 +1,5 @@
-﻿function Remove-StringDiacritic
-{
-<#
+function Remove-StringDiacritic {
+    <#
 .SYNOPSIS
 	This function will remove the diacritics (accents) characters from a string.
 
@@ -25,39 +24,35 @@
 	lazywinadmin.com
 	github.com/lazywinadmin
 #>
-	[CMdletBinding()]
-	PARAM
-	(
-		[ValidateNotNullOrEmpty()]
-		[Alias('Text')]
-		[System.String[]]$String,
-		[System.Text.NormalizationForm]$NormalizationForm = "FormD"
-	)
+    [CMdletBinding()]
+    PARAM
+    (
+        [ValidateNotNullOrEmpty()]
+        [Alias('Text')]
+        [System.String[]]$String,
+        [System.Text.NormalizationForm]$NormalizationForm = "FormD"
+    )
 
-	FOREACH ($StringValue in $String)
-	{
-		Write-Verbose -Message "$StringValue"
-		try
-		{
-			# Normalize the String
-			$Normalized = $StringValue.Normalize($NormalizationForm)
-			$NewString = New-Object -TypeName System.Text.StringBuilder
+    FOREACH ($StringValue in $String) {
+        Write-Verbose -Message "$StringValue"
+        try {
+            # Normalize the String
+            $Normalized = $StringValue.Normalize($NormalizationForm)
+            $NewString = New-Object -TypeName System.Text.StringBuilder
 
-			# Convert the String to CharArray
-			$normalized.ToCharArray() |
-			ForEach-Object -Process {
-				if ([Globalization.CharUnicodeInfo]::GetUnicodeCategory($psitem) -ne [Globalization.UnicodeCategory]::NonSpacingMark)
-				{
-					[void]$NewString.Append($psitem)
-				}
-			}
+            # Convert the String to CharArray
+            $normalized.ToCharArray() |
+                ForEach-Object -Process {
+                    if ([Globalization.CharUnicodeInfo]::GetUnicodeCategory($psitem) -ne [Globalization.UnicodeCategory]::NonSpacingMark) {
+                        [void]$NewString.Append($psitem)
+                    }
+                }
 
-			#Combine the new string chars
-			Write-Output $($NewString -as [string])
-		}
-		Catch
-		{
-			Write-Error -Message $Error[0].Exception.Message
-		}
-	}
+            #Combine the new string chars
+            Write-Output $($NewString -as [string])
+        }
+        Catch {
+            Write-Error -Message $Error[0].Exception.Message
+        }
+    }
 }
