@@ -1,6 +1,5 @@
-﻿function Remove-PSObjectEmptyOrNullProperty
-{
-<#
+function Remove-PSObjectEmptyOrNullProperty {
+    <#
     .SYNOPSIS
         Function to Remove all the empty or null properties with empty value in a PowerShell Object
 
@@ -20,12 +19,11 @@
 #>
     PARAM (
         $PSObject)
-    PROCESS
-    {
+    PROCESS {
         $PsObject.psobject.Properties |
-        Where-Object { -not $_.value } |
-        ForEach-Object {
-            $PsObject.psobject.Properties.Remove($_.name)
-        }
+            Where-Object { -not $_.value } |
+            ForEach-Object {
+                $PsObject.psobject.Properties.Remove($_.name)
+            }
     }
 }
