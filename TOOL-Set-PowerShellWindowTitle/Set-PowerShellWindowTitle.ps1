@@ -1,4 +1,4 @@
-﻿function Set-PowerShellWindowTitle {
+function Set-PowerShellWindowTitle {
     <#
     .SYNOPSIS
         Function to set the title of the PowerShell Window
