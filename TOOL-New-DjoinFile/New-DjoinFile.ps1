@@ -1,5 +1,4 @@
-﻿function New-DjoinFile
-{
+function New-DjoinFile {
     <#
     .SYNOPSIS
         Function to generate a blob file accepted by djoin.exe tool (offline domain join)
@@ -41,10 +40,8 @@
         [System.IO.FileInfo]$DestinationFile = "c:\temp\djoin.tmp"
     )
 
-    PROCESS
-    {
-        TRY
-        {
+    PROCESS {
+        TRY {
             # Create a byte object
             $bytechain = New-Object -TypeName byte[] -ArgumentList 2
             # Add the first two character for Unicode Encoding
@@ -66,8 +63,7 @@
             # Close the file Stream
             $FileStream.Close()
         }
-        CATCH
-        {
+        CATCH {
             $Error[0]
         }
     }
