@@ -1,4 +1,4 @@
-﻿function Send-Email {
+function Send-Email {
     <#
     .SYNOPSIS
         This function allows you to send email
