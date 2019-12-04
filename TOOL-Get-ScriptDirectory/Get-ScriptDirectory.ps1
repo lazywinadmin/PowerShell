@@ -1,6 +1,5 @@
-function Get-ScriptDirectory
-{
-<#
+function Get-ScriptDirectory {
+    <#
 .SYNOPSIS
    This function retrieve the current folder path
 .DESCRIPTION
@@ -8,12 +7,10 @@ function Get-ScriptDirectory
 .EXAMPLE
     Get-ScriptDirectory
 #>
-    if($null -eq $hostinvocation)
-    {
+    if ($null -eq $hostinvocation) {
         Split-Path -Path $hostinvocation.MyCommand.path
     }
-    else
-    {
+    else {
         Split-Path -Path $script:MyInvocation.MyCommand.Path
     }
 }
