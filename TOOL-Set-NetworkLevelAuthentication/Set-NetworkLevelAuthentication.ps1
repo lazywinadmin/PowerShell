@@ -1,6 +1,5 @@
-﻿function Set-NetworkLevelAuthentication
-{
-<#
+function Set-NetworkLevelAuthentication {
+    <#
 .SYNOPSIS
     This function will set the NLA setting on a local machine or remote machine
 
@@ -37,7 +36,7 @@
     #Requires -Version 3.0
     [CmdletBinding()]
     PARAM (
-        [Parameter(ValueFromPipeline,ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [System.String[]]$ComputerName = $env:ComputerName,
 
         [Parameter(Mandatory)]
@@ -47,43 +46,34 @@
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )#Param
-    BEGIN
-    {
-        TRY
-        {
-            IF (-not (Get-Module -Name CimCmdlets))
-            {
+    BEGIN {
+        TRY {
+            IF (-not (Get-Module -Name CimCmdlets)) {
                 Write-Verbose -Message '[BEGIN] Import Module CimCmdlets'
                 Import-Module CimCmdlets -ErrorAction 'Stop' -ErrorVariable ErrorBeginCimCmdlets
             }
         }
-        CATCH
-        {
-            IF ($ErrorBeginCimCmdlets)
-            {
+        CATCH {
+            IF ($ErrorBeginCimCmdlets) {
                 Write-Error -Message "[BEGIN] Can't find CimCmdlets Module"
             }
         }
     }#BEGIN
 
-    PROCESS
-    {
-        FOREACH ($Computer in $ComputerName)
-        {
+    PROCESS {
+        FOREACH ($Computer in $ComputerName) {
             Write-Verbose -message $Computer
-            TRY
-            {
+            TRY {
                 # Building Splatting for CIM Sessions
                 Write-Verbose -message "$Computer - CIM/WIM - Building Splatting"
                 $CIMSessionParams = @{
-                    ComputerName = $Computer
-                    ErrorAction = 'Stop'
+                    ComputerName  = $Computer
+                    ErrorAction   = 'Stop'
                     ErrorVariable = 'ProcessError'
                 }
 
                 # Add Credential if specified when calling the function
-                IF ($PSBoundParameters['Credential'])
-                {
+                IF ($PSBoundParameters['Credential']) {
                     Write-Verbose -message "[PROCESS] $Computer - CIM/WMI - Add Credential Specified"
                     $CIMSessionParams.credential = $Credential
                 }
@@ -94,8 +84,7 @@
 
                 # CIM/WMI Connection
                 #  WsMAN
-                IF ((Test-WSMan -ComputerName $Computer -ErrorAction SilentlyContinue).productversion -match 'Stack: 3.0')
-                {
+                IF ((Test-WSMan -ComputerName $Computer -ErrorAction SilentlyContinue).productversion -match 'Stack: 3.0') {
                     Write-Verbose -Message "[PROCESS] $Computer - WSMAN is responsive"
                     $CimSession = New-CimSession @CIMSessionParams
                     $CimProtocol = $CimSession.protocol
@@ -103,8 +92,7 @@
                 }
 
                 # DCOM
-                ELSE
-                {
+                ELSE {
                     # Trying with DCOM protocol
                     Write-Verbose -Message "[PROCESS] $Computer - Trying to connect via DCOM protocol"
                     $CIMSessionParams.SessionOption = New-CimSessionOption -Protocol Dcom
@@ -119,18 +107,15 @@
                 $NLAinfo | Invoke-CimMethod -MethodName SetUserAuthenticationRequired -Arguments @{ UserAuthenticationRequired = $EnableNLA } -ErrorAction 'Continue' -ErrorVariable ErrorProcessInvokeWmiMethod
             }
 
-            CATCH
-            {
+            CATCH {
                 Write-Warning -Message "Error on $Computer"
                 Write-Error -Message $_.Exception.Message
                 if ($ErrorTestConnection) { Write-Warning -Message "[PROCESS] Error - $ErrorTestConnection" }
                 if ($ProcessError) { Write-Warning -Message "[PROCESS] Error - $ProcessError" }
                 if ($ErrorProcessInvokeWmiMethod) { Write-Warning -Message "[PROCESS] Error - $ErrorProcessInvokeWmiMethod" }
             }#CATCH
-            FINALLY
-            {
-                if ($CimSession)
-                {
+            FINALLY {
+                if ($CimSession) {
                     # CLeanup/Close the remaining session
                     Write-Verbose -Message "[PROCESS] Finally Close any CIM Session(s)"
                     Remove-CimSession -CimSession $CimSession
@@ -138,8 +123,7 @@
             }
         } # FOREACH
     }#PROCESS
-    END
-    {
+    END {
         Write-Verbose -Message "[END] Script is completed"
     }
 }
