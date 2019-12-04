@@ -1,4 +1,4 @@
-﻿<#
+<#
 .DESCRIPTION
 This Script retrieve the VIB information on all the VMware Host
 .PARAMETER AllVib
@@ -68,23 +68,23 @@ PROCESS {
                     $ESXCLI = Get-EsxCli -VMHost $CurrentVMhost.name
                     # Retrieve Vibs
                     $ESXCLI.software.vib.list() |
-                    ForEach-Object {
-                        $VIB = $_
-                        $Prop = [ordered]@{
-                            'VMhost'          = $CurrentVMhost.Name
-                            'ID'              = $VIB.ID
-                            'Name'            = $VIB.Name
-                            'Vendor'          = $VIB.Vendor
-                            'Version'         = $VIB.Version
-                            'Status'          = $VIB.Status
-                            'ReleaseDate'     = $VIB.ReleaseDate
-                            'InstallDate'     = $VIB.InstallDate
-                            'AcceptanceLevel' = $VIB.AcceptanceLevel
-                        }#$Prop
+                        ForEach-Object {
+                            $VIB = $_
+                            $Prop = [ordered]@{
+                                'VMhost'          = $CurrentVMhost.Name
+                                'ID'              = $VIB.ID
+                                'Name'            = $VIB.Name
+                                'Vendor'          = $VIB.Vendor
+                                'Version'         = $VIB.Version
+                                'Status'          = $VIB.Status
+                                'ReleaseDate'     = $VIB.ReleaseDate
+                                'InstallDate'     = $VIB.InstallDate
+                                'AcceptanceLevel' = $VIB.AcceptanceLevel
+                            }#$Prop
 
-                        # Output Current Object
-                        New-Object -TypeName PSobject -Property $Prop
-                    }#FOREACH
+                            # Output Current Object
+                            New-Object -TypeName PSobject -Property $Prop
+                        }#FOREACH
                 }#TRY
                 CATCH {
                     Throw $_
@@ -97,64 +97,64 @@ PROCESS {
                     # Exposes the ESX CLI functionality of the current host
                     $ESXCLI = Get-EsxCli -VMHost $CurrentVMhost.name
                     # Retrieve Vib from vendor $vibvendor
-                    $ESXCLI.software.vib.list() | Where-object { $_.Vendor -eq $VibVendor } |
+                    $ESXCLI.software.vib.list() | Where-Object { $_.Vendor -eq $VibVendor } |
                     ForEach-Object
-                    {
-                        $VIB = $_
-                        $Prop = [ordered]@{
-                            'VMhost'          = $CurrentVMhost.Name
-                            'ID'              = $VIB.ID
-                            'Name'            = $VIB.Name
-                            'Vendor'          = $VIB.Vendor
-                            'Version'         = $VIB.Version
-                            'Status'          = $VIB.Status
-                            'ReleaseDate'     = $VIB.ReleaseDate
-                            'InstallDate'     = $VIB.InstallDate
-                            'AcceptanceLevel' = $VIB.AcceptanceLevel
-                        }#$Prop
+                {
+                    $VIB = $_
+                    $Prop = [ordered]@{
+                        'VMhost'          = $CurrentVMhost.Name
+                        'ID'              = $VIB.ID
+                        'Name'            = $VIB.Name
+                        'Vendor'          = $VIB.Vendor
+                        'Version'         = $VIB.Version
+                        'Status'          = $VIB.Status
+                        'ReleaseDate'     = $VIB.ReleaseDate
+                        'InstallDate'     = $VIB.InstallDate
+                        'AcceptanceLevel' = $VIB.AcceptanceLevel
+                    }#$Prop
 
-                        # Output Current Object
-                        New-Object -TypeName PSobject -Property $Prop
-                    }#FOREACH
-                }#TRY
-                CATCH {
-                    Throw $_
-                }
-            }
-        }
-        IF ($PSBoundParameters['VibName']) {
-            Foreach ($CurrentVMhost in $VMHosts) {
-                TRY {
-                    # Exposes the ESX CLI functionality of the current host
-                    $ESXCLI = Get-EsxCli -VMHost $CurrentVMhost.name
-                    # Retrieve Vib with name $vibname
-                    $ESXCLI.software.vib.list() | Where-object { $_.Name -eq $VibName } |
-                    ForEach-Object
-                    {
-                        $VIB = $_
-                        $Prop = [ordered]@{
-                            'VMhost'          = $CurrentVMhost.Name
-                            'ID'              = $VIB.ID
-                            'Name'            = $VIB.Name
-                            'Vendor'          = $VIB.Vendor
-                            'Version'         = $VIB.Version
-                            'Status'          = $VIB.Status
-                            'ReleaseDate'     = $VIB.ReleaseDate
-                            'InstallDate'     = $VIB.InstallDate
-                            'AcceptanceLevel' = $VIB.AcceptanceLevel
-                        }#$Prop
-
-                        # Output Current Object
-                        New-Object -TypeName PSobject -Property $Prop
-                    }#FOREACH
-                }#TRY
-                CATCH {
-                    Throw $_
-                }
+                    # Output Current Object
+                    New-Object -TypeName PSobject -Property $Prop
+                }#FOREACH
+            }#TRY
+            CATCH {
+                Throw $_
             }
         }
     }
-    CATCH {
-        throw $_
+    IF ($PSBoundParameters['VibName']) {
+        Foreach ($CurrentVMhost in $VMHosts) {
+            TRY {
+                # Exposes the ESX CLI functionality of the current host
+                $ESXCLI = Get-EsxCli -VMHost $CurrentVMhost.name
+                # Retrieve Vib with name $vibname
+                $ESXCLI.software.vib.list() | Where-Object { $_.Name -eq $VibName } |
+                ForEach-Object
+            {
+                $VIB = $_
+                $Prop = [ordered]@{
+                    'VMhost'          = $CurrentVMhost.Name
+                    'ID'              = $VIB.ID
+                    'Name'            = $VIB.Name
+                    'Vendor'          = $VIB.Vendor
+                    'Version'         = $VIB.Version
+                    'Status'          = $VIB.Status
+                    'ReleaseDate'     = $VIB.ReleaseDate
+                    'InstallDate'     = $VIB.InstallDate
+                    'AcceptanceLevel' = $VIB.AcceptanceLevel
+                }#$Prop
+
+                # Output Current Object
+                New-Object -TypeName PSobject -Property $Prop
+            }#FOREACH
+        }#TRY
+        CATCH {
+            Throw $_
+        }
     }
+}
+}
+CATCH {
+    throw $_
+}
 }
