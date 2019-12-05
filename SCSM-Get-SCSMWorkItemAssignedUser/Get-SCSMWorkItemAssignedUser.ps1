@@ -1,30 +1,30 @@
 function Get-SCSMWorkItemAssignedUser {
     <#
-	.SYNOPSIS
-		Function to retrieve the Assigned User of a Work Item
+    .SYNOPSIS
+        Function to retrieve the Assigned User of a Work Item
 
-	.DESCRIPTION
-		Function to retrieve the Assigned User of a Work Item
+    .DESCRIPTION
+        Function to retrieve the Assigned User of a Work Item
 
-	.PARAMETER SMObject
-		Specifies the SMObject(s) on which the Assigned need to be retrieve.
+    .PARAMETER SMObject
+        Specifies the SMObject(s) on which the Assigned need to be retrieve.
 
-	.PARAMETER Guid
-		Specifies the GUID of the SMObject on which the Assigned need to be retrieve.
+    .PARAMETER Guid
+        Specifies the GUID of the SMObject on which the Assigned need to be retrieve.
 
-	.EXAMPLE
-		Get-SCSMWorkItemAssignedUser -SMObject $SR,IR
+    .EXAMPLE
+        Get-SCSMWorkItemAssignedUser -SMObject $SR,IR
 
-	.EXAMPLE
-		$SR,IR | Get-SCSMWorkItemAssignedUser
+    .EXAMPLE
+        $SR,IR | Get-SCSMWorkItemAssignedUser
 
-	.EXAMPLE
-		Get-SCSMWorkItemAssignedUser -GUID 5bd5e783-c8a1-0217-9e19-f82823ef4f87
+    .EXAMPLE
+        Get-SCSMWorkItemAssignedUser -GUID 5bd5e783-c8a1-0217-9e19-f82823ef4f87
 
-	.NOTES
-		Francois-Xavier Cat
-		@lazywinadmin
-		lazywinadmin.com
+    .NOTES
+        Francois-Xavier Cat
+        @lazywinadmin
+        lazywinadmin.com
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'GUID')]
