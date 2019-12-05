@@ -1,28 +1,28 @@
 function Get-ScriptAlias {
     <#
-	.SYNOPSIS
-		Function to retrieve the aliases inside a Powershell script file.
+    .SYNOPSIS
+        Function to retrieve the aliases inside a Powershell script file.
 
-	.DESCRIPTION
-		Function to retrieve the aliases inside a Powershell script file.
-		Using PowerShell AST Parser we are able to retrieve the functions and cmdlets used in the script.
+    .DESCRIPTION
+        Function to retrieve the aliases inside a Powershell script file.
+        Using PowerShell AST Parser we are able to retrieve the functions and cmdlets used in the script.
 
-	.PARAMETER Path
-		Specifies the path of the script
+    .PARAMETER Path
+        Specifies the path of the script
 
-	.EXAMPLE
-		Get-ScriptAlias -Path "C:\LazyWinAdmin\testscript.ps1"
+    .EXAMPLE
+        Get-ScriptAlias -Path "C:\LazyWinAdmin\testscript.ps1"
 
-	.EXAMPLE
-		"C:\LazyWinAdmin\testscript.ps1" | Get-ScriptAlias
+    .EXAMPLE
+        "C:\LazyWinAdmin\testscript.ps1" | Get-ScriptAlias
 
     .EXAMPLE
         gci C:\LazyWinAdmin -file | Get-ScriptAlias
 
-	.NOTES
-		Francois-Xavier Cat
-		lazywinadmin.com
-		@lazywinadmin
+    .NOTES
+        Francois-Xavier Cat
+        lazywinadmin.com
+        @lazywinadmin
 #>
     [CmdletBinding()]
     PARAM
