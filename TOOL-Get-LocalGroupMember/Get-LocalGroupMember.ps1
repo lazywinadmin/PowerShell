@@ -2,12 +2,12 @@ function Get-LocalGroupMember {
     <#
     .SYNOPSIS
         Retrieve a Local Group membership
-	.DESCRIPTION
+    .DESCRIPTION
         Retrieve a Local Group membership
-	.PARAMETER ComputerName
-		Specifies one or computers to query
-	.PARAMETER GroupName
-		Specifies the Group name
+    .PARAMETER ComputerName
+        Specifies one or computers to query
+    .PARAMETER GroupName
+        Specifies the Group name
     .EXAMPLE
         Get-LocalGroupMember
     .NOTES
