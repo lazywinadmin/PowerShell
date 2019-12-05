@@ -1,11 +1,11 @@
 function Get-LogFast {
     <#
     .DESCRIPTION
-		Function to read a log file very fast
-	.SYNOPSIS
-		Function to read a log file very fast
-	.EXAMPLE
-		Get-LogFast -Path C:\megalogfile.log
+        Function to read a log file very fast
+    .SYNOPSIS
+        Function to read a log file very fast
+    .EXAMPLE
+        Get-LogFast -Path C:\megalogfile.log
     .EXAMPLE
         Get-LogFast -Path C:\367.msp.0.log -Match "09:36:43:417" -Verbose
 
@@ -16,11 +16,11 @@ function Get-LogFast {
         VERBOSE: [PROCESS] Match found
         MSI (s) (A8:14) [09:36:43:417]: Note: 1: 2205 2:  3: TypeLib
 
-	.NOTES
-		Francois-Xavier cat
-		@lazywinadmin
-		lazywinadmin.com
-		github.com/lazywinadmin
+    .NOTES
+        Francois-Xavier cat
+        @lazywinadmin
+        lazywinadmin.com
+        github.com/lazywinadmin
 
 #>
     [CmdletBinding()]
