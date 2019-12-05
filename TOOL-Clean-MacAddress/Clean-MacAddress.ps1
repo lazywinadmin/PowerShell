@@ -1,59 +1,59 @@
 function Clean-MacAddress {
     <#
-	.SYNOPSIS
-		Function to cleanup a MACAddress string
+    .SYNOPSIS
+        Function to cleanup a MACAddress string
 
-	.DESCRIPTION
-		Function to cleanup a MACAddress string
+    .DESCRIPTION
+        Function to cleanup a MACAddress string
 
-	.PARAMETER MacAddress
-		Specifies the MacAddress
+    .PARAMETER MacAddress
+        Specifies the MacAddress
 
-	.PARAMETER Separator
-		Specifies the separator every two characters
+    .PARAMETER Separator
+        Specifies the separator every two characters
 
-	.PARAMETER Uppercase
-		Specifies the output must be Uppercase
+    .PARAMETER Uppercase
+        Specifies the output must be Uppercase
 
-	.PARAMETER Lowercase
-		Specifies the output must be LowerCase
+    .PARAMETER Lowercase
+        Specifies the output must be LowerCase
 
-	.EXAMPLE
-		Clean-MacAddress -MacAddress '00:11:22:33:44:55'
+    .EXAMPLE
+        Clean-MacAddress -MacAddress '00:11:22:33:44:55'
 
-		001122334455
-	.EXAMPLE
-		Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Uppercase
+        001122334455
+    .EXAMPLE
+        Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Uppercase
 
-		001122DDEEFF
+        001122DDEEFF
 
-	.EXAMPLE
-		Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase
+    .EXAMPLE
+        Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase
 
-		001122ddeeff
+        001122ddeeff
 
-	.EXAMPLE
-		Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase -Separator '-'
+    .EXAMPLE
+        Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase -Separator '-'
 
-		00-11-22-dd-ee-ff
+        00-11-22-dd-ee-ff
 
-	.EXAMPLE
-		Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase -Separator '.'
+    .EXAMPLE
+        Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase -Separator '.'
 
-		00.11.22.dd.ee.ff
+        00.11.22.dd.ee.ff
 
-	.EXAMPLE
-		Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase -Separator :
+    .EXAMPLE
+        Clean-MacAddress -MacAddress '00:11:22:dD:ee:FF' -Lowercase -Separator :
 
-		00:11:22:dd:ee:ff
+        00:11:22:dd:ee:ff
 
-	.OUTPUTS
-		System.String
+    .OUTPUTS
+        System.String
 
-	.NOTES
-		Francois-Xavier Cat
-		lazywinadmin.com
-		@lazywinadmin
+    .NOTES
+        Francois-Xavier Cat
+        lazywinadmin.com
+        @lazywinadmin
 #>
     [OutputType([String], ParameterSetName = "Upper")]
     [OutputType([String], ParameterSetName = "Lower")]
