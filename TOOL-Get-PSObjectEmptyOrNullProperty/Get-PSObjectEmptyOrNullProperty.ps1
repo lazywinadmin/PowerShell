@@ -1,18 +1,18 @@
 function Get-PSObjectEmptyOrNullProperty {
     <#
 .SYNOPSIS
-	Function to Get all the empty or null properties with empty value in a PowerShell Object
+    Function to Get all the empty or null properties with empty value in a PowerShell Object
 
 .DESCRIPTION
-	Function to Get all the empty or null properties with empty value in a PowerShell Object.
-	I used this function in a System Center Orchestrator where I had a runbook that could update most of the important
-	properties of a user. Using this function I knew which properties were not be updated.
+    Function to Get all the empty or null properties with empty value in a PowerShell Object.
+    I used this function in a System Center Orchestrator where I had a runbook that could update most of the important
+    properties of a user. Using this function I knew which properties were not be updated.
 
 .PARAMETER PSObject
-	Specifies the PowerShell Object
+    Specifies the PowerShell Object
 
 .EXAMPLE
-	PS C:\> Get-PSObjectEmptyOrNullProperty -PSObject $UserInfo
+    PS C:\> Get-PSObjectEmptyOrNullProperty -PSObject $UserInfo
 
 .EXAMPLE
 
@@ -42,9 +42,9 @@ function Get-PSObjectEmptyOrNullProperty {
     IsInstance      : True
 
 .NOTES
-	Francois-Xavier Cat
-	lazywinadmin.com
-	@lazywinadmin
+    Francois-Xavier Cat
+    lazywinadmin.com
+    @lazywinadmin
 #>
     PARAM (
         $PSObject)
