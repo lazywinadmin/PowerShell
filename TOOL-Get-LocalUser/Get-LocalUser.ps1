@@ -1,29 +1,29 @@
 function Get-LocalUser {
 
     <#
-	.SYNOPSIS
-		This script can be list all of local user account.
+    .SYNOPSIS
+        This script can be list all of local user account.
 
-	.DESCRIPTION
-		This script can be list all of local user account.
-		The function is using WMI to connect to the remote machine
+    .DESCRIPTION
+        This script can be list all of local user account.
+        The function is using WMI to connect to the remote machine
 
-	.PARAMETER ComputerName
-		Specifies the computers on which the command . The default is the local computer.
+    .PARAMETER ComputerName
+        Specifies the computers on which the command . The default is the local computer.
 
-	.PARAMETER Credential
-		A description of the Credential parameter.
+    .PARAMETER Credential
+        A description of the Credential parameter.
 
 
-	.EXAMPLE
-		Get-LocalUser
+    .EXAMPLE
+        Get-LocalUser
 
-		This example shows how to list all of local users on local computer.
+        This example shows how to list all of local users on local computer.
 
-	.NOTES
-		Francois-Xavier Cat
-		lazywinadmin.com
-		@lazywinadmin
+    .NOTES
+        Francois-Xavier Cat
+        lazywinadmin.com
+        @lazywinadmin
 #>
 
     PARAM
