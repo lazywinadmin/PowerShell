@@ -1,24 +1,24 @@
 function Expand-ScriptAlias {
     <#
-	.SYNOPSIS
-		Function to replace Aliases used in a script by their fullname
+    .SYNOPSIS
+        Function to replace Aliases used in a script by their fullname
 
-	.DESCRIPTION
-		Function to replace Aliases used in a script by their fullname.
-		Using PowerShell AST we are able to retrieve the functions and cmdlets used in a script.
+    .DESCRIPTION
+        Function to replace Aliases used in a script by their fullname.
+        Using PowerShell AST we are able to retrieve the functions and cmdlets used in a script.
 
-	.PARAMETER Path
-		Specifies the Path to the file.
-		Alias: FullName
+    .PARAMETER Path
+        Specifies the Path to the file.
+        Alias: FullName
 
-	.EXAMPLE
-		"C:\LazyWinAdmin\testscript.ps1", "C:\LazyWinAdmin\testscript2.ps1" | Expand-ScriptAlias
+    .EXAMPLE
+        "C:\LazyWinAdmin\testscript.ps1", "C:\LazyWinAdmin\testscript2.ps1" | Expand-ScriptAlias
 
-	.EXAMPLE
-		gci C:\LazyWinAdmin -File | Expand-ScriptAlias
+    .EXAMPLE
+        gci C:\LazyWinAdmin -File | Expand-ScriptAlias
 
-	.EXAMPLE
-		Expand-ScriptAlias -Path "C:\LazyWinAdmin\testscript.ps1"
+    .EXAMPLE
+        Expand-ScriptAlias -Path "C:\LazyWinAdmin\testscript.ps1"
 
     .EXAMPLE
         "C:\LazyWinAdmin\testscript.ps1", "C:\LazyWinAdmin\testscript2.ps1" | Expand-ScriptAlias -Confirm
@@ -31,10 +31,10 @@ function Expand-ScriptAlias {
         What if: Performing the operation "Expand Alias: group to Group-Object (startoffset: 4)" on target "C:\LazyWinAdmin\testscript2.ps1".
         What if: Performing the operation "Expand Alias: gci to Get-ChildItem (startoffset: 0)" on target "C:\LazyWinAdmin\testscript2.ps1".
 
-	.NOTES
-		Francois-Xavier Cat
-		lazywinadmin.com
-		@lazywinadmin
+    .NOTES
+        Francois-Xavier Cat
+        lazywinadmin.com
+        @lazywinadmin
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
     PARAM (
