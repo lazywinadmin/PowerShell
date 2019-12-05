@@ -1,21 +1,21 @@
 function Get-SCSMWorkItemRelatedCI {
     <#
-	.SYNOPSIS
-		Function to retrieve the related configuration item of a System Center Service Manager Work Item
+    .SYNOPSIS
+        Function to retrieve the related configuration item of a System Center Service Manager Work Item
 
-	.DESCRIPTION
-		Function to retrieve the related configuration item of a System Center Service Manager Work Item
+    .DESCRIPTION
+        Function to retrieve the related configuration item of a System Center Service Manager Work Item
 
-	.PARAMETER GUID
-		Specifies the GUID of the WorkItem
+    .PARAMETER GUID
+        Specifies the GUID of the WorkItem
 
-	.EXAMPLE
-		PS C:\> Get-SCSMWorkItemRelatedCI -GUID "69c5dfc9-9acb-0afb-9210-190d3054901e"
+    .EXAMPLE
+        PS C:\> Get-SCSMWorkItemRelatedCI -GUID "69c5dfc9-9acb-0afb-9210-190d3054901e"
 
-	.NOTES
-		Francois-Xavier.Cat
-		@lazywinadmin
-		lazywinadmin.com
+    .NOTES
+        Francois-Xavier.Cat
+        @lazywinadmin
+        lazywinadmin.com
 #>
     PARAM (
         [parameter()]
