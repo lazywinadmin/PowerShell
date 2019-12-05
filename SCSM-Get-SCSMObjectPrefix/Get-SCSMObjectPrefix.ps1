@@ -1,40 +1,40 @@
 function Get-SCSMObjectPrefix {
     <#
-	.SYNOPSIS
-		Function to retrieve the Prefix used for the different WorkItem, Activities or Knowledge Article
+    .SYNOPSIS
+        Function to retrieve the Prefix used for the different WorkItem, Activities or Knowledge Article
 
-	.DESCRIPTION
-		Function to retrieve the Prefix used for the different WorkItem, Activities or Knowledge Article
+    .DESCRIPTION
+        Function to retrieve the Prefix used for the different WorkItem, Activities or Knowledge Article
 
-	.PARAMETER ClassName
-		Specified the ClassName you want to query
+    .PARAMETER ClassName
+        Specified the ClassName you want to query
 
-	.EXAMPLE
-		Get-SCSMObjectPrefix
+    .EXAMPLE
+        Get-SCSMObjectPrefix
 
-		DependentActivity         : DA
-		ManualActivity            : MA
-		ParallelActivity          : PA
-		ReviewActivity            : RA
-		RunbookAutomationActivity : RB
-		SequentialActivity        : SA
-		IncidentRequest           : IR
-		ServiceRequest            : SR
-		Change                    : CR
-		Knowledge                 : KA
-		Problem                   : PR
-		Release                   : RR
+        DependentActivity         : DA
+        ManualActivity            : MA
+        ParallelActivity          : PA
+        ReviewActivity            : RA
+        RunbookAutomationActivity : RB
+        SequentialActivity        : SA
+        IncidentRequest           : IR
+        ServiceRequest            : SR
+        Change                    : CR
+        Knowledge                 : KA
+        Problem                   : PR
+        Release                   : RR
 
-	.EXAMPLE
-		Get-SCSMObjectPrefix -ClassName Change
+    .EXAMPLE
+        Get-SCSMObjectPrefix -ClassName Change
 
-		CR
+        CR
 
-	.NOTES
-		Francois-Xavier Cat
-		www.lazywinadmin
-		@lazywinadmin
-		github.com/lazywinadmin
+    .NOTES
+        Francois-Xavier Cat
+        www.lazywinadmin
+        @lazywinadmin
+        github.com/lazywinadmin
 #>
 
     [OutputType([psobject])]
