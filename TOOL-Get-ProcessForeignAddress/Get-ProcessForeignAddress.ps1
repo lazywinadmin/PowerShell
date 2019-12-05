@@ -1,34 +1,34 @@
 function Get-ProcessForeignAddress {
     <#
 .SYNOPSIS
-	Get all foreignIPAddress for all or specific processname
+    Get all foreignIPAddress for all or specific processname
 
 .DESCRIPTION
-	Get all foreignIPAddress for all or specific processname
+    Get all foreignIPAddress for all or specific processname
 
 .PARAMETER ProcessName
-	Specifies the ProcessName to filter on
+    Specifies the ProcessName to filter on
 
 .EXAMPLE
-	Get-ProcessForeignAddress
+    Get-ProcessForeignAddress
 
-	Retrieve all the foreign addresses
-
-.EXAMPLE
-	Get-ProcessForeignAddress chrome
-
-	Show all the foreign address(es) for the process chrome
+    Retrieve all the foreign addresses
 
 .EXAMPLE
-	Get-ProcessForeignAddress chrome | select ForeignAddress -Unique
+    Get-ProcessForeignAddress chrome
 
-	Show all the foreign address(es) for the process chrome and show only the ForeignAddress(es) once
+    Show all the foreign address(es) for the process chrome
+
+.EXAMPLE
+    Get-ProcessForeignAddress chrome | select ForeignAddress -Unique
+
+    Show all the foreign address(es) for the process chrome and show only the ForeignAddress(es) once
 
 .NOTES
-	Author	: Francois-Xavier Cat
-	Website	: lazywinadmin.com
-	Github	: github.com/lazywinadmin
-	Twitter	: @lazywinadmin
+    Author  : Francois-Xavier Cat
+    Website : lazywinadmin.com
+    Github  : github.com/lazywinadmin
+    Twitter : @lazywinadmin
 #>
     PARAM ($ProcessName)
     $netstat = netstat -no
