@@ -1,30 +1,30 @@
 function Get-SCSMWorkItemRequestOffering {
     <#
-	.SYNOPSIS
-		Function to retrieve the RequestOffering used to create a specific work item.
+    .SYNOPSIS
+        Function to retrieve the RequestOffering used to create a specific work item.
 
-	.DESCRIPTION
-		Function to retrieve the RequestOffering used to create a specific work item.
-		It will output the full object and add the work item Name and GUID to the output
+    .DESCRIPTION
+        Function to retrieve the RequestOffering used to create a specific work item.
+        It will output the full object and add the work item Name and GUID to the output
 
-	.EXAMPLE
-		$SR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'"
-		Get-SCSMWorkItemRequestOffering -SMObject $SR
+    .EXAMPLE
+        $SR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'"
+        Get-SCSMWorkItemRequestOffering -SMObject $SR
 
-	.EXAMPLE
-		Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'" | Get-SCSMWorkItemRequestOffering
+    .EXAMPLE
+        Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'" | Get-SCSMWorkItemRequestOffering
 
-	.EXAMPLE
-		$SR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'"
-		$IR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.IncidentRequest$) -Filter "ID -eq 'IR99000'"
-		Get-SCSMWorkItemRequestOffering -SMObject $SR,IR
+    .EXAMPLE
+        $SR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.ServiceRequest$) -Filter "ID -eq 'SR55000'"
+        $IR = Get-SCSMObject -Class (Get-SCSMClass -Name System.WorkItem.IncidentRequest$) -Filter "ID -eq 'IR99000'"
+        Get-SCSMWorkItemRequestOffering -SMObject $SR,IR
 
-	.NOTES
-		Francois-Xavier Cat
-		@lazywinadmin
-		lazywinadmin.com
+    .NOTES
+        Francois-Xavier Cat
+        @lazywinadmin
+        lazywinadmin.com
 
-	#>
+    #>
     PARAM (
         [Parameter(ValueFromPipeline)]
         $SMObject
