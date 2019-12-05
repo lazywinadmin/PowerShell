@@ -1,7 +1,7 @@
 function Get-ISEShortCut {
     <#
 .SYNOPSIS
-	List ISE Shortcuts
+    List ISE Shortcuts
 
 .DESCRIPTION
     List ISE Shortcuts.
@@ -16,15 +16,15 @@ function Get-ISEShortCut {
 
     Will show technet page of ISE Shortcuts
 .LINK
-	http://technet.microsoft.com/en-us/library/jj984298.aspx
+    http://technet.microsoft.com/en-us/library/jj984298.aspx
 
 .NOTES
-	Francois-Xavier Cat
-	lazywinadmin.com
-	@lazywinadmin
+    Francois-Xavier Cat
+    lazywinadmin.com
+    @lazywinadmin
 
-	VERSION HISTORY
-	2015/01/10 Initial Version
+    VERSION HISTORY
+    2015/01/10 Initial Version
 #>
     PARAM($Key, $Name)
     BEGIN {
