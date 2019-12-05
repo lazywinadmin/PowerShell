@@ -1,36 +1,36 @@
 function Disable-RemoteDesktop {
     <#
-	.SYNOPSIS
-		The function Disable-RemoteDesktop will disable RemoteDesktop on a local or remote machine.
+    .SYNOPSIS
+        The function Disable-RemoteDesktop will disable RemoteDesktop on a local or remote machine.
 
-	.DESCRIPTION
-		The function Disable-RemoteDesktop will disable RemoteDesktop on a local or remote machine.
+    .DESCRIPTION
+        The function Disable-RemoteDesktop will disable RemoteDesktop on a local or remote machine.
 
-	.PARAMETER ComputerName
-		Specifies the computername
+    .PARAMETER ComputerName
+        Specifies the computername
 
-	.PARAMETER Credential
-		Specifies the credential to use
+    .PARAMETER Credential
+        Specifies the credential to use
 
-	.PARAMETER CimSession
-		Specifies one or more existing CIM Session(s) to use
+    .PARAMETER CimSession
+        Specifies one or more existing CIM Session(s) to use
 
-	.EXAMPLE
-		PS C:\> Disable-RemoteDesktop -ComputerName DC01
+    .EXAMPLE
+        PS C:\> Disable-RemoteDesktop -ComputerName DC01
 
-	.EXAMPLE
-		PS C:\> Disable-RemoteDesktop -ComputerName DC01 -Credential (Get-Credential -cred "FX\SuperAdmin")
+    .EXAMPLE
+        PS C:\> Disable-RemoteDesktop -ComputerName DC01 -Credential (Get-Credential -cred "FX\SuperAdmin")
 
-	.EXAMPLE
-		PS C:\> Disable-RemoteDesktop -CimSession $Session
+    .EXAMPLE
+        PS C:\> Disable-RemoteDesktop -CimSession $Session
 
-	.EXAMPLE
-		PS C:\> Disable-RemoteDesktop -CimSession $Session1,$session2,$session3
+    .EXAMPLE
+        PS C:\> Disable-RemoteDesktop -CimSession $Session1,$session2,$session3
 
-	.NOTES
-		Francois-Xavier Cat
-		@lazywinadmin
-		lazywinadmin.com
+    .NOTES
+        Francois-Xavier Cat
+        @lazywinadmin
+        lazywinadmin.com
         github.com/lazywinadmin
 #>
     #Requires -RunAsAdministrator
@@ -57,18 +57,18 @@ function Disable-RemoteDesktop {
         function Get-DefaultMessage {
             <#
 .SYNOPSIS
-	Helper Function to show default message used in VERBOSE/DEBUG/WARNING
+    Helper Function to show default message used in VERBOSE/DEBUG/WARNING
 .DESCRIPTION
-	Helper Function to show default message used in VERBOSE/DEBUG/WARNING
-	and... HOST in some case.
-	This is helpful to standardize the output messages
+    Helper Function to show default message used in VERBOSE/DEBUG/WARNING
+    and... HOST in some case.
+    This is helpful to standardize the output messages
 
 .PARAMETER Message
-	Specifies the message to show
+    Specifies the message to show
 .NOTES
-	Francois-Xavier Cat
-	lazywinadmin.com
-	@lazywinadmin
+    Francois-Xavier Cat
+    lazywinadmin.com
+    @lazywinadmin
 #>
             PARAM ($Message)
             $DateFormat = Get-Date -Format 'yyyy/MM/dd-HH:mm:ss:ff'
