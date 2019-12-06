@@ -44,6 +44,7 @@ function Get-Uptime {
 
         [Parameter(ParameterSetName = "Main")]
         [Alias("RunAs")]
+        [PSCredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty,
 
