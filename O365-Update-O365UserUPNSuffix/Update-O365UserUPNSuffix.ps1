@@ -72,8 +72,9 @@ function Update-O365UserUPNSuffix {
         [Parameter(Mandatory = $true)]
         [String]$DomainController,
 
-        [System.Management.Automation.Credential()]
         [Alias('RunAs')]
+        [System.Management.Automation.Credential()]
+        [PSCredential]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
