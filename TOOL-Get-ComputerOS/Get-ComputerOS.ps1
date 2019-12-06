@@ -29,6 +29,7 @@ function Get-ComputerOS {
 
         [Parameter(ParameterSetName = "Main")]
         [Alias("RunAs")]
+        [pscredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty,
 
