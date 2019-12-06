@@ -53,6 +53,7 @@ Function Add-SCCMGroupDeviceAffinity {
         $GroupName,
 
         [Alias("RunAs")]
+        [pscredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
