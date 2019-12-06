@@ -181,6 +181,7 @@ function Send-Email {
         [System.String]$Attachment,
 
         [Parameter(ParameterSetName = 'Main')]
+        [pscredential]
         [System.Net.NetworkCredential]$Credential,
 
         [Parameter(ParameterSetName = 'Main',
