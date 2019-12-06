@@ -72,6 +72,7 @@ function New-SCCMDeviceVariable {
         [System.String]$SiteCode,
 
         [Alias("RunAs")]
+        [PSCredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty,
 
