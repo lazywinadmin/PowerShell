@@ -32,6 +32,7 @@ function New-CimSmartSession {
         [string[]]$ComputerName = $env:COMPUTERNAME,
 
         [System.Management.Automation.Credential()]
+        [pscredential]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
