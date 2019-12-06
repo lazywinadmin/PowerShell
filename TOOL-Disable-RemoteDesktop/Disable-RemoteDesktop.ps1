@@ -46,6 +46,7 @@ function Disable-RemoteDesktop {
 
         [Parameter(ParameterSetName = "Main")]
         [Alias("RunAs")]
+        [pscredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty,
 
