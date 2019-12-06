@@ -43,6 +43,7 @@ function Set-NetworkLevelAuthentication {
         [System.Boolean]$EnableNLA,
 
         [Alias("RunAs")]
+        [pscredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )#Param
