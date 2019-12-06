@@ -33,6 +33,7 @@ function Get-NetFramework {
     [CmdletBinding()]
     PARAM (
         [String[]]$ComputerName,
+        [pscredential]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
