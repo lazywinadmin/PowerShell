@@ -65,6 +65,7 @@ function Get-NetworkLevelAuthentication {
         [String[]]$ComputerName = $env:ComputerName,
 
         [Alias("RunAs")]
+        [pscredential]
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )#Param
