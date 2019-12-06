@@ -45,8 +45,9 @@ function Enable-RemoteDesktop {
         [String[]]$ComputerName,
 
         [Parameter(ParameterSetName = 'Main')]
-        [System.Management.Automation.Credential()]
         [Alias('RunAs')]
+        [pscredential]
+        [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty,
 
         [Parameter(ParameterSetName = 'CimSession')]
