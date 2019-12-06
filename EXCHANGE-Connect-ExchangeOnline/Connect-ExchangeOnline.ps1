@@ -29,7 +29,9 @@ function Connect-ExchangeOnline {
     (
         [system.string]$ConnectionUri = 'https://ps.outlook.com/powershell/',
         [Parameter(Mandatory)]
+        [Alias('RunAs')]
         [pscredential]
+        [System.Management.Automation.Credential()]
         $Credential
     )
     PROCESS {
