@@ -51,6 +51,7 @@ Function Add-SCCMUserDeviceAffinity {
 
         [Alias("RunAs")]
         [System.Management.Automation.Credential()]
+        [pscredential]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
