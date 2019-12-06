@@ -27,6 +27,10 @@ function Connect-ExchangeOnPremises {
     PARAM (
         [Parameter(Mandatory, HelpMessage = 'http://<ServerFQDN>/powershell')]
         [system.string]$ConnectionUri,
+
+        [Alias('RunAs')]
+        [pscredential]
+        [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
