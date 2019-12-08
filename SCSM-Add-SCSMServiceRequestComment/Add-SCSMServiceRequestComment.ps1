@@ -36,7 +36,7 @@ Function Add-SCSMServiceRequestComment {
     )
 
     # Make sure that the SR Object it passed to the function
-    If ($SRObject.Id -ne $NULL) {
+    If ($null -ne $SRObject.Id) {
 
 
         If ($AnalystComment) {
