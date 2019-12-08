@@ -32,7 +32,7 @@ function Get-ISEShortCut {
             # try...catch accounts for:
             # Set-StrictMode -Version latest
             try {
-                return $psISE -ne $null;
+                $null -ne $psISE
             }
             catch {
                 return $false;
@@ -48,7 +48,7 @@ function Get-ISEShortCut {
             $rm = New-Object System.Resources.ResourceManager GuiStrings, $gps
             $rs = $rm.GetResourceSet((Get-Culture), $true, $true)
             $rs | Where-Object Name -match 'Shortcut\d?$|^F\d+Keyboard' |
-            Sort-Object Value
+            Sort-Object -Property Value
 
     }
 }
