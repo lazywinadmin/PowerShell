@@ -180,8 +180,8 @@ function Get-ComputerInfo {
                 $Cores = 0
                 $Sockets = 0
                 FOREACH ($Proc in $Processors) {
-                    IF ($Proc.numberofcores -eq $null) {
-                        IF ($Proc.SocketDesignation -ne $null) { $Sockets++ }
+                    IF ($null -eq $Proc.numberofcores) {
+                        IF ($null -ne $Proc.SocketDesignation) { $Sockets++ }
                         $Cores++
                     }
                     ELSE {
