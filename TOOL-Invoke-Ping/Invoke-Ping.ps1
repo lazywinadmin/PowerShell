@@ -159,7 +159,7 @@ Function Invoke-Ping {
                         #Exclude common parameters, bound parameters, and automatic variables
                         Function _temp {
                             [cmdletbinding()]
-                            param () 
+                            param ()
                         }
                         $VariablesToExclude = @((Get-Command _temp | Select-Object -ExpandProperty parameters).Keys + $PSBoundParameters.Keys + $StandardUserEnv.Variables)
                         Write-Verbose "Excluding variables $(($VariablesToExclude | Sort-Object) -join ", ")"
@@ -264,7 +264,7 @@ Function Invoke-Ping {
                             }
 
                             #If runspace isn't null set more to true
-                            ElseIf ($runspace.Runspace -ne $null) {
+                            ElseIf ($null -ne $runspace.Runspace) {
                                 $log = $null
                                 $more = $true
                             }
@@ -277,7 +277,9 @@ Function Invoke-Ping {
 
                         #Clean out unused runspace jobs
                         $temphash = $runspaces.clone()
-                        $temphash | Where-Object { $_.runspace -eq $Null } | ForEach-Object {
+                        $temphash |
+                        Where-Object { $null -eq $_.runspace } |
+                        ForEach-Object {
                             $Runspaces.remove($_)
                         }
 
@@ -678,7 +680,7 @@ Function Invoke-Ping {
                                             ####RDP Check (firewall may block rest so do before ping
                                             try {
                                                 $socket = New-Object Net.Sockets.TcpClient($name, 3389) -ErrorAction stop
-                                                if ($socket -eq $null) {
+                                                if ($null -eq $socket) {
                                                     $rst.RDP = $false
                                                 }
                                                 else {
@@ -708,7 +710,8 @@ Function Invoke-Ping {
                                                     Write-Verbose "Error testing WSMAN: $_"
                                                 }
                                                 Write-Verbose "WSMAN:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
-                                                if ($rst.WSMAN -and $credssp) { ########### credssp
+                                                if ($rst.WSMAN -and $credssp) {
+                                                    ########### credssp
                                                     try {
                                                         Test-WSMan $ip -Authentication Credssp -Credential $cred -ErrorAction stop
                                                         $rst.CredSSP = $true
@@ -721,7 +724,8 @@ Function Invoke-Ping {
                                                 }
                                             }
                                             if ($RemoteReg -or $All) {
-                                                try { ########remote reg
+                                                try {
+                                                    ########remote reg
                                                     [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]::LocalMachine, $ip) | Out-Null
                                                     $rst.remotereg = $true
                                                 }
@@ -732,7 +736,8 @@ Function Invoke-Ping {
                                                 Write-Verbose "remote reg:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                             }
                                             if ($RPC -or $All) {
-                                                try { ######### wmi
+                                                try {
+                                                    ######### wmi
                                                     $w = [wmi] ''
                                                     $w.psbase.options.timeout = 15000000
                                                     $w.path = "\\$Name\root\cimv2:Win32_ComputerSystem.Name='$Name'"
@@ -748,7 +753,8 @@ Function Invoke-Ping {
                                             if ($SMB -or $All) {
 
                                                 #Use set location and resulting errors.  push and pop current location
-                                                try { ######### C$
+                                                try {
+                                                    ######### C$
                                                     $path = "\\$name\c$"
                                                     Push-Location -Path $path -ErrorAction stop
                                                     $rst.SMB = $true
