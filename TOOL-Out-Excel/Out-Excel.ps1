@@ -81,7 +81,7 @@ TODO:
             # and load the data into the correct cell in the current row.
             # this way we don’t have to worry about missing properties
             # or the “ordering” of the properties
-            if ($thisColumn = $HeaderHash[$header]) {
+            if ($thisColumn -eq $HeaderHash[$header]) {
                 if ($raw) {
                     $Sheet.Cells.Item($Row, $thisColumn) = [string]$_.properties.$header
                 }
