@@ -17,7 +17,7 @@ Function Get-HashTableEmptyValue {
 
     $HashTable.GetEnumerator().name |
         ForEach-Object -Process {
-            if ($HashTable[$_] -eq "" -or $HashTable[$_] -eq $null) {
+            if ($HashTable[$_] -eq "" -or $null -eq $HashTable[$_]) {
                 Write-Output $_
             }
         }
