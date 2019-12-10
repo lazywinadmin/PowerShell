@@ -19,7 +19,7 @@ Function Remove-HashTableEmptyValue {
 
     $HashTable.GetEnumerator().name |
         ForEach-Object -Process {
-            if ($HashTable[$_] -eq "" -or $HashTable[$_] -eq $null) {
+            if ($HashTable[$_] -eq "" -or $null -eq $HashTable[$_]) {
                 Write-Verbose -Message "[Remove-HashTableEmptyValue][PROCESS] - Property: $_ removing..."
                 [void]$HashTable.Remove($_)
                 Write-Verbose -Message "[Remove-HashTableEmptyValue][PROCESS] - Property: $_ removed"
