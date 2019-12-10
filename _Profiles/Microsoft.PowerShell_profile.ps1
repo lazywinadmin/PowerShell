@@ -87,7 +87,7 @@ function prompt {
 
 # Get the current script directory
 function Get-ScriptDirectory {
-    if ($hostinvocation -ne $null) {
+    if ($null -ne $hostinvocation) {
         Split-Path $hostinvocation.MyCommand.path
     }
     else {
