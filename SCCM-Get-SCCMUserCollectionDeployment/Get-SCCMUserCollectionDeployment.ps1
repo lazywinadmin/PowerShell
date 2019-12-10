@@ -92,8 +92,8 @@ function Get-SCCMUserCollectionDeployment {
                 $DeploymentIntent
             )
             PROCESS {
-                if ($DeploymentIntent = 0) { Write-Output "Required" }
-                if ($DeploymentIntent = 2) { Write-Output "Available" }
+                if ($DeploymentIntent -eq 0) { Write-Output "Required" }
+                if ($DeploymentIntent -eq 2) { Write-Output "Available" }
                 if ($DeploymentIntent -ne 0 -and $DeploymentIntent -ne 2) { Write-Output "NA" }
             }
         }#Function Get-DeploymentIntentName
