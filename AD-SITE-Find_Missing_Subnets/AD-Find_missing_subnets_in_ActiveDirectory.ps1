@@ -225,7 +225,7 @@ PROCESS {
                     $path = "\\$DCName\admin`$\debug\netlogon.log"
 
                     # Testing the $path
-                    IF ((Test-Path -Path $path) -and ((Get-Item -Path $path).Length -ne $null)) {
+                    IF ((Test-Path -Path $path) -and ($null -ne (Get-Item -Path $path).Length)) {
                         IF ((Get-Content -Path $path | Measure-Object -Line).lines -gt 0) {
                             #Copy the NETLOGON.log locally for the current DC
                             Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - $DCName - NETLOGON.LOG - Copying..."
