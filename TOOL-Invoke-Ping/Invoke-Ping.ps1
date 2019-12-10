@@ -508,7 +508,7 @@ Function Invoke-Ping {
                         #endregion add scripts to runspace pool
                     }
 
-                    Write-Verbose ("Finish processing the remaining runspace jobs: {0}" -f (@($runspaces | Where-Object { $_.Runspace -ne $Null }).Count))
+                    Write-Verbose ("Finish processing the remaining runspace jobs: {0}" -f (@($runspaces | Where-Object { $null -ne $_.Runspace }).Count))
                     Get-RunspaceData -wait
 
                     if (-not $quiet) {
