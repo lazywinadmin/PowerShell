@@ -30,7 +30,7 @@ Function Get-SCSMUserManager {
         ##  get-scsmrelationshipobject tends to keep track of relationship history. It returns old and new
         ##  relationships
 
-        If ($managerOfAffectedUser_relobjs -ne $null) {
+        If ($null -ne $managerOfAffectedUser_relobjs) {
             ForEach ($managerOfAffectedUser_relobj in $managerOfAffectedUser_relobjs) {
                 If ($managerOfAffectedUser_relobj.IsDeleted -eq $True) {
                     #The relationship no longer exists. Returning nothing
