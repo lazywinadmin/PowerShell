@@ -180,7 +180,7 @@ Function Get-VMhostHbaInfo {
                         $line.HostName = $esx.name
                         $line.HostProduct = $esx.config.product.fullName
                         $line.HbaDevice = $hba.device
-                        $line.HbaWWN = ([regex]::matches("{0:x}" -f $hba.PortWorldWideName, '.{2}') | ForEach-Object { $_.value }) -join ':'
+                        $line.HbaWWN = ([regex]::matches("{0:x}" -f $hba.PortWorldWideName, '.{2}') | ForEach-Object -Process { $_.value }) -join ':'
                         $line.HbaDriver = $hba.driver
                         $line.HbaModel = $hba.model
                         $line.HWModel = $esx.hardware.systemInfo.model
