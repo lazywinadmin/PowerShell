@@ -34,7 +34,7 @@ function Get-ProcessForeignAddress {
     $netstat = netstat -no
 
     $Result = $netstat[4..$netstat.count] |
-        ForEach-Object {
+        ForEach-Object -Process {
             $current = $_.trim() -split '\s+'
 
             New-Object -TypeName PSobject -Property @{
