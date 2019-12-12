@@ -209,7 +209,7 @@ PROCESS {
             $DomainControllers = $domain | ForEach-Object -Process { $_.DomainControllers } | Select-Object -Property Name
 
             # Gathering the NETLOGON.LOG for each Domain Controller
-            Write-Verbose "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Gathering Logs from Domain controllers"
+            Write-Verbose -Message "[PROCESS] FOREST: $ForestName DOMAIN: $domainName - Gathering Logs from Domain controllers"
             FOREACH ($dc in $DomainControllers) {
                 $DCName = $($dc.Name).toUpper()
                 TRY {
@@ -376,7 +376,7 @@ PROCESS {
 }#PROCESS
 END {
     IF (-not $KeepLogs) {
-        Write-Verbose "Cleanup txt and log files..."
+        Write-Verbose -Message "Cleanup txt and log files..."
         Remove-Item -Path $ScriptpathOutput\*.txt -force
         Remove-Item -Path $ScriptPathOutput\*.log -force
         Write-Verbose -Message "Script Completed"
