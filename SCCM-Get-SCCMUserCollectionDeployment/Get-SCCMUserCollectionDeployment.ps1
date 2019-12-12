@@ -106,7 +106,7 @@ function Get-SCCMUserCollectionDeployment {
 
         # Find the collections where the user is member of
         Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($user.resourceid)'" |
-            ForEach-Object {
+            ForEach-Object -Process {
 
                 # Retrieve the collection of the user
                 $Collections = Get-WmiObject @splatting -Query "Select * From SMS_Collection WHERE CollectionID='$($_.Collectionid)'"
