@@ -102,7 +102,7 @@ function Get-ADSITokenGroup {
                         New-Object -TypeName PSObject -Property $Properties
                     }
             } | Group-Object -Property groupname |
-            ForEach-Object {
+            ForEach-Object -Process {
                 New-Object -TypeName PSObject -Property @{
                     SamAccountName = $_.group.samaccountname | Select-Object -Unique
                     GroupName      = $_.Name
