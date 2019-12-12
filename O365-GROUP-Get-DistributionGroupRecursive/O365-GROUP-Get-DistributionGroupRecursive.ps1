@@ -28,7 +28,7 @@ function Get-DistributionGroupMemberRecursive {
     PROCESS {
         FOREACH ($Member in $GroupMembers) {
             TRY {
-                Write-Verbose "[PROCESS] Member: $($member.name)"
+                Write-Verbose -Message "[PROCESS] Member: $($member.name)"
 
                 SWITCH ($Member.RecipientType) {
                     "MailUniversalDistributionGroup" {
