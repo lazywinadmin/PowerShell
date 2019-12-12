@@ -67,7 +67,7 @@ PS > Show-Object $ps
             foreach ($childObjectValue in $object) {
                 ## Create the new node to add, with the node text of the item and
                 ## value, along with its type
-                $newChildNode = New-Object Windows.Forms.TreeNode
+                $newChildNode = New-Object -TypeName Windows.Forms.TreeNode
                 $newChildNode.Text = "$($node.Name)[$count] = $childObjectValue : " +
                 $childObjectValue.GetType()
 
@@ -105,7 +105,7 @@ PS > Show-Object $ps
 
                 ## Create the new node to add, with the node text of the item and
                 ## value, along with its type
-                $childNode = New-Object Windows.Forms.TreeNode
+                $childNode = New-Object -TypeName Windows.Forms.TreeNode
                 $childNode.Text = $child.Name + " = $childObject : $childObjectType"
                 $childNode.Name = $child.Name
                 $null = $node.Nodes.Add($childNode)
@@ -127,7 +127,7 @@ PS > Show-Object $ps
 
         if ([System.Management.Automation.LanguagePrimitives]::GetEnumerator($object) -or
             @($object.PSObject.Properties)) {
-            $null = $node.Nodes.Add( (New-Object Windows.Forms.TreeNode "...") )
+            $null = $node.Nodes.Add( (New-Object -TypeName Windows.Forms.TreeNode "...") )
         }
     }
 
@@ -247,7 +247,7 @@ PS > Show-Object $ps
 
     ## Create the TreeView, which will hold our object navigation
     ## area.
-    $treeView = New-Object Windows.Forms.TreeView
+    $treeView = New-Object -TypeName Windows.Forms.TreeView
     $treeView.Dock = "Top"
     $treeView.Height = 500
     $treeView.PathSeparator = "."
@@ -257,7 +257,7 @@ PS > Show-Object $ps
 
     ## Create the output pane, which will hold our object
     ## member information.
-    $outputPane = New-Object System.Windows.Forms.TextBox
+    $outputPane = New-Object -TypeName System.Windows.Forms.TextBox
     $outputPane.Multiline = $true
     $outputPane.ScrollBars = "Vertical"
     $outputPane.Font = "Consolas"
