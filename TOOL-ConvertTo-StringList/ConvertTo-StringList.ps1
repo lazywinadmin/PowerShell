@@ -60,7 +60,7 @@ function ConvertTo-StringList {
             # Adding the current object to the list
             $StringList += "$item$Delimiter"
         }
-        Write-Verbose "StringList: $StringList"
+        Write-Verbose -Message "StringList: $StringList"
     }
     END {
         TRY {
