@@ -68,7 +68,7 @@ PROCESS {
                     $ESXCLI = Get-EsxCli -VMHost $CurrentVMhost.name
                     # Retrieve Vibs
                     $ESXCLI.software.vib.list() |
-                        ForEach-Object {
+                        ForEach-Object -Process {
                             $VIB = $_
                             $Prop = [ordered]@{
                                 'VMhost'          = $CurrentVMhost.Name
