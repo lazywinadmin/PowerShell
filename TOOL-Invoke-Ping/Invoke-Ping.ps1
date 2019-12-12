@@ -279,7 +279,7 @@ Function Invoke-Ping {
                         $temphash = $runspaces.clone()
                         $temphash |
                         Where-Object { $null -eq $_.runspace } |
-                        ForEach-Object {
+                        ForEach-Object -Process {
                             $Runspaces.remove($_)
                         }
 
@@ -323,7 +323,7 @@ Function Invoke-Ping {
                                 [void]$list.Add($Ast.SubExpression)
                             }
 
-                            $UsingVar = $UsingVariables | Group-Object Parent | ForEach-Object { $_.Group | Select-Object -First 1 }
+                            $UsingVar = $UsingVariables | Group-Object Parent | ForEach-Object -Process { $_.Group | Select-Object -First 1 }
 
                             #Extract the name, value, and create replacements for each
                             $UsingVariableData = ForEach ($Var in $UsingVar) {
@@ -655,7 +655,7 @@ Function Invoke-Ping {
                                 try {
                                     $DNSEntity = [Net.Dns]::GetHostEntry($name)
                                     $domain = ($DNSEntity.hostname).replace("$name.", "")
-                                    $ips = $DNSEntity.AddressList | ForEach-Object {
+                                    $ips = $DNSEntity.AddressList | ForEach-Object -Process {
                                         if (-not (-not $IPV6 -and $_.AddressFamily -like "InterNetworkV6")) {
                                             $_.IPAddressToString
                                         }
@@ -800,7 +800,7 @@ Function Invoke-Ping {
                         $detail = "WSMan", "RemoteReg", "RPC", "RDP", "SMB"
                     }
 
-                    $detail | Select-Object -Unique | ForEach-Object { $TestServerParams.add($_, $True) }
+                    $detail | Select-Object -Unique | ForEach-Object -Process { $TestServerParams.add($_, $True) }
                     Test-Server @TestServerParams | Select-Object -Property $("Name", "IP", "Domain", "Ping" + $detail)
                 }
                 Catch {
