@@ -133,7 +133,7 @@ Function Invoke-Ping {
                     $script:MaxQueue = $MaxQueue
                 }
 
-                Write-Verbose "Throttle: '$throttle' SleepTimer '$sleepTimer' runSpaceTimeout '$runspaceTimeout' maxQueue '$maxQueue' logFile '$logFile'"
+                Write-Verbose -Message "Throttle: '$throttle' SleepTimer '$sleepTimer' runSpaceTimeout '$runspaceTimeout' maxQueue '$maxQueue' logFile '$logFile'"
 
                 #If they want to import variables or modules, create a clean runspace, get loaded items, use those to exclude items
                 if ($ImportVariables -or $ImportModules) {
@@ -162,14 +162,14 @@ Function Invoke-Ping {
                             param ()
                         }
                         $VariablesToExclude = @((Get-Command _temp | Select-Object -ExpandProperty parameters).Keys + $PSBoundParameters.Keys + $StandardUserEnv.Variables)
-                        Write-Verbose "Excluding variables $(($VariablesToExclude | Sort-Object) -join ", ")"
+                        Write-Verbose -Message "Excluding variables $(($VariablesToExclude | Sort-Object) -join ", ")"
 
                         # we don't use 'Get-Variable -Exclude', because it uses regexps.
                         # One of the veriables that we pass is '$?'.
                         # There could be other variables with such problems.
                         # Scope 2 required if we move to a real module
                         $UserVariables = @(Get-Variable | Where-Object { -not ($VariablesToExclude -contains $_.Name) })
-                        Write-Verbose "Found variables to import: $(($UserVariables | Select-Object -expandproperty Name | Sort-Object) -join ", " | Out-String).`n"
+                        Write-Verbose -Message "Found variables to import: $(($UserVariables | Select-Object -expandproperty Name | Sort-Object) -join ", " | Out-String).`n"
 
                     }
 
@@ -363,7 +363,7 @@ Function Invoke-Ping {
                 }
 
                 Write-Debug "`$ScriptBlock: $($ScriptBlock | Out-String)"
-                Write-Verbose "Creating runspace pool and session states"
+                Write-Verbose -Message "Creating runspace pool and session states"
 
                 #If specified, add variables and modules/snapins to session state
                 $sessionstate = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
@@ -391,7 +391,7 @@ Function Invoke-Ping {
                 $runspacepool = [runspacefactory]::CreateRunspacePool(1, $Throttle, $sessionstate, $Host)
                 $runspacepool.Open()
 
-                Write-Verbose "Creating empty collection to hold runspace jobs"
+                Write-Verbose -Message "Creating empty collection to hold runspace jobs"
                 $Script:runspaces = New-Object System.Collections.ArrayList
 
                 #If inputObject is bound get a total count and set bound to true
@@ -463,7 +463,7 @@ Function Invoke-Ping {
                         # $Using support from Boe Prox
                         if ($UsingVariableData) {
                             Foreach ($UsingVariable in $UsingVariableData) {
-                                Write-Verbose "Adding $($UsingVariable.Name) with value: $($UsingVariable.Value)"
+                                Write-Verbose -Message "Adding $($UsingVariable.Name) with value: $($UsingVariable.Value)"
                                 [void]$PowerShell.AddArgument($UsingVariable.Value)
                             }
                         }
@@ -495,7 +495,7 @@ Function Invoke-Ping {
 
                             #give verbose output
                             if ($firstRun) {
-                                Write-Verbose "$($runspaces.count) items running - exceeded $Script:MaxQueue limit."
+                                Write-Verbose -Message "$($runspaces.count) items running - exceeded $Script:MaxQueue limit."
                             }
                             $firstRun = $false
 
@@ -519,7 +519,7 @@ Function Invoke-Ping {
                 Finally {
                     #Close the runspace pool, unless we specified no close on timeout and something timed out
                     if (($timedOutTasks -eq $false) -or (($timedOutTasks -eq $true) -and ($noCloseOnTimeout -eq $false))) {
-                        Write-Verbose "Closing the runspace pool"
+                        Write-Verbose -Message "Closing the runspace pool"
                         $runspacepool.close()
                     }
 
@@ -529,7 +529,7 @@ Function Invoke-Ping {
             }
         }
 
-        Write-Verbose "PSBoundParameters = $($PSBoundParameters | Out-String)"
+        Write-Verbose -Message "PSBoundParameters = $($PSBoundParameters | Out-String)"
 
         $bound = $PSBoundParameters.keys -contains "ComputerName"
         if (-not $bound) {
@@ -630,7 +630,7 @@ Function Invoke-Ping {
                                 $wait = $iar.AsyncWaitHandle.WaitOne($timeout, $false)
                                 if (-not $wait) {
                                     $tcpclient.Close()
-                                    Write-Verbose "Connection Timeout to $srv`:$port"
+                                    Write-Verbose -Message "Connection Timeout to $srv`:$port"
                                     $false
                                 }
                                 else {
@@ -639,7 +639,7 @@ Function Invoke-Ping {
                                         $true
                                     }
                                     Catch {
-                                        Write-Verbose "Error for $srv`:$port`: $_"
+                                        Write-Verbose -Message "Error for $srv`:$port`: $_"
                                         $false
                                     }
                                     $tcpclient.Close()
@@ -650,7 +650,7 @@ Function Invoke-Ping {
                         process {
                             foreach ($name in $computername) {
                                 $dt = $cdt = Get-Date
-                                Write-Verbose "Testing: $Name"
+                                Write-Verbose -Message "Testing: $Name"
                                 $failed = 0
                                 try {
                                     $DNSEntity = [Net.Dns]::GetHostEntry($name)
@@ -667,7 +667,7 @@ Function Invoke-Ping {
                                     $results += $rst
                                     $failed = 1
                                 }
-                                Write-Verbose "DNS:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                Write-Verbose -Message "DNS:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                 if ($failed -eq 0) {
                                     foreach ($ip in $ips) {
 
@@ -690,13 +690,13 @@ Function Invoke-Ping {
                                             }
                                             catch {
                                                 $rst.RDP = $false
-                                                Write-Verbose "Error testing RDP: $_"
+                                                Write-Verbose -Message "Error testing RDP: $_"
                                             }
                                         }
-                                        Write-Verbose "RDP:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                        Write-Verbose -Message "RDP:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                         #########ping
                                         if (Test-Connection $ip -count 2 -Quiet) {
-                                            Write-Verbose "PING:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                            Write-Verbose -Message "PING:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                             $rst.ping = $true
 
                                             if ($WSMAN -or $All) {
@@ -707,9 +707,9 @@ Function Invoke-Ping {
                                                 }
                                                 catch {
                                                     $rst.WSMAN = $false
-                                                    Write-Verbose "Error testing WSMAN: $_"
+                                                    Write-Verbose -Message "Error testing WSMAN: $_"
                                                 }
-                                                Write-Verbose "WSMAN:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                                Write-Verbose -Message "WSMAN:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                                 if ($rst.WSMAN -and $credssp) {
                                                     ########### credssp
                                                     try {
@@ -718,9 +718,9 @@ Function Invoke-Ping {
                                                     }
                                                     catch {
                                                         $rst.CredSSP = $false
-                                                        Write-Verbose "Error testing CredSSP: $_"
+                                                        Write-Verbose -Message "Error testing CredSSP: $_"
                                                     }
-                                                    Write-Verbose "CredSSP:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                                    Write-Verbose -Message "CredSSP:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                                 }
                                             }
                                             if ($RemoteReg -or $All) {
@@ -731,9 +731,9 @@ Function Invoke-Ping {
                                                 }
                                                 catch {
                                                     $rst.remotereg = $false
-                                                    Write-Verbose "Error testing RemoteRegistry: $_"
+                                                    Write-Verbose -Message "Error testing RemoteRegistry: $_"
                                                 }
-                                                Write-Verbose "remote reg:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                                Write-Verbose -Message "remote reg:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                             }
                                             if ($RPC -or $All) {
                                                 try {
@@ -746,9 +746,9 @@ Function Invoke-Ping {
                                                 }
                                                 catch {
                                                     $rst.rpc = $false
-                                                    Write-Verbose "Error testing WMI/RPC: $_"
+                                                    Write-Verbose -Message "Error testing WMI/RPC: $_"
                                                 }
-                                                Write-Verbose "WMI/RPC:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                                Write-Verbose -Message "WMI/RPC:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
                                             }
                                             if ($SMB -or $All) {
 
@@ -762,9 +762,9 @@ Function Invoke-Ping {
                                                 }
                                                 catch {
                                                     $rst.SMB = $false
-                                                    Write-Verbose "Error testing SMB: $_"
+                                                    Write-Verbose -Message "Error testing SMB: $_"
                                                 }
-                                                Write-Verbose "SMB:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
+                                                Write-Verbose -Message "SMB:  $((New-TimeSpan $dt ($dt = Get-Date)).totalseconds)"
 
                                             }
                                         }
@@ -779,13 +779,13 @@ Function Invoke-Ping {
                                         $results += $rst
                                     }
                                 }
-                                Write-Verbose "Time for $($Name): $((New-TimeSpan $cdt ($dt)).totalseconds)"
-                                Write-Verbose "----------------------------"
+                                Write-Verbose -Message "Time for $($Name): $((New-TimeSpan $cdt ($dt)).totalseconds)"
+                                Write-Verbose -Message "----------------------------"
                             }
                         }
                         end {
-                            Write-Verbose "Time for all: $((New-TimeSpan $total ($dt)).totalseconds)"
-                            Write-Verbose "----------------------------"
+                            Write-Verbose -Message "Time for all: $((New-TimeSpan $total ($dt)).totalseconds)"
+                            Write-Verbose -Message "----------------------------"
                             return $results
                         }
                     }
