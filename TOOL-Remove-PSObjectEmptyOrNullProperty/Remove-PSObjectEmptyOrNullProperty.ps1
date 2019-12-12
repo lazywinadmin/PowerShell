@@ -22,7 +22,7 @@ function Remove-PSObjectEmptyOrNullProperty {
     PROCESS {
         $PsObject.psobject.Properties |
             Where-Object { -not $_.value } |
-            ForEach-Object {
+            ForEach-Object -Process {
                 $PsObject.psobject.Properties.Remove($_.name)
             }
     }
