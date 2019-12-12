@@ -22,7 +22,7 @@ function Repair-ScriptFormat {
         # Replace whitespace lines
         #$NewContent = $NewContent -replace '\'
 
-        $NewContent | Out-File -Path $Path -Force -NoNewline
+        $NewContent | Out-File -FilePath $Path -Force -NoNewline
 
 
 
