@@ -52,12 +52,12 @@ function New-Password {
         # Exclude some ASCII Char Codes from the ScriptBlock
         #  Excluded characters are ",',.,/,1,<,>,`,O,0,l,|
         #  See http://www.asciitable.com/ for mapping
-        34, 39, 46, 47, 49, 60, 62, 96, 48, 79, 108, 124 | ForEach-Object { [void]$PasswordCharCodes.Remove($_) }
+        34, 39, 46, 47, 49, 60, 62, 96, 48, 79, 108, 124 | ForEach-Object -Process { [void]$PasswordCharCodes.Remove($_) }
         $PasswordChars = [char[]]$PasswordCharCodes
     }#BEGIN
 
     PROCESS {
-        1..$count | ForEach-Object {
+        1..$count | ForEach-Object -Process {
             # Password of 4 characters or longer
             IF ($Length -gt 4) {
 
