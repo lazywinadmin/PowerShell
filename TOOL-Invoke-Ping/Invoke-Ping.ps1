@@ -323,7 +323,7 @@ Function Invoke-Ping {
                                 [void]$list.Add($Ast.SubExpression)
                             }
 
-                            $UsingVar = $UsingVariables | Group-Object Parent | ForEach-Object -Process { $_.Group | Select-Object -First 1 }
+                            $UsingVar = $UsingVariables | Group-Object -Property Parent | ForEach-Object -Process { $_.Group | Select-Object -First 1 }
 
                             #Extract the name, value, and create replacements for each
                             $UsingVariableData = ForEach ($Var in $UsingVar) {
