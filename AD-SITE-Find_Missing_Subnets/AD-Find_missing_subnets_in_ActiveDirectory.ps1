@@ -314,7 +314,7 @@ PROCESS {
             $EmailBody += "<br><font size=`"1`" color=`"red`">"
             # Retrieve Each txt generated from the NETLOGON files
             Get-ChildItem $scriptpathoutput\$DomainName-*.txt -Exclude "*All_Export*" |
-                ForEach-Object {
+                ForEach-Object -Process {
                     # Get the Other Errors (not Missing subnets)
                     $CurrentFile = Get-Content $_ | Where-Object { $_ -notlike "*NO_CLIENT_SITE*" }
                     IF ($CurrentFile) {
