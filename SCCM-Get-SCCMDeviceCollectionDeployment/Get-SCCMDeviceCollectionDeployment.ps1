@@ -132,7 +132,7 @@ function Get-SCCMDeviceCollectionDeployment {
             $Device = Get-WMIObject @Splatting -Query "Select * From SMS_R_SYSTEM WHERE Name='$DeviceName'"
 
             Write-Verbose -Message "[$FunctionName] Retrieving collection(s) where the device is member..."
-            Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($Device.resourceid)'" | ForEach-Object {
+            Get-WmiObject -Class sms_fullcollectionmembership @splatting -Filter "ResourceID = '$($Device.resourceid)'" | ForEach-Object -Process {
 
                 Write-Verbose -Message "[$FunctionName] Retrieving collection '$($_.Collectionid)'..."
                 $Collections = Get-WmiObject @splatting -Query "Select * From SMS_Collection WHERE CollectionID='$($_.Collectionid)'"
