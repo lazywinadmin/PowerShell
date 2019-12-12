@@ -53,7 +53,7 @@ function New-RandomPassword {
     }
 
     PROCESS {
-        1..$Count | ForEach-Object {
+        1..$Count | ForEach-Object -Process {
             [System.Web.Security.Membership]::GeneratePassword($Length, $NumberOfNonAlphanumericCharacters)
         }
     }
