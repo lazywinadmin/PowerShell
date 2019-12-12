@@ -30,7 +30,7 @@ function Get-SCSMIncidentRequestComment {
     PARAM
     (
         [Parameter(ParameterSetName = 'General',
-            Mandatory = $true)]
+            Mandatory = $false)]
         $DateTime = $((Get-Date).AddHours(-24)),
 
         [Parameter(ParameterSetName = 'GUID')]
@@ -51,11 +51,18 @@ function Get-SCSMIncidentRequestComment {
         }
 
         $Tickets |
-            ForEach-Object {
+            ForEach-Object -Process {
                 $CurrentTicket = $_
                 $relatedObjects = Get-scsmrelatedobject -SMObject $CurrentTicket
                 $AssignedTo = (Get-SCSMRelatedObject -SMObject $CurrentTicket -Relationship $AssignedUserClassRelation)
-                Foreach ($Comment in ($relatedObjects | Where-Object { $_.classname -eq 'System.WorkItem.TroubleTicket.UserCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AnalystCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AuditCommentLog' })) {
+
+                $Objects = $relatedObjects |
+                    Where-Object -FilterScript {
+                        $_.classname -eq 'System.WorkItem.TroubleTicket.UserCommentLog' -or
+                        $_.classname -eq 'System.WorkItem.TroubleTicket.AnalystCommentLog' -or
+                        $_.classname -eq 'System.WorkItem.TroubleTicket.AuditCommentLog' }
+
+                Foreach ($Comment in $Objects) {
                     # Output the information
                     [pscustomobject][ordered] @{
                         TicketName         = $CurrentTicket.Name
