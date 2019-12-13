@@ -50,7 +50,7 @@ function Get-SCSMServiceRequestComment {
         ForEach-Object -Process {
             $CurrentTicket = $_
             $relatedObjects = Get-scsmrelatedobject -SMObject $CurrentTicket
-            Foreach ($Comment in ($relatedObjects | Where-Object { $_.classname -eq 'System.WorkItem.TroubleTicket.UserCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AnalystCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AuditCommentLog' })) {
+            Foreach ($Comment in ($relatedObjects | Where-Object -FilterScript { $_.classname -eq 'System.WorkItem.TroubleTicket.UserCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AnalystCommentLog' -or $_.classname -eq 'System.WorkItem.TroubleTicket.AuditCommentLog' })) {
                 # Output the information
                 [pscustomobject][ordered] @{
                     TicketName         = $CurrentTicket.Name
