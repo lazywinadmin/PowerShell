@@ -131,7 +131,7 @@ BEGIN {
         PROCESS {
             TRY {
                 # Create Mail Message Object
-                $SMTPMessage = New-Object System.Net.Mail.MailMessage
+                $SMTPMessage = New-Object -TypeName System.Net.Mail.MailMessage
                 $SMTPMessage.From = $EmailFrom
                 $SMTPMessage.To = $EmailTo
                 $SMTPMessage.Body = $Body
@@ -144,12 +144,12 @@ BEGIN {
 
                 # Attachement Parameter
                 IF ($PSBoundParameters['attachment']) {
-                    $SMTPattachment = New-Object -TypeName System.Net.Mail.Attachment($attachment)
-                    $SMTPMessage.Attachments.Add($STMPattachment)
+                    $SMTPattachment = New-Object -TypeName System.Net.Mail.Attachment -ArgumentList $attachment
+                    $SMTPMessage.Attachments.Add($SMTPattachment)
                 }
 
                 # Create SMTP Client Object
-                $SMTPClient = New-Object Net.Mail.SmtpClient
+                $SMTPClient = New-Object -TypeName Net.Mail.SmtpClient
                 $SMTPClient.Host = $SmtpServer
                 $SMTPClient.Port = $Port
 
