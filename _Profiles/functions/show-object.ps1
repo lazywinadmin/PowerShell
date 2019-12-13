@@ -266,7 +266,7 @@ PS > Show-Object $ps
 
     ## Create the root node, which represents the object
     ## we are trying to show.
-    $root = New-Object Windows.Forms.TreeNode
+    $root = New-Object -TypeName Windows.Forms.TreeNode
     $root.Text = "$InputObject : " + $InputObject.GetType()
     $root.Name = '$' + $rootVariableName
     $root.Expand()
@@ -277,7 +277,7 @@ PS > Show-Object $ps
     PopulateNode $root $InputObject
 
     ## Finally, create the main form and show it.
-    $form = New-Object Windows.Forms.Form
+    $form = New-Object -TypeName Windows.Forms.Form
     $form.Text = "Browsing " + $root.Text
     $form.Width = 1000
     $form.Height = 800
