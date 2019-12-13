@@ -50,7 +50,7 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
                     $virtualKey = $API::MapVirtualKey($ascii, 3)
 
                     # get keyboard state for virtual keys
-                    $kbstate = New-Object Byte[] 256
+                    $kbstate = New-Object -TypeName Byte[] -ArgumentList 256
                     $checkkbstate = $API::GetKeyboardState($kbstate)
 
                     # prepare a StringBuilder to receive input key
