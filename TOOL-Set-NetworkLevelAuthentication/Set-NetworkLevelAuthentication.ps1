@@ -51,7 +51,7 @@ function Set-NetworkLevelAuthentication {
         TRY {
             IF (-not (Get-Module -Name CimCmdlets)) {
                 Write-Verbose -Message '[BEGIN] Import Module CimCmdlets'
-                Import-Module CimCmdlets -ErrorAction 'Stop' -ErrorVariable ErrorBeginCimCmdlets
+                Import-Module -Name CimCmdlets -ErrorAction 'Stop' -ErrorVariable ErrorBeginCimCmdlets
             }
         }
         CATCH {

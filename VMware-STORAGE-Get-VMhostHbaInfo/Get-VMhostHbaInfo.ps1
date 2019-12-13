@@ -173,8 +173,8 @@ Function Get-VMhostHbaInfo {
             IF ($hostsview) {
                 IF ($hostsview.runtime.PowerState -match "poweredOn") {
                     Write-Verbose -Message "PROCESS - $($hostview.name) - Status is Powered On"
-                    $esx = $hostsview | Where-Object { $_.runtime.PowerState -match "poweredOn" }
-                    FOREACH ($hba in ($esx.Config.StorageDevice.HostBusAdapter | Where-Object { $_.GetType().Name -eq "HostFibreChannelHba" })) {
+                    $esx = $hostsview | Where-Object -FilterScript { $_.runtime.PowerState -match "poweredOn" }
+                    FOREACH ($hba in ($esx.Config.StorageDevice.HostBusAdapter | Where-Object -FilterScript { $_.GetType().Name -eq "HostFibreChannelHba" })) {
                         Write-Verbose -Message "PROCESS - $($esx.name) - Retrieving HBA information ..."
                         $line = "" | Select-Object -Property HostName, HostProduct, HbaDevice, HbaWWN, HbaDriver, HbaModel, HbaFirmwareVersion, HWModel
                         $line.HostName = $esx.name
@@ -187,7 +187,7 @@ Function Get-VMhostHbaInfo {
 
 
                         Write-Verbose -Message "PROCESS - $($esx.name) - Retrieving HBA Advance information - checking SSH Service..."
-                        IF (((Get-View -ViewType HostSystem -ErrorAction Stop -ErrorVariable ErrorProcessGetViewTypeService -Filter @{ "Name" = $($ESX.name) }).config.service.service | Where-Object { $_.key -eq 'tsm-ssh' }).running) {
+                        IF (((Get-View -ViewType HostSystem -ErrorAction Stop -ErrorVariable ErrorProcessGetViewTypeService -Filter @{ "Name" = $($ESX.name) }).config.service.service | Where-Object -FilterScript { $_.key -eq 'tsm-ssh' }).running) {
                             if ($hba.driver -match "lpfc") {
                                 $remoteCommand = "head -9 /proc/scsi/lpfc*/* | grep -B1 $($line.HbaWWN) | grep -i 'firmware version' | sed 's/Firmware Version:\{0,1\} \(.*\)/\1/'"
                             }

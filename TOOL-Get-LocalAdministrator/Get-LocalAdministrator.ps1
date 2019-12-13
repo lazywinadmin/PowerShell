@@ -37,7 +37,7 @@ function Get-LocalAdministratorBuiltin {
                 $UserPrincipal = New-Object -TypeName System.DirectoryServices.AccountManagement.UserPrincipal($PrincipalContext)
                 $Searcher = New-Object -TypeName System.DirectoryServices.AccountManagement.PrincipalSearcher
                 $Searcher.QueryFilter = $UserPrincipal
-                $Searcher.FindAll() | Where-Object { $_.Sid -Like "*-500" }
+                $Searcher.FindAll() | Where-Object -FilterScript { $_.Sid -Like "*-500" }
             }
             Catch {
                 Write-Warning -Message "$($_.Exception.Message)"

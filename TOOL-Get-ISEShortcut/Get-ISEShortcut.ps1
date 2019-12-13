@@ -47,7 +47,7 @@ function Get-ISEShortCut {
             $gps = $psISE.GetType().Assembly
             $rm = New-Object -TypeName System.Resources.ResourceManager -ArgumentList GuiStrings, $gps
             $rs = $rm.GetResourceSet((Get-Culture), $true, $true)
-            $rs | Where-Object Name -match 'Shortcut\d?$|^F\d+Keyboard' |
+            $rs | Where-Object -Property Name -match 'Shortcut\d?$|^F\d+Keyboard' |
             Sort-Object -Property Value
 
     }

@@ -35,7 +35,7 @@ PS > Show-Object $ps
     ## object navigation syntax. To do this, we look through all
     ## of the variables for the one with the same object identifier.
     $rootVariableName = Get-ChildItem variable:\* -Exclude InputObject, Args |
-        Where-Object {
+        Where-Object -FilterScript {
             $_.Value -and
             ($_.Value.GetType() -eq $InputObject.GetType()) -and
             ($_.Value.GetHashCode() -eq $InputObject.GetHashCode())

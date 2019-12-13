@@ -49,7 +49,7 @@ function Get-NetFramework {
         # Get the Net Framework Installed
         $netFramework = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse |
             Get-ItemProperty -name Version -EA 0 |
-            Where-Object { $_.PSChildName -match '^(?!S)\p{L}' } |
+            Where-Object -FilterScript { $_.PSChildName -match '^(?!S)\p{L}' } |
             Select-Object -Property PSChildName, Version
 
         # Prepare output

@@ -15,7 +15,7 @@ Function Find-Apartment {
     $AvailableRooms = @()
     For ($CurrentPage = 0; $CurrentPage -le $MaxPages; $CurrentPage++) {
         $WebPage = Invoke-WebRequest "$URL/search/roo?=roo&s=$Start&query=&zoomToPosting=&minAsk=$MinPrice&maxAsk=$MaxPrice&hasPic=1"
-        $Results = $WebPage.ParsedHtml.body.innerHTML.Split("`n") | Where-Object { $_ -like "<P class=row*" }
+        $Results = $WebPage.ParsedHtml.body.innerHTML.Split("`n") | Where-Object -FilterScript { $_ -like "<P class=row*" }
         ForEach ($Item in $Results) {
             $ItemObject = $ID = $Price = $DatePosted = $Neighborhood = $Link = $Description = $Email = $null
             $ID = ($Item -replace ".*pid\=`"", "") -replace "`".*"
@@ -24,7 +24,7 @@ Function Find-Apartment {
             $Neighborhood = ($Item -replace ".*\<SMALL\>\(", "") -replace "\)\</SMALL>.*"
             If ($Neighborhood -like "<*") { $Neighborhood = "N/A" }
             $Link = $URL + ((($Item -replace ".*\<A href\=`"", "") -replace "\<.*") -split ('">'))[0]
-            $Email = (($(Invoke-WebRequest $Link).ParsedHtml.body.innerHTML.Split("`n") | Where-Object { $_ -like "var displayEmail*" }) -replace "var displayEmail \= `"") -replace "`";"
+            $Email = (($(Invoke-WebRequest $Link).ParsedHtml.body.innerHTML.Split("`n") | Where-Object -FilterScript { $_ -like "var displayEmail*" }) -replace "var displayEmail \= `"") -replace "`";"
             $Description = ((($Item -replace ".*\<A href\=`"", "") -replace "\<.*") -split ('">'))[1]
             $ItemObject = New-Object -TypeName PSObject -Property @{
                 'ID'           = $ID

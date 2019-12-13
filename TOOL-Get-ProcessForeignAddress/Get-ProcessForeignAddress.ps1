@@ -46,7 +46,7 @@ function Get-ProcessForeignAddress {
         }
 
     if ($ProcessName) {
-        $result | Where-Object { $_.processname -like "$processname" }
+        $result | Where-Object -FilterScript { $_.processname -like "$processname" }
     }
     else { $Result }
 }

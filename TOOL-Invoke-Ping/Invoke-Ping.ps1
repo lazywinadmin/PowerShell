@@ -168,13 +168,13 @@ Function Invoke-Ping {
                         # One of the veriables that we pass is '$?'.
                         # There could be other variables with such problems.
                         # Scope 2 required if we move to a real module
-                        $UserVariables = @(Get-Variable | Where-Object { -not ($VariablesToExclude -contains $_.Name) })
+                        $UserVariables = @(Get-Variable | Where-Object -FilterScript { -not ($VariablesToExclude -contains $_.Name) })
                         Write-Verbose -Message "Found variables to import: $(($UserVariables | Select-Object -expandproperty Name | Sort-Object) -join ", " | Out-String).`n"
 
                     }
 
                     if ($ImportModules) {
-                        $UserModules = @(Get-Module | Where-Object { $StandardUserEnv.Modules -notcontains $_.Name -and (Test-Path $_.Path -ErrorAction SilentlyContinue) } | Select-Object -ExpandProperty Path)
+                        $UserModules = @(Get-Module | Where-Object -FilterScript { $StandardUserEnv.Modules -notcontains $_.Name -and (Test-Path $_.Path -ErrorAction SilentlyContinue) } | Select-Object -ExpandProperty Path)
                         $UserSnapins = @(Get-PSSnapin | Select-Object -ExpandProperty Name | Where-Object { $StandardUserEnv.Snapins -notcontains $_ })
                     }
                 }
@@ -278,7 +278,7 @@ Function Invoke-Ping {
                         #Clean out unused runspace jobs
                         $temphash = $runspaces.clone()
                         $temphash |
-                        Where-Object { $null -eq $_.runspace } |
+                        Where-Object -FilterScript { $null -eq $_.runspace } |
                         ForEach-Object -Process {
                             $Runspaces.remove($_)
                         }
@@ -508,7 +508,7 @@ Function Invoke-Ping {
                         #endregion add scripts to runspace pool
                     }
 
-                    Write-Verbose ("Finish processing the remaining runspace jobs: {0}" -f (@($runspaces | Where-Object { $null -ne $_.Runspace }).Count))
+                    Write-Verbose ("Finish processing the remaining runspace jobs: {0}" -f (@($runspaces | Where-Object -FilterScript { $null -ne $_.Runspace }).Count))
                     Get-RunspaceData -wait
 
                     if (-not $quiet) {

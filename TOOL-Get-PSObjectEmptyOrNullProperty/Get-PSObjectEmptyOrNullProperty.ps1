@@ -50,6 +50,6 @@ function Get-PSObjectEmptyOrNullProperty {
         $PSObject)
     PROCESS {
         $PsObject.psobject.Properties |
-            Where-Object { -not $_.value }
+            Where-Object -FilterScript { -not $_.value }
     }
 }

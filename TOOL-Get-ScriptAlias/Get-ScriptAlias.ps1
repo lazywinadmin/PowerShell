@@ -46,7 +46,7 @@ function Get-ScriptAlias {
                 $AbstractSyntaxTree.FindAll( { $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true) |
                     ForEach-Object -Process {
                         $Command = $_.CommandElements[0]
-                        if ($Alias = Get-Alias | Where-Object { $_.Name -eq $Command }) {
+                        if ($Alias = Get-Alias | Where-Object -FilterScript { $_.Name -eq $Command }) {
 
                             # Output information
                             [PSCustomObject]@{

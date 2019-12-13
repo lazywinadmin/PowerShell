@@ -59,7 +59,7 @@ BEGIN {
 }
 PROCESS {
     TRY {
-        $VMHosts = Get-VMHost -ErrorAction Stop -ErrorVariable ErrorGetVMhost | Where-Object { $_.ConnectionState -eq "Connected" }
+        $VMHosts = Get-VMHost -ErrorAction Stop -ErrorVariable ErrorGetVMhost | Where-Object -FilterScript { $_.ConnectionState -eq "Connected" }
 
         IF ($PSBoundParameters['AllVib']) {
             Foreach ($CurrentVMhost in $VMHosts) {
@@ -97,7 +97,7 @@ PROCESS {
                     # Exposes the ESX CLI functionality of the current host
                     $ESXCLI = Get-EsxCli -VMHost $CurrentVMhost.name
                     # Retrieve Vib from vendor $vibvendor
-                    $ESXCLI.software.vib.list() | Where-Object { $_.Vendor -eq $VibVendor } |
+                    $ESXCLI.software.vib.list() | Where-Object -FilterScript { $_.Vendor -eq $VibVendor } |
                     ForEach-Object
                 {
                     $VIB = $_
@@ -128,7 +128,7 @@ PROCESS {
                 # Exposes the ESX CLI functionality of the current host
                 $ESXCLI = Get-EsxCli -VMHost $CurrentVMhost.name
                 # Retrieve Vib with name $vibname
-                $ESXCLI.software.vib.list() | Where-Object { $_.Name -eq $VibName } |
+                $ESXCLI.software.vib.list() | Where-Object -FilterScript { $_.Name -eq $VibName } |
                 ForEach-Object
             {
                 $VIB = $_
