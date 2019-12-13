@@ -74,8 +74,8 @@ function Get-ADSiteInventory {
                     InterSiteTopologyGenerator   = $item.InterSiteTopologyGenerator
                     Location                     = $item.location
                     Subnets                      = ( $info = Foreach ($i in $item.Subnets.name) {
-                            $SubnetAdditionalInfo = $SubnetsContainer.Children | Where-Object { $_.name -like "*$i*" }
-                            "$i -- $($SubnetAdditionalInfo.Description)" 
+                            $SubnetAdditionalInfo = $SubnetsContainer.Children | Where-Object -FilterScript { $_.name -like "*$i*" }
+                            "$i -- $($SubnetAdditionalInfo.Description)"
                         }) -join ","
                     #SiteLinksInfo = $LinksInfo | fl *
 
