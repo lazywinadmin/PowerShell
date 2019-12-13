@@ -577,7 +577,7 @@ PROCESS {
                                 IF ($_.SideIndicator -eq "=>") { "Removed" }
                                 ELSE { "Added" }
                             }
-                        }, DisplayName, Name, SamAccountName, DN | Where-Object { $_.name -notlike "*no user or group*" }
+                        }, DisplayName, Name, SamAccountName, DN | Where-Object -FilterScript { $_.name -notlike "*no user or group*" }
                     Write-Verbose -Message "[PROCESS] $item - Compare Block Done !"
 
                     <# Troubleshooting
