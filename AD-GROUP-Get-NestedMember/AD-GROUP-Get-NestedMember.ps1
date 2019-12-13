@@ -36,7 +36,7 @@ function Get-NestedMember {
         Write-Verbose -Message "[$FunctionName] Check if ActiveDirectory Module is available"
         if (-not(Get-Module Activedirectory -ErrorAction Stop)) {
             Write-Verbose -Message "[$FunctionName] Loading ActiveDirectory Module"
-            Import-Module ActiveDirectory -ErrorAction Stop
+            Import-Module -Name ActiveDirectory -ErrorAction Stop
         }
 
         # Set Depth Counter
