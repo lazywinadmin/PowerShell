@@ -27,7 +27,7 @@ function Get-SCSMIRComment {
         FOREACH ($IR in $Incident) {
             TRY {
                 # Retrieve Comments
-                $FilteredIncidents = $IR.AppliesToTroubleTicket | Where-Object {
+                $FilteredIncidents = $IR.AppliesToTroubleTicket | Where-Object -FilterScript {
                     $_.ClassName -eq "System.WorkItem.TroubleTicket.UserCommentLog" -OR $_.ClassName -eq "System.WorkItem.TroubleTicket.AnalystCommentLog"
                 }
 
