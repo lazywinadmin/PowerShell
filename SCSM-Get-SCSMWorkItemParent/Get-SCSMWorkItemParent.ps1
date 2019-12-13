@@ -67,7 +67,7 @@ function Get-SCSMWorkItemParent {
             Write-Verbose -Message "[PROCESS] Activity: $($ActivityObject.name)"
             Write-Verbose -Message "[PROCESS] Retrieving WorkItem Parent"
             $ParentRelationshipID = '2da498be-0485-b2b2-d520-6ebd1698e61b'
-            $ParentRelatedObject = Get-SCSMRelationshipObject -ByTarget $ActivityObject | Where-Object { $_.RelationshipId -eq $ParentRelationshipID }
+            $ParentRelatedObject = Get-SCSMRelationshipObject -ByTarget $ActivityObject | Where-Object -FilterScript { $_.RelationshipId -eq $ParentRelationshipID }
             $ParentObject = $ParentRelatedObject.SourceObject
 
             Write-Verbose -Message "[PROCESS] Activity: $($ActivityObject.name) - Parent: $($ParentObject.name)"
