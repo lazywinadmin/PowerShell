@@ -318,7 +318,7 @@ Function Invoke-Ping {
                         $UsingVariables = $ScriptBlock.ast.FindAll( { $args[0] -is [System.Management.Automation.Language.UsingExpressionAst] }, $True)
 
                         If ($UsingVariables) {
-                            $List = New-Object 'System.Collections.Generic.List`1[System.Management.Automation.Language.VariableExpressionAst]'
+                            $List = New-Object -TypeName 'System.Collections.Generic.List`1[System.Management.Automation.Language.VariableExpressionAst]'
                             ForEach ($Ast in $UsingVariables) {
                                 [void]$list.Add($Ast.SubExpression)
                             }
@@ -392,7 +392,7 @@ Function Invoke-Ping {
                 $runspacepool.Open()
 
                 Write-Verbose -Message "Creating empty collection to hold runspace jobs"
-                $Script:runspaces = New-Object System.Collections.ArrayList
+                $Script:runspaces = New-Object -TypeName System.Collections.ArrayList
 
                 #If inputObject is bound get a total count and set bound to true
                 $global:__bound = $false
@@ -625,7 +625,7 @@ Function Invoke-Ping {
                                     $timeout = 3000
                                 )
                                 $ErrorActionPreference = "SilentlyContinue"
-                                $tcpclient = New-Object system.Net.Sockets.TcpClient
+                                $tcpclient = New-Object -TypeName system.Net.Sockets.TcpClient
                                 $iar = $tcpclient.BeginConnect($srv, $port, $null, $null)
                                 $wait = $iar.AsyncWaitHandle.WaitOne($timeout, $false)
                                 if (-not $wait) {
@@ -679,7 +679,7 @@ Function Invoke-Ping {
                                         if ($RDP -or $All) {
                                             ####RDP Check (firewall may block rest so do before ping
                                             try {
-                                                $socket = New-Object Net.Sockets.TcpClient($name, 3389) -ErrorAction stop
+                                                $socket = New-Object -TypeName Net.Sockets.TcpClient -ArgumentList $name,3389 -ErrorAction stop
                                                 if ($null -eq $socket) {
                                                     $rst.RDP = $false
                                                 }
