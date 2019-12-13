@@ -269,9 +269,9 @@ PROCESS {
                         $ImportString = $FilesToCombine | ConvertFrom-Csv -Delimiter ' ' -Header Date, Time, Code, Domain, Error, Name, IPAddress
 
                         # Append Missing Subnet File
-                        $importString | Where-Object { $_.Error -like "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-NOCLIENTSITE.csv -Append
+                        $importString | Where-Object -FilterScript { $_.Error -like "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-NOCLIENTSITE.csv -Append
                         # Append Other Error File
-                        $importString | Where-Object { $_.Error -notlike "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-OTHERERRORS.csv -Append
+                        $importString | Where-Object -FilterScript { $_.Error -notlike "*NO_CLIENT_SITE*" } | Export-Csv -LiteralPath $scriptpathOutput\$ForestName-$dateformat-OTHERERRORS.csv -Append
 
                     }#IF File to Combine
                     ELSE { Write-Verbose -Message "[PROCESS] Nothing to process" }
@@ -316,7 +316,7 @@ PROCESS {
             Get-ChildItem $scriptpathoutput\$DomainName-*.txt -Exclude "*All_Export*" |
                 ForEach-Object -Process {
                     # Get the Other Errors (not Missing subnets)
-                    $CurrentFile = Get-Content $_ | Where-Object { $_ -notlike "*NO_CLIENT_SITE*" }
+                    $CurrentFile = Get-Content $_ | Where-Object -FilterScript { $_ -notlike "*NO_CLIENT_SITE*" }
                     IF ($CurrentFile) {
                         # Write the name of the log, this will help sysadmin to find which side report the error
                         $EmailBody += "<font size=`"2`"><b>$($_.basename)</b><br></font>"
