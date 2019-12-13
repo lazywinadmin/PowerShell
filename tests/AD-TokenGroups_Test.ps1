@@ -13,7 +13,7 @@ $Search.FindAll() | ForEach-Object -Process {
     $($AccountGetDirectory.Get("tokenGroups")) |
         ForEach-Object -Process {
             # Create SecurityIdentifier to translate into group name
-            $Principal = New-Object System.Security.Principal.SecurityIdentifier($_, 0)
+            $Principal = New-Object -TypeName System.Security.Principal.SecurityIdentifier($_, 0)
             $domainName = [adsi]"LDAP://$($Principal.AccountDomainSid)"
 
             <#
