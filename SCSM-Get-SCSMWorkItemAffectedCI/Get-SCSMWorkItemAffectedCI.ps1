@@ -28,6 +28,6 @@ function Get-SCSMWorkItemAffectedCI {
 
         # Find the Affected Configuration Items
         Get-SCSMRelationshipObject -BySource $WorkItemObject |
-            Where-Object { $_.relationshipid -eq 'b73a6094-c64c-b0ff-9706-1822df5c2e82' }
+            Where-Object -FilterScript { $_.relationshipid -eq 'b73a6094-c64c-b0ff-9706-1822df5c2e82' }
     }
 }
