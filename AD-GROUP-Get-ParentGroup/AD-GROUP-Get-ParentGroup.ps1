@@ -29,7 +29,7 @@ function Get-ParentGroup {
         TRY {
             if (-not(Get-Module Activedirectory -ErrorAction Stop)) {
                 Write-Verbose -Message "[BEGIN] Loading ActiveDirectory Module"
-                Import-Module ActiveDirectory -ErrorAction Stop
+                Import-Module -Name ActiveDirectory -ErrorAction Stop
             }
         }
         CATCH {
