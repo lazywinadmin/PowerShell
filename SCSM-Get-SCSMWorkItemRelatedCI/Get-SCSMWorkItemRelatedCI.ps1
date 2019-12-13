@@ -28,6 +28,6 @@ function Get-SCSMWorkItemRelatedCI {
 
         # Find the Related Configuration Items
         Get-SCSMRelationshipObject -BySource $WorkItemObject |
-            Where-Object { $_.relationshipid -eq 'd96c8b59-8554-6e77-0aa7-f51448868b43' }
+            Where-Object -FilterScript { $_.relationshipid -eq 'd96c8b59-8554-6e77-0aa7-f51448868b43' }
     }
 }
