@@ -262,7 +262,7 @@ function Send-Email {
             # Attachement Parameter
             IF ($PSBoundParameters['attachment']) {
                 $SMTPattachment = New-Object -TypeName System.Net.Mail.Attachment($attachment)
-                $SMTPMessage.Attachments.Add($STMPattachment)
+                $SMTPMessage.Attachments.Add($SMTPattachment)
             }
 
             # Delivery Options
