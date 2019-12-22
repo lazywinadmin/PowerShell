@@ -37,7 +37,7 @@ function Set-RDPDisable {
                         $regkey.SetValue("fDenyTSConnections", 1)
                         $regKey.flush()
                         $regKey.Close()
-                    } #IF Test-Connection
+                    }
                 }
             } #Try
             CATCH {
