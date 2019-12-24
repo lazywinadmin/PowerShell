@@ -6,6 +6,9 @@ function New-ADDomainJoin
 .Description
     Perform offline domain join in c#/PowerShell without djoin.exe
     This will create an object in active directory and output the blob needed to join the machine offline
+
+    If needed, you can use the function New-DjoinFile to recreate the file consumed by djoin.exe
+    https://github.com/lazywinadmin/PowerShell/tree/master/TOOL-New-DjoinFile
 .Parameter machinename
     Specify the machinename
 .Parameter domain
