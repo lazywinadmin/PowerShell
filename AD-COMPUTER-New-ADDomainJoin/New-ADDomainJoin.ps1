@@ -42,6 +42,8 @@ function New-ADDomainJoin
     Todo
         Add support for non dc specified
         Add support for non credential specified
+.link
+    https://github.com/lazywinadmin/PowerShell
 #>
 [CmdletBinding()]
 PARAM(
