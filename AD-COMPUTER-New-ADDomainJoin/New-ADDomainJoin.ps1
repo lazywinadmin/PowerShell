@@ -1,6 +1,5 @@
-function New-ADDomainJoin
-{
-<#
+function New-ADDomainJoin {
+    <#
 .Synopsis
     Perform offline domain join in c#/PowerShell without djoin.exe
 .Description
@@ -48,36 +47,36 @@ function New-ADDomainJoin
 .link
     https://github.com/lazywinadmin/PowerShell
 #>
-[CmdletBinding()]
-PARAM(
-    [Parameter(Mandatory=$true)]
-    $machinename,
+    [CmdletBinding()]
+    PARAM(
+        [Parameter(Mandatory = $true)]
+        $machinename,
 
-    [Parameter(Mandatory=$true)]
-    $domain,
+        [Parameter(Mandatory = $true)]
+        $domain,
 
-    [Alias("RunAs")]
-    [System.Management.Automation.PSCredential]
-    [System.Management.Automation.Credential()]
-    $Credential = [System.Management.Automation.PSCredential]::Empty,
+        [Alias("RunAs")]
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.Credential()]
+        $Credential = [System.Management.Automation.PSCredential]::Empty,
 
-    $machineaccountou=$null,
+        $machineaccountou = $null,
 
-    $dcname
-)
-Try{
-    $FunctionName = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).MyCommand
+        $dcname
+    )
+    Try {
+        $FunctionName = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).MyCommand
 
-    # Detect OS
-    $OSVersion = [Environment]::OSVersion
-    $OSVersionMajorMinor = "$($OSVersion.version.major).$($OSVersion.version.minor)"
-    Write-Verbose -Message "[$FunctionName] OS detected - $OSVersionMajorMinor"
-    if($OSVersionMajorMinor -lt 6.2){$CodeToUse = 'W2008'}
-    else{$CodeToUse = 'W2012'}
+        # Detect OS
+        $OSVersion = [Environment]::OSVersion
+        $OSVersionMajorMinor = "$($OSVersion.version.major).$($OSVersion.version.minor)"
+        Write-Verbose -Message "[$FunctionName] OS detected - $OSVersionMajorMinor"
+        if ($OSVersionMajorMinor -lt 6.2) { $CodeToUse = 'W2008' }
+        else { $CodeToUse = 'W2012' }
 
-    # W2008
-    Write-Verbose -Message "[$FunctionName] Declare code for Windows Server 2008/Windows 7"
-    $source2008 = @'
+        # W2008
+        Write-Verbose -Message "[$FunctionName] Declare code for Windows Server 2008/Windows 7"
+        $source2008 = @'
     using System;
     using System.Security.Principal;
     using System.Runtime.InteropServices;
@@ -325,9 +324,9 @@ Try{
     }
 '@
 
-    # W2012
-    Write-Verbose -Message "[$FunctionName] Declare code for Windows Server 2012/Windows 8"
-    $source2012 = @'
+        # W2012
+        Write-Verbose -Message "[$FunctionName] Declare code for Windows Server 2012/Windows 8"
+        $source2012 = @'
 using System;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
@@ -692,24 +691,26 @@ namespace Djoin
 }
 '@
 
-    switch ($CodeToUse) {
-        'W2008'   {
-            Write-Verbose -Message "[$FunctionName] Importing code for Windows Server 2008/Windows 7"
-            Add-Type -TypeDefinition $Source2008 -Language CSharp }
-        default {
-            Write-Verbose -Message "[$FunctionName] Importing code for Windows Server 2012/Windows 8"
-            Add-Type -TypeDefinition $Source2012 -Language CSharp}
+        switch ($CodeToUse) {
+            'W2008' {
+                Write-Verbose -Message "[$FunctionName] Importing code for Windows Server 2008/Windows 7"
+                Add-Type -TypeDefinition $Source2008 -Language CSharp
+            }
+            default {
+                Write-Verbose -Message "[$FunctionName] Importing code for Windows Server 2012/Windows 8"
+                Add-Type -TypeDefinition $Source2012 -Language CSharp
+            }
+        }
+
+        Write-Verbose -Message "[$FunctionName] Performing offline domain join...."
+
+        $DomainJoinBlob = ""
+        [void]([Djoin.DomainJoin]::GetDomainJoin($($Credential.username), $($Credential.GetNetworkCredential().password), $domain, $machinename, $machineaccountou, $dcname, [ref]$DomainJoinBlob))
+
+        # return the blob
+        return $DomainJoinBlob
     }
-
-    Write-Verbose -Message "[$FunctionName] Performing offline domain join...."
-
-    $DomainJoinBlob = ""
-    [void]([Djoin.DomainJoin]::GetDomainJoin($($Credential.username),$($Credential.GetNetworkCredential().password),$domain,$machinename,$machineaccountou,$dcname,[ref]$DomainJoinBlob))
-
-    # return the blob
-    return $DomainJoinBlob
-}
-catch {
-    throw $_
-}
+    catch {
+        throw $_
+    }
 }
