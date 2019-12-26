@@ -54,6 +54,10 @@ Describe 'Comment based help' -Tag @('Help') {
                         $functionHelp.Parameters | Should Not BeNullOrEmpty
                     }
                 }
+
+                It 'Contains Link' {
+                    $functionHelp.relatedlinks.navigationlink | Should match 'https://github.com/lazywinadmin'
+                }
             }
             else {
                 It "[$($script.BaseName)] is not a unique function" {
@@ -62,7 +66,7 @@ Describe 'Comment based help' -Tag @('Help') {
         }
     }
 }
-Describe 'func' -Tag @('func') {
+Describe 'Function' -Tag @('func') {
     foreach ($myscript in $scripts) {
         It "[$($myscript.BaseName)] `$Error[*] Variable should not be present" {
             "$($myscript.FullName)" | Should -Not -FileContentMatch ([regex]::Escape('$error['))
