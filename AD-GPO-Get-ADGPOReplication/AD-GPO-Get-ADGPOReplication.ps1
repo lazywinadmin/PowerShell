@@ -22,6 +22,8 @@ function Get-ADGPOReplication {
             Initial version
             Adding some more Error Handling
             Fix some typo
+    .link
+        https://github.com/lazywinadmin/PowerShell
     #>
     #requires -version 3
     [CmdletBinding()]
