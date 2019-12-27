@@ -54,6 +54,8 @@ function Clean-MacAddress {
         Francois-Xavier Cat
         lazywinadmin.com
         @lazywinadmin
+    .Link
+        https://github.com/lazywinadmin/PowerShell
 #>
     [OutputType([String], ParameterSetName = "Upper")]
     [OutputType([String], ParameterSetName = "Lower")]
