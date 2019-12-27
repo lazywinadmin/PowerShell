@@ -18,6 +18,8 @@ function Get-ParentGroup {
         Get-NestedMember TESTGROUP | Group Name | select name, count
 
         This will find duplicate
+    .link
+        https://github.com/lazywinadmin/PowerShell
 
 #>
     [CmdletBinding()]
