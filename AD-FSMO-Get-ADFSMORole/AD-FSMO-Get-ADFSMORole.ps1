@@ -23,6 +23,8 @@ function Get-ADFSMORole {
         Update logic
         Remove warning messages
         Replace tabs with spaces
+.link
+    https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM (
