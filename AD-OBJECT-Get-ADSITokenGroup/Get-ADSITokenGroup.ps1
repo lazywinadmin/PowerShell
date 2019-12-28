@@ -34,7 +34,9 @@ function Get-ADSITokenGroup {
     .NOTES
         Francois-Xavier Cat
         lazywinadmin.com
-        @lazywinadm
+        @lazywinadmin
+    .link
+    https://github.com/lazywinadmin/PowerShell
     #>
     [CmdletBinding()]
     param
