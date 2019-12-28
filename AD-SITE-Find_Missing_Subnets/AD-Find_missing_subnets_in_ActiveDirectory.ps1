@@ -64,6 +64,8 @@
             REMOVE the ExportCSV part, it is saved by default
             ADD HTMLReportPath Parameter, Just need to specify the folder. default file name will be: $ForestName-DateFormat-Report.html
             ADD Table CSS
+    .link
+        https://github.com/lazywinadmin/PowerShell
 #>
 
 #requires -version 2.0
