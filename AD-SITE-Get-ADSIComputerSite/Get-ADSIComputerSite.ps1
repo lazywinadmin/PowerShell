@@ -30,6 +30,8 @@ function Get-ADSIComputerSite {
 
     Thanks to the Reddit folks for their help! :-)
     https://www.reddit.com/r/PowerShell/comments/4cjdk8/get_the_ad_site_name_of_a_computer/
+.link
+    https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding()]
