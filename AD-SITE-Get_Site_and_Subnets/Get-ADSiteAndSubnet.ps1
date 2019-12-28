@@ -16,12 +16,11 @@ function Get-ADSiteAndSubnet {
         PSObject
 
     .NOTES
-        AUTHOR    : Francois-Xavier Cat
-        DATE    : 2014/02/03
-
-        HISTORY    :
-
-            1.0        2014/02/03    Initial Version
+        CHANGE HISTORY:
+            1.0 | 2014/02/03 | @lazywinadmin
+                Initial Version
+    .link
+    https://github.com/lazywinadmin/PowerShell
 
 
 #>
