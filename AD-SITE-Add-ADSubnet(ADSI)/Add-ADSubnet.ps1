@@ -43,6 +43,8 @@ Function Add-ADSubnet {
         VERSION HISTORY:
         1.0 2013.11.07
             Initial Version
+    .link
+    https://github.com/lazywinadmin/PowerShell
 
 #>
     [CmdletBinding()]
