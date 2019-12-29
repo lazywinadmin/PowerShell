@@ -61,6 +61,8 @@ function New-SCCMDeviceVariable {
         lazywinadmin.com
         @lazywinadmin
         github.com/lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
     #>
     [cmdletbinding()]
     PARAM (

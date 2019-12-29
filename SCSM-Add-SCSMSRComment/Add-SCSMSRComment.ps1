@@ -36,6 +36,8 @@ Function Add-SCSMSRComment {
     @lazywinadmin
 
     Script inspired from http://www.scsm.se/?p=1423 by Anders Asp
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM (

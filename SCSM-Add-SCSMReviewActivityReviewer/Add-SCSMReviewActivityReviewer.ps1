@@ -27,6 +27,8 @@ function Add-SCSMReviewActivityReviewer {
         lazywinadmin.com
 
         1.0 Based on Cireson's consultant function
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM

@@ -17,6 +17,12 @@ function Set-SCCMClientCacheLocation {
             Set-SCCMClientCacheLocation -ComputerName Client01 -Location "C:\temp\ccmcache"
 
             This will set the client cache location "C:\temp\ccmcache" on the computer Client01
+        .NOTES
+            Francois-Xavier Cat
+            lazywinadmin.com
+            @lazywinadmin
+        .LINK
+            https://github.com/lazywinadmin/PowerShell
     #>
     PARAM(
         [string[]]$ComputerName = ".",

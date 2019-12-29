@@ -1,34 +1,36 @@
 function Get-SCSMReviewActivityReviewer {
-    <#
-    .SYNOPSIS
-    Function to retrieve the reviewers of a Review Activity
+<#
+.SYNOPSIS
+Function to retrieve the reviewers of a Review Activity
 
-    .DESCRIPTION
-    Function to retrieve the reviewers of a Review Activity
+.DESCRIPTION
+Function to retrieve the reviewers of a Review Activity
 
-    .PARAMETER ActivityObject
-    Specifies the Service Manager Object
+.PARAMETER ActivityObject
+Specifies the Service Manager Object
 
-    .PARAMETER ActivityName
-    Specifies the Name of the Ticket (Example RA1000)
+.PARAMETER ActivityName
+Specifies the Name of the Ticket (Example RA1000)
 
-    .PARAMETER ActivityGUID
-    Specifies the GUID of the Activity
+.PARAMETER ActivityGUID
+Specifies the GUID of the Activity
 
-    .EXAMPLE
-    Get-SCSMReviewActivityReviewer -ActivityObject $RA
+.EXAMPLE
+Get-SCSMReviewActivityReviewer -ActivityObject $RA
 
-    .EXAMPLE
-    Get-SCSMReviewActivityReviewer -ActivityGUID '04ddd0a1-993a-13dc-68a8-c434270df5a2'
+.EXAMPLE
+Get-SCSMReviewActivityReviewer -ActivityGUID '04ddd0a1-993a-13dc-68a8-c434270df5a2'
 
-    .EXAMPLE
-    Get-SCSMReviewActivityReviewer -ActivityName 'RA1234'
+.EXAMPLE
+Get-SCSMReviewActivityReviewer -ActivityName 'RA1234'
 
-    .NOTES
-    Francois-Xavier Cat
-    lazywinadmin.com
-    @lazywinadmin
-    #>
+.NOTES
+Francois-Xavier Cat
+lazywinadmin.com
+@lazywinadmin
+.LINK
+    https://github.com/lazywinadmin/PowerShell
+#>
 
     [CmdletBinding(DefaultParameterSetName = 'Object')]
     param

@@ -45,6 +45,8 @@ function Get-SCCMDeviceCollectionDeployment {
         SMS_R_SYSTEM: https://msdn.microsoft.com/en-us/library/cc145392.aspx
         SMS_Collection: https://msdn.microsoft.com/en-us/library/hh948939.aspx
         SMS_DeploymentInfo: https://msdn.microsoft.com/en-us/library/hh948268.aspx
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM

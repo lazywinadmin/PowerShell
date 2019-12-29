@@ -35,6 +35,8 @@ function Get-SCSMObjectPrefix {
         www.lazywinadmin
         @lazywinadmin
         github.com/lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [OutputType([psobject])]

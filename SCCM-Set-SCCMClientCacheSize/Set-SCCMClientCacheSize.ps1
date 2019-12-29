@@ -17,6 +17,12 @@ function Set-SCCMClientCacheSize {
             Set-SCCMClientCacheSize -ComputerName Client01 -SizeMB 5000
 
             This will set the client cache to 5000Mb on the computer Client01
+        .NOTES
+            Francois-Xavier Cat
+            lazywinadmin.com
+            @lazywinadmin
+        .LINK
+            https://github.com/lazywinadmin/PowerShell
     #>
     PARAM(
         [Parameter(Mandatory)]

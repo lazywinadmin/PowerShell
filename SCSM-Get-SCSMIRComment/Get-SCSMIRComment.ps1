@@ -16,6 +16,8 @@ function Get-SCSMIRComment {
         Francois-Xavier Cat
         lazywinadmin.com
         @lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM

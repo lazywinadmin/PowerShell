@@ -16,6 +16,8 @@ Function Add-SCSMServiceRequestComment {
         Use if the comment is private
     .EXAMPLE
         Add-SCSMServiceRequestComment -SRObject $SR -Comment "This is a Comment" -EnteredBy 'FX'
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
     #>
     [CmdletBinding()]
     param (

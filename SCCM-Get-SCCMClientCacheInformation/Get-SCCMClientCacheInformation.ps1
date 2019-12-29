@@ -23,6 +23,8 @@ function Get-SCCMClientCacheInformation {
             Initial Version
         1.1 | 2017/11/01 | Francois-Xavier Cat
             Update Error handling and messages
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     PARAM(
         [string[]]$ComputerName = ".",

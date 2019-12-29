@@ -40,6 +40,8 @@ function Get-SCCMUserCollectionDeployment {
         SMS_R_User: https://msdn.microsoft.com/en-us/library/hh949577.aspx
         SMS_Collection: https://msdn.microsoft.com/en-us/library/hh948939.aspx
         SMS_DeploymentInfo: https://msdn.microsoft.com/en-us/library/hh948268.aspx
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding()]

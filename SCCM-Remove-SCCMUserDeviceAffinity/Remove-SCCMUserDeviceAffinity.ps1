@@ -34,6 +34,8 @@ function Remove-SCCMUserDeviceAffinity {
         Francois-Xavier Cat
         lazywinadmin.com
         @lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ResourceName')]
