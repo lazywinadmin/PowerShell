@@ -20,9 +20,7 @@ function Get-ADSiteAndSubnet {
             1.0 | 2014/02/03 | @lazywinadmin
                 Initial Version
     .link
-    https://github.com/lazywinadmin/PowerShell
-
-
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM()
