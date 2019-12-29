@@ -67,6 +67,8 @@ function Get-O365CalendarEvent {
             Add all the timezones in the ValidateSet of $TimeZone
             Add TRY/CATCH and Error handler
             Add some Verbose messages
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding()]
