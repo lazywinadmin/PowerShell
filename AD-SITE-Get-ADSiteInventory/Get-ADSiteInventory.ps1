@@ -25,6 +25,8 @@ function Get-ADSiteInventory {
                 Initial Version
             1.1 | 2014/02/02 | Francois-Xavier Cat
                 Update some verbose messages
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 
 #>
     [CmdletBinding()]
