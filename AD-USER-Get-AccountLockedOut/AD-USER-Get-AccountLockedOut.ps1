@@ -19,6 +19,8 @@ Function Get-AccountLockedOut {
 
 .EXAMPLE
     Get-AccountLockedOut -UserName "Francois-Xavier.cat" -StartTime (Get-Date).AddDays(-2)
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
 
     #Requires -Version 3.0
