@@ -51,6 +51,8 @@ function Update-O365UserUPNSuffix {
         lazywinadmin.com
         @lazywinadmin
         github.com/lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding()]
