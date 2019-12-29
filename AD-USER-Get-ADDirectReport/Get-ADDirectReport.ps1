@@ -45,7 +45,8 @@ test_userB2         test_userB2         test_userB2@lazy... test_managerB
 test_managerA       test_managerA       test_managerA@la... test_director
 test_userA2         test_userA2         test_userA2@lazy... test_managerA
 test_userA1         test_userA1         test_userA1@lazy... test_managerA
-
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
     #>
     [CmdletBinding()]
     PARAM (
