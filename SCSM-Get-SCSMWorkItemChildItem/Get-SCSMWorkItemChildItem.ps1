@@ -10,6 +10,8 @@ Function Get-SCSMWorkItemChildItem {
         Get-SCSMWorkItemChildItem -WorkItemGuid $WIGuid
     .NOTES
         General notes
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
     #>
     [CmdletBinding()]
     param (
