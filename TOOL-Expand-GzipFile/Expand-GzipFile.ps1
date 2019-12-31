@@ -19,6 +19,8 @@ Function Expand-GZipFile {
     Expand-GZipFile -LiteralPath C:\tmp\lazywinadmin-2019.xml.gz
 
     Will expand the content of C:\tmp\lazywinadmin-2019.xml.gz to C:\tmp\lazywinadmin-2019.xml
+.LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     Param(
