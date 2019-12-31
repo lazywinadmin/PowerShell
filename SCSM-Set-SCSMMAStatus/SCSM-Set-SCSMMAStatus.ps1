@@ -20,6 +20,8 @@ Function Set-SCSMMAStatus {
         Skipped
     .EXAMPLE
         Set-SCSMMAStatus -ManualActivityID MA123456 -Status 'Cancelled'
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
     #>
     [CmdletBinding()]
     PARAM(
