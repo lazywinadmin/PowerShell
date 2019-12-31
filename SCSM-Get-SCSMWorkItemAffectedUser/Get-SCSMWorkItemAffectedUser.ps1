@@ -25,6 +25,8 @@ function Get-SCSMWorkItemAffectedUser {
         Francois-Xavier Cat
         @lazywinadmin
         lazywinadmin.com
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'GUID')]
