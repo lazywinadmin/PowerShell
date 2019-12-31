@@ -23,6 +23,8 @@ function Get-SCSMWorkItemRequestOffering {
         Francois-Xavier Cat
         @lazywinadmin
         lazywinadmin.com
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 
     #>
     PARAM (
