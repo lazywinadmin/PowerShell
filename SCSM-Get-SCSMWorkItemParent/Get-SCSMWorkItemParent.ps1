@@ -28,6 +28,8 @@ function Get-SCSMWorkItemParent {
         lazywinadmin.com
 
         1.0 Function based on the work from Prosum and Cireson consultants
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
     #>
     [CmdletBinding()]
     PARAM (
