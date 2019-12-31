@@ -35,6 +35,8 @@ function Expand-ScriptAlias {
         Francois-Xavier Cat
         lazywinadmin.com
         @lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
     PARAM (
