@@ -17,6 +17,8 @@ function ConvertTo-Base64 {
         @lazywinadmin
         lazywinadmin.com
         github.com/lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding()]
