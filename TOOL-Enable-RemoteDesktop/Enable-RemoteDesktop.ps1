@@ -32,6 +32,8 @@ function Enable-RemoteDesktop {
         @lazywinadmin
         lazywinadmin.com
         github.com/lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     #Requires -RunAsAdministrator
     [CmdletBinding(DefaultParameterSetName = 'CimSession',
