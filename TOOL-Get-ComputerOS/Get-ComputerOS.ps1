@@ -20,6 +20,8 @@ function Get-ComputerOS {
 
     .NOTES
         Additional information about the function.
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM (
