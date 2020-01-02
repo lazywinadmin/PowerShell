@@ -29,6 +29,8 @@ function Get-NetFramework {
             Invoke-WmiMethod -name GetDWORDValue -ArgumentList $hklm,$key,$value | select uvalue
 
         #http://stackoverflow.com/questions/27375012/check-remote-wmi-and-remote-registry
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM (
