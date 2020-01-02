@@ -19,6 +19,9 @@ function Get-AsciiReaction {
 
     Based on Reddit Thread https://www.reddit.com/r/PowerShell/comments/4aipw5/%E3%83%84/
     and Matt Hodge function: https://github.com/MattHodge/MattHodgePowerShell/blob/master/Fun/Get-Ascii.ps1
+
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [cmdletbinding()]
     Param
