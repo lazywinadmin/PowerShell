@@ -12,6 +12,8 @@ function Get-NetStat {
     Francois-Xavier Cat
     lazywinadmin.com
     @lazywinadmin
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     PROCESS {
         # Get the output of netstat
