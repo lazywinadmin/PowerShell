@@ -23,6 +23,8 @@ function Get-ScriptAlias {
         Francois-Xavier Cat
         lazywinadmin.com
         @lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM
