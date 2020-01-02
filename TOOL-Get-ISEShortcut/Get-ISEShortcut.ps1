@@ -15,9 +15,6 @@ function Get-ISEShortCut {
     Get-Help Get-ISEShortcut -Online
 
     Will show technet page of ISE Shortcuts
-.LINK
-    http://technet.microsoft.com/en-us/library/jj984298.aspx
-
 .NOTES
     Francois-Xavier Cat
     lazywinadmin.com
@@ -25,6 +22,7 @@ function Get-ISEShortCut {
 
     VERSION HISTORY
     2015/01/10 Initial Version
+        http://technet.microsoft.com/en-us/library/jj984298.aspx
 .LINK
     https://github.com/lazywinadmin/PowerShell
 #>
