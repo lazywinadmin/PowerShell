@@ -19,6 +19,8 @@ function Get-LocalGroupMember {
             Credential param
             Resurce Local and AD using ADSI or ActiveDirectory Module
             OnlyUser param
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM (
