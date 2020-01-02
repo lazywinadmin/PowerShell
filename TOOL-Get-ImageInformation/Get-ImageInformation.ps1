@@ -17,6 +17,8 @@ function Get-ImageInformation {
     lazywinadmin.com
     @lazywinadmin
     github.com/lazywinadmin
+.LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     PARAM (
         [System.String[]]$FilePath
