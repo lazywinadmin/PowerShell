@@ -29,6 +29,8 @@ function Get-ProcessForeignAddress {
     Website : lazywinadmin.com
     Github  : github.com/lazywinadmin
     Twitter : @lazywinadmin
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     PARAM ($ProcessName)
     $netstat = netstat -no
