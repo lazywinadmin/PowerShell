@@ -25,6 +25,8 @@ function Get-ISEShortCut {
 
     VERSION HISTORY
     2015/01/10 Initial Version
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     PARAM($Key, $Name)
     BEGIN {
