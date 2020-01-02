@@ -21,6 +21,8 @@ function Get-LogFast {
         @lazywinadmin
         lazywinadmin.com
         github.com/lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 
 #>
     [CmdletBinding()]
