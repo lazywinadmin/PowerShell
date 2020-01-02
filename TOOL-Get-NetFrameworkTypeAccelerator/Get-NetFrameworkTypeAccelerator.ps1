@@ -19,6 +19,8 @@ function Get-NetFrameworkTypeAccelerator {
     lazywinadmin.com
     @lazywinadmin
     github.com/lazywinadmin
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     [Alias('Get-Acceletrator')]
     PARAM ()
