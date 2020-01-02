@@ -12,6 +12,8 @@ Function Get-StringCharCount {
         Francois-Xavier Cat
         @lazywinadmin
         lazywinadmin.com
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
     #>
     PARAM ([String]$String)
     ($String -as [Char[]]).count
