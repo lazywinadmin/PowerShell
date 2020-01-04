@@ -39,6 +39,8 @@ function New-RandomPassword {
     lazywinadmin.com
     @lazywinadmin
     github.com/lazywinadmin
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     PARAM (
         [Int32]$Length = 12,
