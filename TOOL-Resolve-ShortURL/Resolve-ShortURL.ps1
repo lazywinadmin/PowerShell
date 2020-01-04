@@ -20,6 +20,8 @@ function Resolve-ShortURL {
     lazywinadmin.com
     @lazywinadmin
     github.com/lazywinadmin
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding()]
