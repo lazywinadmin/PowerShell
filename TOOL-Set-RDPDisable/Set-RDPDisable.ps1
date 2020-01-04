@@ -22,6 +22,8 @@ function Set-RDPDisable {
         Francois-Xavier Cat
         lazywinadmin.com
         @lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding(SupportsShouldProcess = $true)]
     PARAM (
