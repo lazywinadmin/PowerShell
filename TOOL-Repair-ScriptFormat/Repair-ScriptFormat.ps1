@@ -13,6 +13,7 @@ function Repair-ScriptFormat {
     }
 
     process {
+        try{
         # Retrieve content
         $scriptContent = Get-Content -Path $Path -Raw
 
@@ -23,11 +24,10 @@ function Repair-ScriptFormat {
         #$NewContent = $NewContent -replace '\'
 
         $NewContent | Out-File -FilePath $Path -Force -NoNewline
-
-
-
+        }catch{
+            $PSCmdlet.ThrowTerminatingError($_)
+        }
     }
     end {
-
     }
 }
