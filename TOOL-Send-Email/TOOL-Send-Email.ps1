@@ -128,6 +128,8 @@ function Send-Email {
         TODO
         -Add more Help/Example
         -Add Support for classic Get-Credential
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'Main')]
