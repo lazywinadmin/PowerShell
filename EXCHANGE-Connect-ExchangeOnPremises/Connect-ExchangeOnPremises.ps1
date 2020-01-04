@@ -35,13 +35,18 @@ function Connect-ExchangeOnPremises {
         [System.Management.Automation.Credential()]
         $Credential = [System.Management.Automation.PSCredential]::Empty
     )
+    try{
 
-    $Splatting = @{
-        ConnectionUri     = $ConnectionUri
-        ConfigurationName = 'microsoft.exchange'
+
+        $Splatting = @{
+            ConnectionUri     = $ConnectionUri
+            ConfigurationName = 'microsoft.exchange'
+        }
+        IF ($PSBoundParameters['Credential']) { $Splatting.Credential = $Credential }
+
+        # Load Exchange cmdlets (Implicit remoting)
+        Import-PSSession -Session (New-PSSession @Splatting)
+    }catch{
+        $PSCmdlet.ThrowTerminatingError($_)
     }
-    IF ($PSBoundParameters['Credential']) { $Splatting.Credential = $Credential }
-
-    # Load Exchange cmdlets (Implicit remoting)
-    Import-PSSession -Session (New-PSSession @Splatting)
 }
