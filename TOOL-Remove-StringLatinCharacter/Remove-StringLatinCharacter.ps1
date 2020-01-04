@@ -39,6 +39,8 @@ function Remove-StringLatinCharacter {
         1.0.0.2 | Francois-Xavier Cat
             Add Support for multiple String
             Add Error Handling
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM (
