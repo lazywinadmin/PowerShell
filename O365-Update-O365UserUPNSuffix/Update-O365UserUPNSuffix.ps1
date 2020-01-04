@@ -111,7 +111,7 @@ function Update-O365UserUPNSuffix {
             }
         }
         CATCH {
-            $Error[0].Exception.Message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
     PROCESS {
@@ -144,7 +144,7 @@ function Update-O365UserUPNSuffix {
             }
         }
         CATCH {
-            $Error[0].Exception.Message
+            $PSCmdlet.ThrowTerminatingError($_)
         }
     }
     END {
