@@ -13,6 +13,8 @@ Function Remove-HashTableEmptyValue {
     @lazywinadmin
     lazywinadmin.com
     github.com/lazywinadmin
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM([System.Collections.Hashtable]$HashTable)

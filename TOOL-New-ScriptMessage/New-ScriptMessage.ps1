@@ -52,6 +52,8 @@ function New-ScriptMessage {
         lazywinadmin.com
         @lazywinadmin
         github.com/lazywinadmin
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
 
     [CmdletBinding()]

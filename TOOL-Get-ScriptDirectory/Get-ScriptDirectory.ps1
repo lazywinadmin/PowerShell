@@ -6,6 +6,8 @@ function Get-ScriptDirectory {
    This function retrieve the current folder path
 .EXAMPLE
     Get-ScriptDirectory
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     if ($null -eq $hostinvocation) {
         Split-Path -Path $hostinvocation.MyCommand.path

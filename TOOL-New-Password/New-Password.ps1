@@ -34,6 +34,9 @@ function New-Password {
     .NOTES
         See ASCII Table http://www.asciitable.com/
         Code based on a blog post of https://mjolinor.wordpress.com/2014/01/31/random-password-generator/
+
+    .LINK
+        https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM

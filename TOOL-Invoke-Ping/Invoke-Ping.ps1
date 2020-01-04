@@ -61,6 +61,9 @@ Function Invoke-Ping {
     Warren F
     http://ramblingcookiemonster.github.io/Invoke-Ping/
 
+.LINK
+    https://github.com/lazywinadmin/PowerShell
+
 #>
     [cmdletbinding(DefaultParameterSetName = 'Ping')]
     param (

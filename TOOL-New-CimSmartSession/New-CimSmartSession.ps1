@@ -24,6 +24,9 @@ function New-CimSmartSession {
     Francois-Xavier Cat
     lazywinadmin.com
     @lazywinadmin
+
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     #Requires -Version 3.0
     [CmdletBinding()]
