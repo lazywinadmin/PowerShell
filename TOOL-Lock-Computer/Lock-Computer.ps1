@@ -9,6 +9,8 @@ Function Lock-Computer {
     Lock-Computer
 
     This will lock the current computer
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
 
     $signature = @"
