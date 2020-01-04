@@ -1,39 +1,39 @@
 function Get-Uptime {
-    <#
-    .SYNOPSIS
-        The function Get-Uptime will get uptime of a local or remote machine.
+<#
+.SYNOPSIS
+    The function Get-Uptime will get uptime of a local or remote machine.
 
-    .DESCRIPTION
-        The function Get-Uptime will get uptime of a local or remote machine.
-        This function is compatible with CIM sessions and alternative credentials.
+.DESCRIPTION
+    The function Get-Uptime will get uptime of a local or remote machine.
+    This function is compatible with CIM sessions and alternative credentials.
 
-    .PARAMETER ComputerName
-        Specifies the computername
+.PARAMETER ComputerName
+    Specifies the computername
 
-    .PARAMETER Credential
-        Specifies the credential to use
+.PARAMETER Credential
+    Specifies the credential to use
 
-    .PARAMETER CimSession
-        Specifies one or more existing CIM Session(s) to use
+.PARAMETER CimSession
+    Specifies one or more existing CIM Session(s) to use
 
-    .EXAMPLE
-        PS C:\> Get-Uptime -ComputerName DC01
+.EXAMPLE
+    PS C:\> Get-Uptime -ComputerName DC01
 
-    .EXAMPLE
-        PS C:\> Get-Uptime -ComputerName DC01 -Credential (Get-Credential -cred "FX\SuperAdmin")
+.EXAMPLE
+    PS C:\> Get-Uptime -ComputerName DC01 -Credential (Get-Credential -cred "FX\SuperAdmin")
 
-    .EXAMPLE
-        PS C:\> Get-Uptime -CimSession $Session
+.EXAMPLE
+    PS C:\> Get-Uptime -CimSession $Session
 
-    .EXAMPLE
-        PS C:\> Get-Uptime -CimSession $Session1,$session2,$session3
+.EXAMPLE
+    PS C:\> Get-Uptime -CimSession $Session1,$session2,$session3
 
-    .NOTES
-        Francois-Xavier Cat
-        @lazywinadmin
-        lazywinadmin.com
-    .LINK
-        https://github.com/lazywinadmin/PowerShell
+.NOTES
+    Francois-Xavier Cat
+    @lazywinadmin
+    lazywinadmin.com
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     [CmdletBinding()]
     PARAM (
