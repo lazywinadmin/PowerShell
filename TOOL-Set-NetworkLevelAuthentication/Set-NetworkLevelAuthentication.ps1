@@ -31,7 +31,8 @@ function Set-NetworkLevelAuthentication {
     Twitter    : @lazywinadmin
 
     Article : http://lazywinadmin.com/2014/04/powershell-getset-network-level.html
-    GitHub    : https://github.com/lazywinadmin/PowerShell
+.LINK
+    https://github.com/lazywinadmin/PowerShell
 #>
     #Requires -Version 3.0
     [CmdletBinding()]
