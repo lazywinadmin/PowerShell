@@ -1,9 +1,17 @@
 function Get-AzureIPRangesAndServiceTags {
 <#
 .SYNOPSIS
+
 Retrieve the Ip address ranges and Service Tags ranges for Azure (Public, USgov, Germnay or China)
 The function return a Json. This can be passed to '|Converfrom-json' if you wish
 to get a PowerShell object.
+
+This information is pulled from Microsoft Download pages.
+
+'Public' = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
+'USGov' = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=57063'
+'China' = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=57062'
+'Germany' = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=57064'
 
 .DESCRIPTION
 
@@ -20,6 +28,36 @@ services running in Azure. These service tags can also be used to simplify
 the Network Security Group rules for your Azure deployments though some
 service tags might not be available in all clouds and regions.
 For more information please visit http://aka.ms/servicetags
+
+.PARAMETER Cloud
+    Specify the type of cloud.
+    Default is 'Public'
+
+    Accepted Values: 'Public','USGov','Germany','China'
+.EXAMPLE
+Get-AzureIPRangesAndServiceTags
+
+Retrieve the IP Ranges and Service Tags Ranges for Public Cloud
+This will output the Json File
+
+.EXAMPLE
+Get-AzureIPRangesAndServiceTags | ConvertFrom-Json
+
+Retrieve the IP Ranges and Service Tags Ranges for Public Cloud
+The Json is converted to a PowerShell Object
+
+.EXAMPLE
+Get-AzureIPRangesAndServiceTags -Cloud China
+
+Retrieve the IP Ranges and Service Tags Ranges for China
+This will output the Json File
+
+.NOTES
+Version History
+1.0 | 2020/01/14 | Francois-Xavier Cat
+    Initial version
+.LINK
+https://github.com/lazywinadmin/PowerShell
 
 #>
 [CmdletBinding()]
