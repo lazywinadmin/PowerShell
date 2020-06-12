@@ -1,0 +1,3 @@
+"ipAddress","action","priority","name","description","tag"
+"120.3.2.0/20","Allow","100","test ip1","test ip1","Default"
+"120.3.3.0/20","Allow","100","test ip4","test ip4","Default"
