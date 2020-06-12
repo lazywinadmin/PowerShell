@@ -63,6 +63,9 @@ try {
     # Load CSV
     Write-Verbose -Message "Loading CSV File '$Path'..."
     $FileContent = Import-Csv -path $Path
+    if($null -eq $FileContent){
+        Write-Error -Message "CSV file is empty or not able to import"
+    }
 
     # Establish connection to Azure if not already connected
     Write-Verbose -Message "Checking connection to Azure..."
