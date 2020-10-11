@@ -63,6 +63,7 @@ if (Get-Module -name PSReadline) {
     #  commands in my story that started by "Get-"
     Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
     Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+    Set-PSReadlineOption -EditMode Windows
 }
 
 
