@@ -6,8 +6,12 @@
     This is using the Get-AzContext cmdlets from the module Az.Account and assume a session is already opened.
 
 .EXAMPLE
-    Get-AzToken
+    $token=Get-AzToken
+    $uri = "https://management.azure.com/tenants?api-version=2019-11-01"
+    invoke-restmethod -method get -uri $uri -Headers @{Authorization="Bearer $token";'Content-Type'='application/json'}
 
+    This leverate the token of the current session to query the Azure Management
+    API and retrieves all the tenants information
 .LINK
     https://github.com/lazywinadmin/PowerShell
 
