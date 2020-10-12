@@ -1,20 +1,19 @@
 <#
 .SYNOPSIS
-Retrieve Apps using a App Service Plan without VNET Integration in the current Tenant
+Retrieve WebApps without VNET Integration in the current Tenant
 
 .DESCRIPTION
 This script will do the following steps:
 
--Retrieve App Service Plan accross the Tenant
--Check if they have a VNET Integration present
--If Not, retrieve the WebApp using the App Service Plan
--Output the result
+-Using Resource Graph API:  Retrieve WebApp accross the tenant
+-Using Management API:      Check if they have a VNET Integration present
+-If Not, Output the WebApp information
 .EXAMPLE
-    ./Apps_without_VNETIntegration.ps1
+    ./WebApps_without_VNETIntegration.ps1
 
     Output the Apps using a App Service Plan without VNET Integration
 .EXAMPLE
-    ./Apps_without_VNETIntegration.ps1|
+    ./WebApps_without_VNETIntegration.ps1|
     Export-Csv report.csv
 
     Send the output to an excel report
@@ -24,10 +23,14 @@ This script will do the following steps:
 
 # TODO
 -Support for retries
+-Use Parallel call if v7.0+
 
-# Resources
-* List VnetIntegration in a particular RG for a App Service Plan
-az appservice vnet-integration list -g <resource group name> --plan <app Service plan name>
+# RESOURCES
+* List VnetIntegration in a particular RG for a webapp
+az webapp vnet-integration list
+https://docs.microsoft.com/en-us/cli/azure/webapp/vnet-integration?view=azure-cli-latest
+* WebApp integration with VNET
+https://docs.microsoft.com/en-us/azure/app-service/web-sites-integrate-with-vnet#automation
 * Creating VNET Integration
 https://stackoverflow.com/questions/59976040/how-do-you-associate-an-azure-web-app-with-a-vnet-using-powershell-az
 
@@ -70,32 +73,26 @@ try{
     if(-not(Get-AzContext)){Connect-AzAccount}
 
     # Retrieve All the App Service Plan (ServerFarms) using Resource Graph
-    $servicePlans=Search-AzGraph -Query "Resources | where type == 'microsoft.web/serverfarms'" -First 1000
+    #$servicePlans=Search-AzGraph -Query "Resources | where type == 'microsoft.web/serverfarms'" -First 1000
 
     # Get Current token
     $token = Get-AzToken
 
-    foreach ($sp in $serviceplans){
-        Write-Verbose -Message "Service Plan: '$($sp.name)' - VNET Integration - Retrieving..."
-        $uri = "https://management.azure.com/subscriptions/$($sp.subscriptionId)/resourceGroups/$($sp.resourcegroup)/providers/Microsoft.Web/serverfarms/$($sp.name)/virtualNetworkConnections?api-version=2019-08-01"
+    # Retrieve all the WebApp
+    Write-Verbose -Message "WebApp - Retrieving WebApps in Tenant..."
+    $Apps = Search-AzGraph -Query "Resources |where type == 'microsoft.web/sites' and kind contains 'app'"
+
+    # Retrieve VNET Integration information for each
+    $Apps | ForEach-Object -Process {
+        $App = $_
+        Write-Verbose -Message "WebApp - '$($App.Name)' - Retrieving VNET Integration..."
+        $Uri="https://management.azure.com/subscriptions/$($app.subscriptionId)/resourceGroups/$($App.ResourceGroup)/providers/Microsoft.Web/sites/$($App.name)/virtualNetworkConnections?api-version=2019-08-01"
+        Write-Verbose -Message "WebApp - '$($App.Name)' - Uri '$Uri'"
         $Result = invoke-restmethod -method get -uri $uri -Headers @{Authorization="Bearer $token";'Content-Type'='application/json'} -verbose:$false
 
         if(-not$result){
-            Write-Verbose -Message "Service Plan: '$($sp.name)' - VNET Integration - Not present..."
-            Write-Verbose -Message "Service Plan: '$($sp.name)' - Retrieving Apps using this App Service Plan..."
-            $Apps = Search-AzGraph -Query "Resources |where properties.serverFarmId contains '$($sp.id)'" -first 1000
-
-            foreach ($app in $apps)
-            {
-                [pscustomobject]@{
-                    AppServicePlanName = $sp.name
-                    AppServicePlanResourceId = $sp.id
-                    AppName = $app.name
-                    AppResourceId = $app.id
-                    AppResourceType = $app.type
-                }
-
-            }
+            Write-Verbose -Message "WebApp - '$($App.Name)' - DOT NOT HAVE VNET INTEGRATION"
+            $App
         }
     }
 }catch{
