@@ -27,6 +27,7 @@ function Invoke-ComplianceEvaluation {
         Invoke-ComplianceEvaluation -ResourceGroupName MyRg -subscriptionid <uid>
 
     #>
+    [CmdletBinding()]
     param($resourceGroupName,$subscriptionId)
 
     if(-not $subscriptionId){
@@ -37,7 +38,9 @@ function Invoke-ComplianceEvaluation {
     if ($resourceGroupName){
         $uri = "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.PolicyInsights/policyStates/latest/triggerEvaluation?api-version=2018-07-01-preview"
     }
-
+    
+    Write-verbose -message "uri = '$uri'"
+    Write-verbose -message "Retrieving Context..."
     $azContext = Get-AzContext
     $azProfile = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile
     $profileClient = New-Object -TypeName Microsoft.Azure.Commands.ResourceManager.Common.RMProfileClient -ArgumentList ($azProfile)
@@ -46,5 +49,6 @@ function Invoke-ComplianceEvaluation {
         'Content-Type'='application/json'
         'Authorization'='Bearer ' + $token.AccessToken
     }
+    Write-verbose -message "Invoking TriggerEvaluation..."
     Invoke-RestMethod -Method Post -Uri $uri -UseBasicParsing -Headers $authHeader
 }
