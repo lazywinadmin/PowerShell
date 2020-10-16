@@ -2,7 +2,7 @@
 # The code assume you are already connected to azure
 
 # Load the function
-. ./invoke-complianceevaluation
+. ./invoke-complianceevaluation.ps1
 
 # Trigger Policy Compliance evaluation against current subscription
 Invoke-ComplianceEvaluation
