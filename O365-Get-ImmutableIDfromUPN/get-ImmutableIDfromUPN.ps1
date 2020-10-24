@@ -14,8 +14,13 @@
     .OUTPUTS
         String
 
-    .link
+    .NOTES
+        Anthony Kersten
+
+    .LINK
         https://github.com/lazywinadmin/PowerShell
+
+
 #>
 
 
