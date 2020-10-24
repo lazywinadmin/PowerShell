@@ -40,6 +40,9 @@
  
     .EXAMPLE 
     Invoke-TSPingSweep -StartAddress 192.168.0.1 -EndAddress 192.168.10.254 -ResolveHost -ScanPort -Port 80 
+
+    .NOTES
+    Goude 2012, TrueSec
  
   #> 
   Param( 
