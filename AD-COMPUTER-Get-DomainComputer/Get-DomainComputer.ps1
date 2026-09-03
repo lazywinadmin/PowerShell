@@ -1,4 +1,4 @@
-﻿﻿Function Get-DomainComputer {
+﻿﻿function Get-DomainComputer {
 <#
 .SYNOPSIS
     The Get-DomainComputer function allows you to get information from an Active Directory Computer object using ADSI.
