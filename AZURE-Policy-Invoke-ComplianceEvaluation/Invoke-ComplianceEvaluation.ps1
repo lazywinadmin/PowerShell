@@ -1,7 +1,7 @@
 function Invoke-ComplianceEvaluation {
     <#
     .SYNOPSIS
-        Function to trigger compliance evalution for Azure Policies on a specific Resource Group or Subscription
+        Function to trigger compliance evaluation for Azure Policies on a specific Resource Group or Subscription
     .description
         The code assume you are already authenticated to azure
     .example

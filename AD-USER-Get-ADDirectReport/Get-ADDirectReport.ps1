@@ -1,14 +1,14 @@
 function Get-ADDirectReports {
     <#
     .SYNOPSIS
-        This function retrieve the directreports property from the IdentitySpecified.
+        This function retrieves the directreports property from the IdentitySpecified.
         Optionally you can specify the Recurse parameter to find all the indirect
-        users reporting to the specify account (Identity).
+        users reporting to the specified account (Identity).
 
     .DESCRIPTION
-        This function retrieve the directreports property from the IdentitySpecified.
+        This function retrieves the directreports property from the IdentitySpecified.
         Optionally you can specify the Recurse parameter to find all the indirect
-        users reporting to the specify account (Identity).
+        users reporting to the specified account (Identity).
 
     .NOTES
         Francois-Xavier Cat

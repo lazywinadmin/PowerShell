@@ -16,12 +16,12 @@ function Get-ADSIComputerSite {
     Specifies the computer name(s) that you want to know the site.
 
 .EXAMPLE
-    Get-ADSIComputerName -ComputerName TestServer01
+    Get-ADSIComputerSite -ComputerName TestServer01
 
     This will retrieve the Site of the Computer TestServer01
 
 .EXAMPLE
-    Get-ADSIComputerName -ComputerName TestServer01,TestServer02
+    Get-ADSIComputerSite -ComputerName TestServer01,TestServer02
 
     This will retrieve the Site of the Computers TestServer01 and TestServer02
 

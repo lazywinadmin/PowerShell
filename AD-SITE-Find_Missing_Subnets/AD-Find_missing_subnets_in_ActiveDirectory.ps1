@@ -55,7 +55,7 @@
             FIX issue with sending the email
         1.5.0 2015.03.12
             ADD Search all domains in the forest
-            ADD NETLOGON file version detection (from 2012, NETLOGON contains a colomn for ErrorCode)
+            ADD NETLOGON file version detection (from 2012, NETLOGON contains a column for ErrorCode)
             ADD some Verbose/Warning message
             ADD Support for SMTP Port (Parameter EmailSMTPPort), default is 25
             UPDATE Logic of the script (now append csv for each DC, and process the CSV files and Build html at the end of the PROCESS block)

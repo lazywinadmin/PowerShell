@@ -71,7 +71,7 @@ function Set-SCCMClientCacheSize {
         }
         CATCH {
             Write-Warning -message "[PROCESS] Something Wrong happened with $Computer"
-            $Error[0].execption.message
+            $Error[0].Exception.Message
         }
     }
 }

@@ -5,7 +5,7 @@
 
 .DESCRIPTION
     The Get-DomainComputer function allows you to get information from an Active Directory Computer object using ADSI.
-    You can specify: how many result you want to see, which credentials to use and/or which domain to query.
+    You can specify: how many results you want to see, which credentials to use and/or which domain to query.
 
 .PARAMETER ComputerName
     Specifies the name(s) of the Computer(s) to query
@@ -47,7 +47,7 @@
     Get-DomainComputer -ComputerName "Workstation0*" -SizeLimit 10 -Verbose
 
     This will query information for computers starting with 'Workstation0', but only show 10 results max.
-    The Verbose parameter allow you to track the progression of the script.
+    The Verbose parameter allows you to track the progression of the script.
 
 .EXAMPLE
     Get-DomainComputer -ComputerName "Workstation0*" -SizeLimit 10 -Verbose -DomainDN "DC=FX,DC=LAB" -Credential (Get-Credential -Credential FX\Administrator)

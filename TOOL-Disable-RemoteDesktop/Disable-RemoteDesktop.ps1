@@ -156,7 +156,7 @@ function Disable-RemoteDesktop {
                     CATCH {
                         Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Something wrong happened")
                         IF ($ErrorProcessGetWmi) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Issue with Get-WmiObject") }
-                        Write-Warning -MEssage $Error[0].Exception.Message
+                        Write-Warning -Message $Error[0].Exception.Message
                     }
                     FINALLY {
                         $Splatting.Clear()

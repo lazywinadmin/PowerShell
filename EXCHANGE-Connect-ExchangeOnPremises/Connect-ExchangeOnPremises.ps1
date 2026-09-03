@@ -26,6 +26,7 @@ function Connect-ExchangeOnPremises {
     .LINK
         https://github.com/lazywinadmin/PowerShell
 #>
+    [CmdletBinding()]
     PARAM (
         [Parameter(Mandatory, HelpMessage = 'http://<ServerFQDN>/powershell')]
         [system.string]$ConnectionUri,

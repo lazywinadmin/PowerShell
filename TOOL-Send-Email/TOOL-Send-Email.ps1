@@ -46,7 +46,7 @@ function Send-Email {
         Specifies the text encoding of the title and the body.
 
     .PARAMETER Attachment
-        Specifies if an attachement must be added to the function
+        Specifies if an attachment must be added to the message
 
     .PARAMETER Credential
         Specifies the credential to use, default will use the current credential.
@@ -61,7 +61,7 @@ function Send-Email {
         Specifies if the email must be sent using SSL.
 
     .PARAMETER DeliveryNotificationOptions
-        Specifies the delivey notification options.
+        Specifies the delivery notification options.
         https://msdn.microsoft.com/en-us/library/system.net.mail.deliverynotificationoptions.aspx
 
     .PARAMETER EmailCC
@@ -261,7 +261,7 @@ function Send-Email {
                 }
             }
 
-            # Attachement Parameter
+            # Attachment Parameter
             IF ($PSBoundParameters['attachment']) {
                 $SMTPattachment = New-Object -TypeName System.Net.Mail.Attachment($attachment)
                 $SMTPMessage.Attachments.Add($SMTPattachment)
@@ -282,7 +282,7 @@ function Send-Email {
                 $SMTPClient.EnableSsl = $true
             }
 
-            # Credential Paramenter
+            # Credential Parameter
             #IF (($PSBoundParameters['Username']) -and ($PSBoundParameters['Password']))
             IF ($PSBoundParameters['Credential']) {
                 <#

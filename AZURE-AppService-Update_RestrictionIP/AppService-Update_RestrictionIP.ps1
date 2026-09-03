@@ -4,7 +4,7 @@ Script to update or overwrite App Service IP Rules Restriction based on a CSV fi
 .DESCRIPTION
 Script to update or overwrite App Service IP Rules Restriction based on a CSV file provided
 
-The script only validate the IPAddress property to defined if an IP Rule is already present.
+The script only validates the IPAddress property to determine if an IP Rule is already present.
 It does not check the other properties such as Priority, Name, Description, ...
 
 The script will output the IPRules present on the App Service in the output.

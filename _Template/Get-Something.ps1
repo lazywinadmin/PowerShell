@@ -21,7 +21,7 @@ Function Get-Something {
     lazywinadmin.com
     @lazywinadmin
 
-    1.0 | 2016/00/00 | Francois-Xavier Cat
+    1.0 | 2016/01/01 | Francois-Xavier Cat
         Initial Version
 #>
     [CmdletBinding()]

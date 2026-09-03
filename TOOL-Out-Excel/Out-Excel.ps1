@@ -22,6 +22,8 @@ TODO:
 #>
     [CmdletBinding()]
     PARAM (
+        [Parameter(ValueFromPipeline)]
+        [psobject]$InputObject,
         [string[]]$property,
         [switch]$raw
     )
@@ -39,7 +41,7 @@ TODO:
     }
 
     PROCESS {
-        if ($_ -eq $null) { return }
+        if ($InputObject -eq $null) { return }
         if ($Row -eq 1) {
             # when we see the first object, we need to build our header table
             if (-not $property) {
@@ -47,13 +49,13 @@ TODO:
                 # we’ll build one from the object’s properties
                 $property = @()
                 if ($raw) {
-                    $_.properties.PropertyNames |
+                    $InputObject.properties.PropertyNames |
                         ForEach-Object -Process {
                             $property += @($_)
                         }
                 }
                 else {
-                    $_.PsObject.get_properties() |
+                    $InputObject.PsObject.get_properties() |
                         ForEach-Object -Process {
                             $property += @($_.Name.ToString())
                         }
@@ -81,13 +83,12 @@ TODO:
             # and load the data into the correct cell in the current row.
             # this way we don’t have to worry about missing properties
             # or the “ordering” of the properties
-            if ($thisColumn -eq $HeaderHash[$header]) {
-                if ($raw) {
-                    $Sheet.Cells.Item($Row, $thisColumn) = [string]$_.properties.$header
-                }
-                else {
-                    $Sheet.Cells.Item($Row, $thisColumn) = [string]$_.$header
-                }
+            $thisColumn = $HeaderHash[$header]
+            if ($raw) {
+                $Sheet.Cells.Item($Row, $thisColumn) = [string]$InputObject.properties.$header
+            }
+            else {
+                $Sheet.Cells.Item($Row, $thisColumn) = [string]$InputObject.$header
             }
         }
     }

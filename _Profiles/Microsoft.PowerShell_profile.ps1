@@ -60,7 +60,7 @@ Import-Module -Name PSReadline
 if (Get-Module -name PSReadline) {
     # Set Shortcuts for History Search
     #  Start typing, for example "Get-" then press up and down arrow, it'll show all
-    #  commands in my story that started by "Get-"
+    #  commands in my history that started by "Get-"
     Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
     Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
     Set-PSReadlineOption -EditMode Windows

@@ -142,7 +142,7 @@ BEGIN {
                 $SMTPMessage.BodyEncoding = $Encoding
                 $SMTPMessage.SubjectEncoding = $Encoding
 
-                # Attachement Parameter
+                # Attachment Parameter
                 IF ($PSBoundParameters['attachment']) {
                     $SMTPattachment = New-Object -TypeName System.Net.Mail.Attachment -ArgumentList $attachment
                     $SMTPMessage.Attachments.Add($SMTPattachment)
@@ -158,7 +158,7 @@ BEGIN {
                     $SMTPClient.EnableSsl = $true
                 }
 
-                # Credential Paramenter
+                # Credential Parameter
                 #IF (($PSBoundParameters['Username']) -and ($PSBoundParameters['Password'])) {
                 IF ($PSBoundParameters['Credential']) {
                     # Create Credential Object

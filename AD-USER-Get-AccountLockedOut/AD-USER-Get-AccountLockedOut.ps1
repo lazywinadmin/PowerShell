@@ -10,7 +10,7 @@ Function Get-AccountLockedOut {
 .PARAMETER DomainName
     Specifies the DomainName to query, by default it takes the current domain ($env:USERDOMAIN)
 .PARAMETER UserName
-    Specifies the DomainName to query, by default it takes the current domain ($env:USERDOMAIN)
+    Specifies the sAMAccountName to search. Wildcards allowed. Default '*'.
 .EXAMPLE
     Get-AccountLockedOut -UserName * -StartTime (Get-Date).AddDays(-5) -Credential (Get-Credential)
 

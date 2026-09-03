@@ -24,11 +24,12 @@ function Set-SCCMClientCacheLocation {
         .LINK
             https://github.com/lazywinadmin/PowerShell
     #>
+    [CmdletBinding(SupportsShouldProcess)]
     PARAM(
         [string[]]$ComputerName = ".",
 
         [parameter(Mandatory)]
-        [int]$Location,
+        [string]$Location,
 
         [Switch]$ServiceRestart,
 
@@ -59,10 +60,12 @@ function Set-SCCMClientCacheLocation {
         }
 
         TRY {
-            # Set the Cache Size
+            # Set the Cache Location
             $Cache = Get-WmiObject @SplattingWMI
-            $Cache.location = $Location
-            $Cache.Put()
+            IF ($PSCmdlet.ShouldProcess($Computer, "Set SCCM client cache location to $Location")) {
+                $Cache.location = $Location
+                $Cache.Put()
+            }
 
             # Restart SCCM Client
             IF ($PSBoundParameters['ServiceRestart']) {

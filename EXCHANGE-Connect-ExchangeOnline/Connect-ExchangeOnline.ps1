@@ -27,6 +27,7 @@ function Connect-ExchangeOnline {
         https://github.com/lazywinadmin/PowerShell
 #>
 
+    [CmdletBinding()]
     param
     (
         [system.string]$ConnectionUri = 'https://ps.outlook.com/powershell/',
