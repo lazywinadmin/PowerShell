@@ -24,6 +24,7 @@ function Test-RemoteDesktopIsEnabled {
 #>
 
 
+    [CmdletBinding()]
     PARAM(
         [String[]]$ComputerName = $env:COMPUTERNAME
     )
@@ -34,7 +35,7 @@ function Test-RemoteDesktopIsEnabled {
                     ComputerName = $Computer
                     NameSpace    = "root\cimv2\TerminalServices"
                 }
-                # Enable Remote Desktop
+                # Read AllowTsConnections
                 [boolean](Get-WmiObject -Class Win32_TerminalServiceSetting @Splatting).AllowTsConnections
 
                 # Disable requirement that user must be authenticated

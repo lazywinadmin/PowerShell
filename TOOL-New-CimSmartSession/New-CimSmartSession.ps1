@@ -53,7 +53,7 @@ function New-CimSmartSession {
             Write-Output "[$(Get-Date -Format 'yyyy/MM/dd-HH:mm:ss:ff')][$((Get-Variable -Scope 1 -Name MyInvocation -ValueOnly).MyCommand.Name)] $Message"
         }#Get-DefaultMessage
 
-        # Create a containter (hashtable) for the properties (Splatting)
+        # Create a container (hashtable) for the properties (Splatting)
         $CIMSessionSplatting = @{ }
 
         # Credential specified
@@ -89,7 +89,7 @@ function New-CimSmartSession {
 
                     TRY {
                         Write-Verbose -Message (Get-DefaultMessage -Message "$Computer - Connecting using DCOM protocol")
-                        New-CimSession @SessionParams -errorVariable ErrorProcessNewCimSessionDCOM
+                        New-CimSession @CIMSessionSplatting -errorVariable ErrorProcessNewCimSessionDCOM
                     }
                     CATCH {
                         IF ($ErrorProcessNewCimSessionDCOM) { Write-Warning -Message (Get-DefaultMessage -Message "$Computer - Can't connect using DCOM protocol either") }
@@ -97,7 +97,7 @@ function New-CimSmartSession {
                     }
                     FINALLY {
                         # Remove the CimSessionOption for the DCOM protocol for the next computer
-                        $CIMSessionSplatting.Remove('CIMSessionOption')
+                        $CIMSessionSplatting.Remove('SessionOption')
                     }
                 }#ELSE
             }#Test-Connection

@@ -1,9 +1,9 @@
 function Get-ADGPOReplication {
     <#
     .SYNOPSIS
-        This function retrieve one or all the GPO and report their DSVersions and SysVolVersions (Users and Computers)
+        This function retrieves one or all GPOs and report their DSVersions and SysVolVersions (Users and Computers)
     .DESCRIPTION
-        This function retrieve one or all the GPO and report their DSVersions and SysVolVersions (Users and Computers)
+        This function retrieves one or all GPOs and report their DSVersions and SysVolVersions (Users and Computers)
     .PARAMETER GPOName
         Specify the name of the GPO
     .PARAMETER All

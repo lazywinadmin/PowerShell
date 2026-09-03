@@ -41,12 +41,11 @@ Function Expand-GZipFile {
             $output.Write($buffer, 0, $read)
         }
 
-        $GzipStream.Close()
-        $output.Close()
-        $FileStreamIn.Close()
     }
     catch {
         throw $_
+    }
+    finally {
         if ($GzipStream) { $GzipStream.Close() }
         if ($output) { $output.Close() }
         if ($FileStreamIn) { $FileStreamIn.Close() }

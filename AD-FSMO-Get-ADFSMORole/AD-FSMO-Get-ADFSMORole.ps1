@@ -16,7 +16,7 @@ function Get-ADFSMORole {
     @lazywinadmin
     github.com/lazywinadmin
 
-    1.0 | 2016/00/00 | Francois-Xavier Cat
+    1.0 | 2016/01/01 | Francois-Xavier Cat
         Initial Version
     1.1 | 2017/11/01 | Francois-Xavier Cat
         Update Error handling

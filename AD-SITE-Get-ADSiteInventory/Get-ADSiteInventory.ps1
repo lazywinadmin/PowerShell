@@ -91,7 +91,7 @@ function Get-ADSiteInventory {
                     DataCompressionEnabled       = $LinksInfo.DataCompressionEnabled -join ','
                     #}
                     #>
-                }#New-Object -TypeName PSoBject
+                }#New-Object -TypeName PSObject
             }#Foreach ($item in $SiteInfo)
         }#TRY
         CATCH {

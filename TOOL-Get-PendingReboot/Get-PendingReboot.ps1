@@ -8,7 +8,7 @@ Function Get-PendingReboot {
     system is pending a reboot, from either Microsoft Patching or a Software Installation.
     For Windows 2008+ the function will query the CBS registry key as another factor in determining
     pending reboot state.  "PendingFileRenameOperations" and "Auto Update\RebootRequired" are observed
-    as being consistant across Windows Server 2003 & 2008.
+    as being consistent across Windows Server 2003 & 2008.
 
     CBServicing = Component Based Servicing (Windows 2008)
     WindowsUpdate = Windows Update / Auto Update (Windows 2003 / 2008)

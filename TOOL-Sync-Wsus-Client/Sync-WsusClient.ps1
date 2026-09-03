@@ -28,6 +28,7 @@ function sync-WsusClient {
     Here's one place where it came from: http://pleasework.robbievance.net/howto-force-really-wsus-clients-to-check-in-on-demand/
     Roger P Seekell, (2019), 9-13-2019
 #>
+[CmdletBinding()]
 Param(
     [Parameter(ValueFromPipeline=$true,
         ValueFromPipelineByPropertyName=$true)]
@@ -39,6 +40,7 @@ process {
     $scriptBlock = {
         try {
         $updateSession = New-Object -com "Microsoft.Update.Session"
+        $criteria = "IsInstalled=0"
         $null = $updateSession.CreateUpdateSearcher().Search($criteria).UPdates #I don't want to see them
         wuauclt /reportnow
         "$env:computername - Done!"

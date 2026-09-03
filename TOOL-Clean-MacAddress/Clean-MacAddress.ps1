@@ -82,7 +82,7 @@ function Clean-MacAddress {
         # Initial Cleanup
         $MacAddress = $MacAddress -replace "-", "" #Replace Dash
         $MacAddress = $MacAddress -replace ":", "" #Replace Colon
-        $MacAddress = $MacAddress -replace "/s", "" #Remove whitespace
+        $MacAddress = $MacAddress -replace "\s", "" #Remove whitespace
         $MacAddress = $MacAddress -replace " ", "" #Remove whitespace
         $MacAddress = $MacAddress -replace "\.", "" #Remove dots
         $MacAddress = $MacAddress.trim() #Remove space at the beginning

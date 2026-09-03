@@ -69,7 +69,7 @@ function New-Password {
                     $NewPassWord = $(foreach ($i in 1..$length) { Get-Random -InputObject $PassWordChars }) -join ''
                 }#Do
                 UNTIL (
-                    # Make sure it contains an Upercase and Lowercase letter, a number and another special character
+                    # Make sure it contains an Uppercase and Lowercase letter, a number and another special character
                     ($NewPassword -cmatch '[A-Z]') -and
                     ($NewPassWord -cmatch '[a-z]') -and
                     ($NewPassWord -imatch '[0-9]') -and

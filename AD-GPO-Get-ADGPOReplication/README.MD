@@ -3,7 +3,7 @@ Get-ADGPOReplication
 
 [Blog article on lazywinadmin.com](http://www.lazywinadmin.com/2014/10/powershell-check-gpo-replication.html)
 
-Get-ADGPOReplication is retrieving the GPO version and Sysvol version accross the domain for one or more Group Policy objects. This can especially helps you troubleshooting replication issues.
+Get-ADGPOReplication is retrieving the GPO version and Sysvol version across the domain for one or more Group Policy objects. This can especially helps you troubleshooting replication issues.
 
 This small function is taking advantage of the module ActiveDirectory to retrieve the list of all Domain Controllers and the module GroupPolicy to query one or more Group Policy objects.
 

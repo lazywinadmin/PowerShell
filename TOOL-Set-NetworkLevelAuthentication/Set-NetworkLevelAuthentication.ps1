@@ -67,7 +67,7 @@ function Set-NetworkLevelAuthentication {
             Write-Verbose -message $Computer
             TRY {
                 # Building Splatting for CIM Sessions
-                Write-Verbose -message "$Computer - CIM/WIM - Building Splatting"
+                Write-Verbose -message "$Computer - CIM/WMI - Building Splatting"
                 $CIMSessionParams = @{
                     ComputerName  = $Computer
                     ErrorAction   = 'Stop'
@@ -118,7 +118,7 @@ function Set-NetworkLevelAuthentication {
             }#CATCH
             FINALLY {
                 if ($CimSession) {
-                    # CLeanup/Close the remaining session
+                    # Cleanup/Close the remaining session
                     Write-Verbose -Message "[PROCESS] Finally Close any CIM Session(s)"
                     Remove-CimSession -CimSession $CimSession
                 }

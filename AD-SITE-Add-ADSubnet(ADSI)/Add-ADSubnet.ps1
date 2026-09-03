@@ -1,10 +1,10 @@
 Function Add-ADSubnet {
     <#
     .SYNOPSIS
-        This function allow you to add a subnet object in your active directory using ADSI
+        This function allows you to add a subnet object in your active directory using ADSI
 
     .DESCRIPTION
-        This function allow you to add a subnet object in your active directory using ADSI
+        This function allows you to add a subnet object in your active directory using ADSI
 
     .PARAMETER  Subnet
         Specifies the Name of the subnet to add

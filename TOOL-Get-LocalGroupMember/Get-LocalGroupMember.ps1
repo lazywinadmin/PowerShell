@@ -17,7 +17,7 @@ function Get-LocalGroupMember {
 
         To Add:
             Credential param
-            Resurce Local and AD using ADSI or ActiveDirectory Module
+            Resource Local and AD using ADSI or ActiveDirectory Module
             OnlyUser param
     .LINK
         https://github.com/lazywinadmin/PowerShell

@@ -30,7 +30,8 @@ function Get-NestedMember {
     PARAM(
         [String[]]$GroupName,
         [String]$RelationShipPath,
-        [Int]$MaxDepth
+        [Int]$MaxDepth,
+        [Int]$DepthCount = 1
     )
     TRY {
         $FunctionName = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).MyCommand
@@ -41,8 +42,6 @@ function Get-NestedMember {
             Import-Module -Name ActiveDirectory -ErrorAction Stop
         }
 
-        # Set Depth Counter
-        $DepthCount = 1
         FOREACH ($Group in $GroupName) {
             Write-Verbose -Message "[$FunctionName] Group '$Group'"
 
@@ -75,10 +74,9 @@ function Get-NestedMember {
                                 # Output Object
                                 $CurrentObject | Select-Object Name, SamAccountName, ObjectClass, DistinguishedName, @{Label = "ParentGroup"; Expression = { $ParentGroup } }, @{Label = "RelationShipPath"; Expression = { $RelationShipPath } }
 
-                                if (-not($DepthCount -lt $MaxDepth)) {
+                                if (-not $MaxDepth -or $DepthCount -lt $MaxDepth) {
                                     # Find Child
-                                    Get-NestedMember -GroupName $CurrentObject.Name -RelationShipPath $RelationShipPath
-                                    $DepthCount++
+                                    Get-NestedMember -GroupName $CurrentObject.Name -RelationShipPath $RelationShipPath -MaxDepth $MaxDepth -DepthCount ($DepthCount + 1)
                                 }
                             }#Group
                             default { $CurrentObject | Select-Object Name, SamAccountName, ObjectClass, DistinguishedName, @{Label = "ParentGroup"; Expression = { $ParentGroup } }, @{Label = "RelationShipPath"; Expression = { $RelationShipPath } } }

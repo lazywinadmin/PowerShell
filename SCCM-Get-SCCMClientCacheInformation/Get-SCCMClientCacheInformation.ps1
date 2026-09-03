@@ -8,7 +8,6 @@ function Get-SCCMClientCacheInformation {
         Specifies the name of the client
     .PARAMETER Credential
         Specifies the credential to use against the remote machine
-        Only work with the WMI query for now, not the service restart
     .EXAMPLE
         Get-SCCMClientCacheInformation -ComputerName Client01
 
@@ -58,7 +57,7 @@ function Get-SCCMClientCacheInformation {
         }
         CATCH {
             Write-Warning -message "[PROCESS] Something Wrong happened with $Computer"
-            $Error[0].execption.message
+            $Error[0].Exception.Message
         }
     }
 }

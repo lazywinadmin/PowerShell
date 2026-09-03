@@ -18,7 +18,7 @@ function Get-ComputerInfo {
    Processor(s) (NumberOfProcessors), Number of Socket(s) (NumberOfSockets),
    and Number of Core(s) (NumberOfCores).
 
-   This function as been tested against Windows Server 2000, 2003, 2008 and 2012
+   This function has been tested against Windows Server 2000, 2003, 2008 and 2012
 
 .PARAMETER ComputerName
    Specify a ComputerName or IP Address. Default is Localhost.

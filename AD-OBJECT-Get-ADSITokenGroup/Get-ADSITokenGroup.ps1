@@ -64,21 +64,26 @@ function Get-ADSITokenGroup {
             # Building the basic search object with some parameters
             $Search = New-Object -TypeName System.DirectoryServices.DirectorySearcher -ErrorAction 'Stop'
             $Search.SizeLimit = $SizeLimit
-            $Search.SearchRoot = $DomainDN
             #$Search.Filter = "(&(anr=$SamAccountName))"
             $Search.Filter = "(&((objectclass=user)(samaccountname=$SamAccountName)))"
 
-            # Credential
-            IF ($PSBoundParameters['Credential']) {
-                $Cred = New-Object -TypeName System.DirectoryServices.DirectoryEntry -ArgumentList $DomainDistinguishedName, $($Credential.UserName), $($Credential.GetNetworkCredential().password)
-                $Search.SearchRoot = $Cred
+            # Normalize Domain DN only when the caller passed DomainDistinguishedName
+            $SearchRootPath = $null
+            IF ($PSBoundParameters['DomainDistinguishedName']) {
+                $SearchRootPath = $DomainDistinguishedName
+                IF ($SearchRootPath -notlike "LDAP://*") { $SearchRootPath = "LDAP://$SearchRootPath" }#IF
+                Write-Verbose -Message "[PROCESS] Different Domain specified: $SearchRootPath"
             }
 
-            # Different Domain
-            IF ($DomainDistinguishedName) {
-                IF ($DomainDistinguishedName -notlike "LDAP://*") { $DomainDistinguishedName = "LDAP://$DomainDistinguishedName" }#IF
-                Write-Verbose -Message "[PROCESS] Different Domain specified: $DomainDistinguishedName"
-                $Search.SearchRoot = $DomainDistinguishedName
+            # Credential (bind DirectoryEntry after LDAP path is normalized if Domain was also passed)
+            IF ($PSBoundParameters['Credential']) {
+                IF ($SearchRootPath) { $BindPath = $SearchRootPath }
+                ELSE { $BindPath = $DomainDistinguishedName }
+                $Cred = New-Object -TypeName System.DirectoryServices.DirectoryEntry -ArgumentList $BindPath, $($Credential.UserName), $($Credential.GetNetworkCredential().password)
+                $Search.SearchRoot = $Cred
+            }
+            ELSEIF ($SearchRootPath) {
+                $Search.SearchRoot = $SearchRootPath
             }
 
             $Search.FindAll() | ForEach-Object -Process {

@@ -1,23 +1,23 @@
 function Get-ParentGroup {
     <#
     .SYNOPSIS
-        Find all Nested members of a group
+        Find all parent groups of an AD object
     .DESCRIPTION
-        Find all Nested members of a group
+        Find all parent groups of an AD object by walking the memberof attribute
     .PARAMETER Name
-        Specify one or more GroupName to audit
+        Specify one or more object names (ANR or distinguishedName) to look up parent groups for
     .Example
-        Get-NestedMember -GroupName TESTGROUP
+        Get-ParentGroup -Name TESTUSER
 
-        This will find all the indirect members of TESTGROUP
+        This will find all parent groups of TESTUSER
     .Example
-        Get-NestedMember -GroupName TESTGROUP,TESTGROUP2
+        Get-ParentGroup -Name TESTGROUP,TESTUSER
 
-        This will find all the indirect members of TESTGROUP and TESTGROUP2
+        This will find all parent groups of TESTGROUP and TESTUSER
     .Example
-        Get-NestedMember TESTGROUP | Group Name | select name, count
+        Get-ParentGroup TESTUSER | Group Name | select name, count
 
-        This will find duplicate
+        This will find duplicate parent group entries
     .link
         https://github.com/lazywinadmin/PowerShell
 
@@ -57,7 +57,7 @@ function Get-ParentGroup {
                             Write-Output $CurrentObject | Select-Object Name, SamAccountName, ObjectClass, @{L = "Child"; E = { $Account.samaccountname } }
 
                             Write-Verbose -Message "Inception - $($CurrentObject.distinguishedname)"
-                            Get-ParentGroup -OutBuffer $CurrentObject.distinguishedname
+                            Get-ParentGroup -Name $CurrentObject.DistinguishedName
 
                         }#$Account | Select-Object
                     }#FOREACH ($Account in $ADObject){
@@ -72,6 +72,6 @@ function Get-ParentGroup {
         }
     }#PROCESS
     END {
-        Write-Verbose -Message "[END] Get-NestedMember"
+        Write-Verbose -Message "[END] Get-ParentGroup"
     }
 }

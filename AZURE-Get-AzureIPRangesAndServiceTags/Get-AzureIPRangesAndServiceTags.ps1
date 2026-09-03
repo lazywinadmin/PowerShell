@@ -2,8 +2,8 @@ function Get-AzureIPRangesAndServiceTags {
 <#
 .SYNOPSIS
 
-Retrieve the Ip address ranges and Service Tags ranges for Azure (Public, USgov, Germnay or China)
-The function return a Json. This can be passed to '|Converfrom-json' if you wish
+Retrieve the Ip address ranges and Service Tags ranges for Azure (Public, USgov, Germany or China)
+The function return a Json. This can be passed to '| ConvertFrom-Json' if you wish
 to get a PowerShell object.
 
 This information is pulled from Microsoft Download pages.
