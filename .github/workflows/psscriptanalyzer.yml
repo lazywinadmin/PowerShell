@@ -1,0 +1,80 @@
+---
+
+name: Linting
+
+on: [pull_request]
+
+env:
+  PSSA_VERSION: latest
+  PSSA_EXCLUDE_RULES:
+  DELETE_OLD_COMMENTS: 1
+
+jobs:
+  PSScriptAnalyzer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Install PSScriptAnalyzer Module
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          if ("${{ env.PSSA_VERSION }}" -in @($null, "latest")) {
+            Install-Module PSScriptAnalyzer -Scope CurrentUser -Repository PSGallery -Force
+          } else {
+            Install-Module PSScriptAnalyzer -RequiredVersion "${{ env.PSSA_VERSION }}" -Scope CurrentUser -Repository PSGallery -Force
+          }
+        shell: pwsh -Command "$ProgressPreference = 'SilentlyContinue'; & '{0}'"
+
+      - name: Run PSScriptAnalyzer
+        run: |
+          Import-Module PSScriptAnalyzer -Verbose
+          $ExcludeRules = '${{ env.PSSA_EXCLUDE_RULES }}'.Split([string[]]@(" ", ",", "`n"), [System.StringSplitOptions]::RemoveEmptyEntries)
+          Invoke-ScriptAnalyzer -Path "$ENV:GITHUB_WORKSPACE" -ExcludeRule $ExcludeRules -Recurse -Verbose | Tee-Object -Variable PSSAResults
+          $SUMMARY    = ($PSSAResults | Group-Object -Property Severity -NoElement | Foreach-Object { "- $($_.Count) $($_.Name)" }) -join [Environment]::NewLine
+          $DETAILS    = ($PSSAResults | Format-List -Property @{'Name' = 'Location'; 'Expression' = { "{0} [{1}, {2}]" -f (Resolve-Path -LiteralPath $_.ScriptPath -Relative), $_.Line, $_.Column }}, RuleName, Severity, Message | Out-String -Width 88).Trim()
+          $STRINGBODY = "PSScriptAnalyzer results as of this commit:
+
+          $SUMMARY
+
+          <details><summary>See details</summary>
+
+          ``````
+          $DETAILS
+          ``````
+
+          </details>
+          <!-- IsPSSABotComment -->" | ConvertTo-Json -Compress
+
+          $BODY = '"body":{0}' -f $STRINGBODY
+          Set-Content -LiteralPath 'COMMENTBODY.json' -Value "{$BODY}"
+        shell: pwsh -Command "$ProgressPreference = 'SilentlyContinue'; & '{0}'"
+
+      - name: Get PR number
+        run: |
+          CURLOUT="$(echo $GITHUB_REF | awk -F '[/|/]' '{print $3}')"
+          echo "PR_NUMBER=${CURLOUT}" >> $GITHUB_ENV
+
+      - name: Delete old comments
+        run: |
+          $comments = Invoke-RestMethod "https://api.github.com/repos/${env:GITHUB_REPOSITORY}/issues/${env:PR_NUMBER}/comments" -Headers @{
+            'Authorization' = "token ${{ secrets.GITHUB_TOKEN }}"
+          }
+          $commentIDs = $comments | Where { $_.body -like "*<!-- IsPSSABotComment -->" } | Select-Object -Expand url
+          echo "Will be deleting these:"
+          echo $commentIDs
+          $commentIDs | Foreach-Object {
+            Invoke-WebRequest "$_" -Method Delete -Headers @{
+              'Authorization' = "token ${{ secrets.GITHUB_TOKEN }}"
+            }
+          }
+        shell: pwsh -Command "$ProgressPreference = 'SilentlyContinue'; & '{0}'"
+        if: env.DELETE_OLD_COMMENTS == 1
+
+      - name: Create PR comment
+        run: |
+          curl -sL --data @COMMENTBODY.json \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/vnd.github.groot-preview+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+
