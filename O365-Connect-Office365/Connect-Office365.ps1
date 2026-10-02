@@ -38,6 +38,11 @@ function Connect-Office365 {
                 Write-Verbose -Message "BEGIN - Import module Lync Online"
                 Import-Module -Name LyncOnlineConnector -ErrorAction Stop -ErrorVariable ErrorBeginIpmoLyncOnline
             }
+            
+            IF (-not (Get-Module -Name ExchangeOnlineManagement -ListAvailable)) {
+                Write-Verbose -Message "BEGIN - Import module ExchangeOnlineManagement"
+                Import-Module -Name ExchangeOnlineManagement -ErrorAction Stop -ErrorVariable ErrorBeginExchangeOnlineManagement
+            }
         }
         CATCH {
             IF ($ErrorBeginIpmoMSOnline) {
@@ -45,6 +50,10 @@ function Connect-Office365 {
             }
             IF ($ErrorBeginIpmoLyncOnline) {
                 Write-Warning -Message "BEGIN - Error while importing LyncOnlineConnector module"
+            }
+            
+            IF ($ErrorBeginExchangeOnlineManagement) {
+                Write-Warning -Message "BEGIN - Error while importing ExchangeOnlineManagement module"
             }
 
             $PSCmdlet.ThrowTerminatingError($_)
@@ -62,17 +71,13 @@ function Connect-Office365 {
             Write-Verbose -Message "PROCESS - Connect to Azure Active Directory"
             Connect-MsolService -Credential $Credential
 
-            # EXCHANGE ONLINE (Implicit Remoting module)
-            Write-Verbose -Message "PROCESS - Create session to Exchange online"
-            $ExchangeURL = "https://ps.outlook.com/powershell/"
-            $O365PS = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri $ExchangeURL -Credential $Credential -Authentication Basic -AllowRedirection -ErrorAction Stop -ErrorVariable ErrorConnectExchange
-
-            Write-Verbose -Message "PROCESS - Open session to Exchange online (Prefix: Cloud)"
-            Import-PSSession -Session $O365PS –Prefix ExchCloud
+            # EXCHANGE ONLINE (V2)
+            Write-Verbose -Message "PROCESS - Connect to Exchange online"
+            Connect-ExchangeOnline -Credential $Credential -ErrorAction Stop -ErrorVariable ErrorConnectExchange
 
             # LYNC ONLINE (LyncOnlineConnector)
             Write-Verbose -Message "PROCESS - Create session to Lync online"
-            $LyncSession = New-CsOnlineSession –Credential $Credential -ErrorAction Stop -ErrorVariable ErrorConnectExchange
+            $LyncSession = New-CsOnlineSession –Credential $Credential -ErrorAction Stop -ErrorVariable ErrorConnectLync
             Import-PSSession -Session $LyncSession -Prefix LyncCloud
 
             # SHAREPOINT ONLINE (Implicit Remoting module)
