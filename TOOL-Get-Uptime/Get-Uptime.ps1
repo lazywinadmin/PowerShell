@@ -98,7 +98,7 @@ function Get-Uptime {
                     # Prepare output
                     $Uptime = New-TimeSpan -Start $($CimResult.lastbootuptime) -End (Get-Date)
 
-                    $Properties = @{
+                    $Properties = [Ordered]@{
                         ComputerName   = $CIMComputer
                         Days           = $Uptime.days
                         Hours          = $Uptime.hours
@@ -147,13 +147,13 @@ function Get-Uptime {
                         $HumanTimeFormat = $Result.ConvertToDateTime($Result.Lastbootuptime)
                         $Uptime = New-TimeSpan -Start $HumanTimeFormat -End $(Get-Date)
 
-                        $Properties = @{
+                        $Properties = [Ordered]@{
                             ComputerName   = $Computer
                             Days           = $Uptime.days
                             Hours          = $Uptime.hours
                             Minutes        = $Uptime.minutes
                             Seconds        = $Uptime.seconds
-                            LastBootUpTime = $CimResult.lastbootuptime
+                            LastBootUpTime = $HumanTimeFormat
                         }
                         # Output the information
                         New-Object -TypeName PSObject -Property $Properties
