@@ -46,6 +46,11 @@ function Update-O365UserUPNSuffix {
         -TenantUPNSuffix 'Contoso.onmicrosoft.com' `
         -DomainController 'DC01.Contoso.com'
 
+    .EXAMPLE
+        Update-O365UserUPNSuffix -Credential $cred -UserAlias 'perm.test' -CurrentUPNSuffix 'ContosoConsultant.com' -NewUPNSuffix 'Contoso.com' -TenantUPNSuffix 'Contoso.onmicrosoft.com' -DomainController 'DC01.Contoso.com' -WhatIf
+
+        Shows the UPN changes that would be made in Office 365 and Active Directory without applying them.
+
     .NOTES
         Francois-Xavier Cat
         lazywinadmin.com
@@ -55,7 +60,7 @@ function Update-O365UserUPNSuffix {
         https://github.com/lazywinadmin/PowerShell
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     [OutputType([pscustomobject])]
     param
     (
@@ -120,6 +125,10 @@ function Update-O365UserUPNSuffix {
             $Splatting = @{ }
 
             if ($PSBoundParameters['Credential']) { $Splatting.credential = $Credential }
+
+            if (-not $PSCmdlet.ShouldProcess("$CurrentUPN -> $NewUPN (Office 365 via $TemporaryUPN, and Active Directory on $DomainController)", "Change UserPrincipalName")) {
+                return
+            }
 
             # Set the current MSOL user to the default OnMicrosoft.com UPN Suffix
             Set-MsolUserPrincipalName -UserPrincipalName $CurrentUPN -NewUserPrincipalName $TemporaryUPN -ErrorAction Stop | Out-Null
