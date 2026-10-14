@@ -34,13 +34,18 @@ Append ip rules not already present. The script only checks if the IP/CIDR is pr
 
 Erase all existing rules and append the one specified in the CSV file
 
+.EXAMPLE
+/AppService-Update_RestrictionIP.ps1 -ResourceGroupName "MyRG" -AppServiceName "MyApp" -SubscriptionId '<GUID>' -Path ./source.csv -overwrite -WhatIf -verbose
+
+Show what would change on the App Service IP rules without applying anything
+
 .NOTES
 
 VERSION HISTORY
 1.0 | 2020/06/11 | Francois-Xavier Cat (lazywinadmin.com)
     initial version
 #>
-[cmdletBinding()]
+[cmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
 Param(
     [Parameter(Mandatory = $true)]
     [string] $ResourceGroupName,
@@ -71,13 +76,13 @@ try {
     Write-Verbose -Message "Checking connection to Azure..."
     $GetContext = Get-AzContext
     if($Null -eq $GetContext){
-        Connect-AzAccount
+        Connect-AzAccount -WhatIf:$false
     }
 
     # Set Context
     if($GetContext.Subscription.id -ne $SubscriptionId){
         Write-Verbose -Message "Switching context to subscription '$SubscriptionId'..."
-        Set-AzContext -Subscription $SubscriptionId
+        Set-AzContext -Subscription $SubscriptionId -WhatIf:$false
     }else{
         Write-Verbose -Message "Context already on subscription '$SubscriptionId'"
     }
@@ -106,9 +111,17 @@ try {
         else{Write-Verbose -Message "Skip $($NewIPRule.IPAddress). IPAddress already in the rules."}
     }
 
-    if($Changes){
+    if($Overwrite){
+        $Action = "Overwrite ALL existing IP restriction rules with $(@($FileContent).Count) rule(s) from '$Path'"
+    }else{
+        $Action = "Append new IP restriction rule(s) from '$Path'"
+    }
+
+    if($Changes -and $PSCmdlet.ShouldProcess("App Service '$AppServiceName' (Resource Group '$ResourceGroupName')", $Action)){
         Write-Verbose -Message "Applying changes..."
         (Set-AzResource -ResourceId $WebAppConfig.ResourceId -Properties $WebAppConfig.Properties -ApiVersion $APIVersion).Properties.ipSecurityRestrictions
+    }elseif($Changes){
+        Write-Verbose -Message "Changes not applied (WhatIf/Confirm)."
     }else{
         Write-Verbose -Message "No Change to apply."
         $WebAppConfig.Properties.ipSecurityRestrictions
