@@ -1,0 +1,1 @@
+New-ModuleManifest Get-DomainComputer.psd1 -NestedModules "./../../../AD-COMPUTER-Get-DomainComputer/Get-DomainComputer.ps1"
